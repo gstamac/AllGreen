@@ -13,7 +13,7 @@ describe("AllGreen SignalR Hub", function () {
         });
 
         var callbacks = ['stateChanged', 'error', 'reconnecting', 'reconnected', 'disconnected'];
-        _this.connection = jasmine.createSpyObj('connection', callbacks.concat(['createHubProxy', 'start']));
+        _this.connection = jasmine.createSpyObj('connection', callbacks.concat(['createHubProxy', 'start', 'received']));
         _this.connection['createHubProxy'].andReturn(_this.hubProxy);
         _this.connection['start'].andReturn({ done: function (callback) {
                 _this.connectionCallbacks['done'] = callback;

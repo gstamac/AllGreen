@@ -4,9 +4,9 @@
 var reporter = null;
 var suite1 = null;
 
-xdescribe("AllGreenEnv", function () {
+describe("App", function () {
     beforeEach(function () {
-        this.addMatchers({
+        jasmine.getEnv().currentSpec.addMatchers({
             toBeSpecElement: function (specName, statusClass) {
                 var actual = this.actual;
 
@@ -56,6 +56,7 @@ xdescribe("AllGreenEnv", function () {
         jasmine.getFixtures().fixturesPath = '';
         var clientHtml = readFixtures('Client/client.html');
         clientHtml = clientHtml.replace(/<script[^>]*><\/script>/g, '');
+        clientHtml = clientHtml.replace(/<script[^>]*>[^<]*AllGreen\.startApp()[^<]*<\/script>/g, '');
         setFixtures(clientHtml);
 
         reporter = new AllGreen.Reporter();

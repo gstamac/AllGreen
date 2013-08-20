@@ -1,8 +1,13 @@
 /// <reference path="reporter.ts" />
 var AllGreen;
 (function (AllGreen) {
-    var AllGreenEnv = (function () {
-        function AllGreenEnv() {
+    function startApp() {
+        App.startApp();
+    }
+    AllGreen.startApp = startApp;
+
+    var App = (function () {
+        function App() {
             this.adapterFactories = [];
             this.start = function () {
                 var _this = this;
@@ -11,37 +16,40 @@ var AllGreen;
                 });
             };
         }
-        AllGreenEnv.getCurrent = function () {
-            if (this.currentEnv == null)
-                this.currentEnv = new AllGreenEnv();
-            return this.currentEnv;
+        App.startApp = function () {
+            if (this.currentApp == null)
+                this.currentApp = new App();
         };
 
-        AllGreenEnv.prototype.setReporter = function (newReporter) {
+        App.getCurrent = function () {
+            return this.currentApp;
+        };
+
+        App.prototype.setReporter = function (newReporter) {
             if (newReporter != null)
                 this.reporter = newReporter;
         };
 
-        AllGreenEnv.prototype.registerAdapterFactory = function (adapterFactory) {
+        App.prototype.registerAdapterFactory = function (adapterFactory) {
             this.adapterFactories.push(adapterFactory);
         };
 
-        AllGreenEnv.prototype.setServerStatus = function (status) {
+        App.prototype.setServerStatus = function (status) {
             this.reporter.setServerStatus(status);
         };
 
-        AllGreenEnv.prototype.reset = function () {
+        App.prototype.reset = function () {
             this.adapterFactories = [];
             this.reporter.reset();
             $('#runner').prop('src', 'about:blank');
         };
 
-        AllGreenEnv.prototype.reload = function () {
+        App.prototype.reload = function () {
             this.reset();
             $('#runner').prop('src', 'runner.html');
         };
-        AllGreenEnv.currentEnv = null;
-        return AllGreenEnv;
+        App.currentApp = null;
+        return App;
     })();
-    AllGreen.AllGreenEnv = AllGreenEnv;
+    AllGreen.App = App;
 })(AllGreen || (AllGreen = {}));

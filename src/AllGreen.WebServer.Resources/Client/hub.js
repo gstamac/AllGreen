@@ -5,9 +5,16 @@ var AllGreen;
 (function (AllGreen) {
     var Hub = (function () {
         function Hub(connection, env) {
-            this.attachToHub(connection, env);
-            this.attachToConnectionEvents(connection, env);
+            this.connection = connection;
+            this.env = env;
+            env.setServerStatus('Disconnected');
         }
+        Hub.prototype.connect = function () {
+            this.attachToHub(this.connection, this.env);
+            this.attachToConnectionEvents(this.connection, this.env);
+            this.startConnection(this.connection, this.env);
+        };
+
         Hub.prototype.attachToHub = function (connection, env) {
             connection.createHubProxy('runnerHub').on('reload', function () {
                 console.log('reloading...');
@@ -36,9 +43,12 @@ var AllGreen;
                 console.log('disconnected');
                 env.setServerStatus('Disconnected');
             });
-            connection.received(function (data) {
-                console.log('received', data);
-                env.setServerStatus('Received');
+        };
+
+        Hub.prototype.startConnection = function (connection, env) {
+            connection.start().done(function () {
+                console.log('done');
+                env.setServerStatus('Done');
             });
         };
 
@@ -56,3 +66,13 @@ var AllGreen;
     })();
     AllGreen.Hub = Hub;
 })(AllGreen || (AllGreen = {}));
+
+(function () {
+    var app = AllGreen.App.getCurrent();
+    if (app != null) {
+        console.log('registering signalR hub');
+        var connection = $.hubConnection();
+        var hub = new AllGreen.Hub(connection, app);
+        hub.connect();
+    }
+})();

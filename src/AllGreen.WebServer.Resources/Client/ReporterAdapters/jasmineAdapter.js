@@ -2,6 +2,16 @@
 /// <reference path="../../Scripts/typings/jasmine/jasmine.d.ts" />
 var AllGreen;
 (function (AllGreen) {
+    var JasmineAdapterFactory = (function () {
+        function JasmineAdapterFactory() {
+        }
+        JasmineAdapterFactory.prototype.create = function (reporter) {
+            return new JasmineAdapter(reporter);
+        };
+        return JasmineAdapterFactory;
+    })();
+    AllGreen.JasmineAdapterFactory = JasmineAdapterFactory;
+
     var JasmineAdapter = (function () {
         function JasmineAdapter(reporter) {
             this.reporter = reporter;
@@ -77,10 +87,10 @@ var AllGreen;
         };
 
         JasmineAdapter.prototype.start = function () {
-            /*var jasmineEnv = window.jasmine.getEnv();
-            
+            var jasmineEnv = jasmine.getEnv();
+
             jasmineEnv.addReporter(this);
-            jasmineEnv.execute();*/
+            jasmineEnv.execute();
         };
         return JasmineAdapter;
     })();
@@ -92,11 +102,15 @@ var AllGreen;
             this.id = jasmineSpec.id;
             this.name = jasmineSpec.description;
             this.status = status;
-            if (status == AllGreen.SpecStatus.Undefined)
-                this.calculateStatusAndSteps(jasmineSpec);
+            this.steps = [];
             this.suite = new JasmineAdapterSuite(jasmineSpec.suite);
+
+            if (this.status == AllGreen.SpecStatus.Undefined)
+                this.calculateStatus(jasmineSpec);
+            if (this.status == AllGreen.SpecStatus.Failed)
+                this.calculateSteps(jasmineSpec);
         }
-        JasmineAdapterSpec.prototype.calculateStatusAndSteps = function (jasmineSpec) {
+        JasmineAdapterSpec.prototype.calculateStatus = function (jasmineSpec) {
             var results = jasmineSpec.results();
             if (results.skipped)
                 this.status = AllGreen.SpecStatus.Skipped;
@@ -105,23 +119,25 @@ else {
                     this.status = AllGreen.SpecStatus.Passed;
                 } else {
                     this.status = AllGreen.SpecStatus.Failed;
+                }
+            }
+        };
 
-                    var resultItems = results.getItems();
-                    if (resultItems && resultItems.length) {
-                        this.steps = [];
+        JasmineAdapterSpec.prototype.calculateSteps = function (jasmineSpec) {
+            var resultItems = jasmineSpec.results().getItems();
+            if (resultItems && resultItems.length) {
+                this.steps = [];
 
-                        for (var i = 0; i < resultItems.length; i++) {
-                            var step = resultItems[i];
+                for (var i = 0; i < resultItems.length; i++) {
+                    var step = resultItems[i];
 
-                            if (step.type === 'log') {
-                                this.steps.push({ message: step.toString() });
-                            } else if (step.type === 'expect' && !step.passed()) {
-                                if (step.trace.stack) {
-                                    this.steps.push({ message: step.message, status: AllGreen.SpecStatus.Failed, trace: this.formatTraceStack(step.trace.stack) });
-                                } else {
-                                    this.steps.push({ message: step.message, status: AllGreen.SpecStatus.Failed });
-                                }
-                            }
+                    if (step.type === 'log') {
+                        this.steps.push({ message: step.toString(), status: AllGreen.SpecStatus.Undefined, trace: '' });
+                    } else if (step.type === 'expect' && !step.passed()) {
+                        if (step.trace.stack) {
+                            this.steps.push({ message: step.message, status: AllGreen.SpecStatus.Failed, trace: this.formatTraceStack(step.trace.stack) });
+                        } else {
+                            this.steps.push({ message: step.message, status: AllGreen.SpecStatus.Failed, trace: '' });
                         }
                     }
                 }
@@ -146,3 +162,12 @@ else {
         return JasmineAdapterSuite;
     })();
 })(AllGreen || (AllGreen = {}));
+
+(function () {
+    var app = AllGreen.App.getCurrent();
+    if (app != null) {
+        console.log('registering Jasmine adapter factory');
+        app.registerAdapterFactory(new AllGreen.JasmineAdapterFactory());
+    }
+    ;
+})();

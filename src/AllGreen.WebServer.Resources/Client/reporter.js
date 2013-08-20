@@ -167,9 +167,9 @@ else
 })(AllGreen || (AllGreen = {}));
 
 (function () {
-    var env = AllGreen.AllGreenEnv.getCurrent();
-    if (env != null) {
+    var app = AllGreen.App.getCurrent();
+    if (app != null) {
         console.log('registering reporter factory');
-        env.setReporter(new AllGreen.Reporter());
+        app.setReporter(new AllGreen.Reporter());
     }
 })();

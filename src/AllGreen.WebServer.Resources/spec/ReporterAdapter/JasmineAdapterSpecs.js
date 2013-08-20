@@ -1,22 +1,35 @@
 /// <reference path="../../Scripts/typings/jasmine/jasmine.d.ts" />
 /// <reference path="../../Client/ReporterAdapters/jasmineAdapter.ts" />
-describe("AllGreen Jasmine Adapter", function () {
-    var reporter;
-    var adapter;
-    var runner;
-    var spec;
-    var spec2;
+describe("AllGreen JasmineAdapterFactory", function () {
+    it("Creates Jasmine adapter", function () {
+        var factory = new AllGreen.JasmineAdapterFactory();
+        reporter = jasmine.createSpyObj('reporter', ['reset', 'setServerStatus', 'setRunnerStatus', 'setSpecStatus']);
+        var adapter = factory.create(reporter);
 
+        expect(adapter).toBeDefined();
+        expect(adapter.start).toBeDefined();
+    });
+});
+
+var reporter;
+var adapter;
+var runner;
+var spec;
+var spec2;
+
+describe("AllGreen Jasmine Adapter", function () {
     var createSpecResults = function (ispassed, isskipped, steps) {
+        if (typeof steps === "undefined") { steps = []; }
         return function () {
-            this.passed = function () {
-                return ispassed;
+            return {
+                passed: function () {
+                    return ispassed;
+                },
+                skipped: isskipped,
+                getItems: function () {
+                    return steps ? steps : [];
+                }
             };
-            this.skipped = isskipped;
-            this.getItems = function () {
-                return steps ? steps : [];
-            };
-            return this;
         };
     };
 
@@ -36,12 +49,12 @@ describe("AllGreen Jasmine Adapter", function () {
                 return ispassed;
             },
             message: message_,
-            trace: { stack: traceStack ? traceStack : false }
+            trace: { stack: traceStack != null ? traceStack : false }
         };
     };
 
     beforeEach(function () {
-        this.addMatchers({
+        jasmine.getEnv().currentSpec.addMatchers({
             toHaveBeenCalledForSpec: function (specId, specName, suiteId, suiteName, specStatus, steps) {
                 var actual = this.actual;
 
@@ -52,10 +65,15 @@ describe("AllGreen Jasmine Adapter", function () {
                         id: suiteId,
                         name: suiteName
                     }),
-                    status: specStatus
+                    status: specStatus,
+                    steps: []
                 };
-                if (steps)
-                    specParams.steps = steps;
+                if (steps) {
+                    specParams.steps = [];
+                    for (var i = 0; i < steps.length; i++) {
+                        specParams.steps.push(jasmine.objectContaining(steps[i]));
+                    }
+                }
 
                 expect(actual).toHaveBeenCalledWith(jasmine.objectContaining(specParams));
 
@@ -100,13 +118,13 @@ describe("AllGreen Jasmine Adapter", function () {
 
     it("Shows started specs as running", function () {
         adapter.reportSpecStarting(spec);
-        expect(reporter.setSpecStatus).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Running);
+        expect(reporter.setSpecStatus).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Running, null);
     });
 
     it("Shows passed specs as passed", function () {
         spec.results = createSpecResults(true, false);
         adapter.reportSpecResults(spec);
-        expect(reporter.setSpecStatus).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Passed);
+        expect(reporter.setSpecStatus).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Passed, null);
     });
 
     it("Shows failed specs as failed", function () {
@@ -136,14 +154,14 @@ describe("AllGreen Jasmine Adapter", function () {
     it("Shows skipped specs as skipped", function () {
         spec.results = createSpecResults(false, true);
         adapter.reportSpecResults(spec);
-        expect(reporter.setSpecStatus).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Skipped);
+        expect(reporter.setSpecStatus).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Skipped, null);
     });
 
     it("Shows specs from same suite as results from same suite", function () {
         adapter.reportSpecResults(spec);
         adapter.reportSpecResults(spec2);
-        expect(reporter.setSpecStatus).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Failed);
-        expect(reporter.setSpecStatus).toHaveBeenCalledForSpec(344, 'test 2', 881, 'Suite 1', AllGreen.SpecStatus.Failed);
+        expect(reporter.setSpecStatus).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Failed, null);
+        expect(reporter.setSpecStatus).toHaveBeenCalledForSpec(344, 'test 2', 881, 'Suite 1', AllGreen.SpecStatus.Failed, null);
     });
 
     it("Shows nested suites", function () {
