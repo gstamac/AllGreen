@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.WebServer.Core", "AllGreen.WebServer.Core\AllGreen.WebServer.Core.csproj", "{061D51C9-B850-4187-9B49-FB87770BA753}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.WebServer.Core.Tests", "AllGreen.WebServer.Core.Tests\AllGreen.WebServer.Core.Tests.csproj", "{216FCF6A-7B92-4608-A544-70A6532A89B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.WebServer", "AllGreen.WebServer\AllGreen.WebServer.csproj", "{8EB14D14-0960-4930-837D-602241774A3D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{26A04B86-C877-4E45-8EBD-335573BA051B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.WebServer.Resources", "AllGreen.WebServer.Resources\AllGreen.WebServer.Resources.csproj", "{49B3C384-E5A6-4063-9271-BAE47E9D502C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9FF1764C-7892-4FD9-8E42-716FF69FA5D1}"
+	ProjectSection(SolutionItems) = preProject
+		WE-settings.xml = WE-settings.xml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{061D51C9-B850-4187-9B49-FB87770BA753}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{061D51C9-B850-4187-9B49-FB87770BA753}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{061D51C9-B850-4187-9B49-FB87770BA753}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{061D51C9-B850-4187-9B49-FB87770BA753}.Release|Any CPU.Build.0 = Release|Any CPU
+		{216FCF6A-7B92-4608-A544-70A6532A89B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{216FCF6A-7B92-4608-A544-70A6532A89B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{216FCF6A-7B92-4608-A544-70A6532A89B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{216FCF6A-7B92-4608-A544-70A6532A89B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EB14D14-0960-4930-837D-602241774A3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EB14D14-0960-4930-837D-602241774A3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EB14D14-0960-4930-837D-602241774A3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EB14D14-0960-4930-837D-602241774A3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49B3C384-E5A6-4063-9271-BAE47E9D502C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49B3C384-E5A6-4063-9271-BAE47E9D502C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49B3C384-E5A6-4063-9271-BAE47E9D502C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49B3C384-E5A6-4063-9271-BAE47E9D502C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{216FCF6A-7B92-4608-A544-70A6532A89B7} = {26A04B86-C877-4E45-8EBD-335573BA051B}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <script type="text/javascript">
+        var AllGreen = parent.AllGreen;
+    </script>
+
+    <!--%SCRIPTS%-->
+
+    <script type="text/javascript">
+        var app = AllGreen.App.getCurrent();
+        if (app) {
+            console.log('starting env');
+            app.start();
+        };
+    </script>
+
+</body>
+</html>

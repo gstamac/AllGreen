@@ -1,0 +1,132 @@
+﻿
+body
+{
+    background-color: #F9F9FF;
+    margin: 5px;
+    overflow-y: scroll;
+    padding: 0;
+}
+
+iframe
+{
+    border: medium none;
+    height: 0;
+    width: 0;
+}
+
+div#server-status
+{
+    border: 1px solid red;
+    border-radius: 4px 4px 4px 4px;
+    font-size: 20px;
+    margin: 5px 0;
+    padding: 5px;
+}
+
+div#runner-status
+{
+    border: 1px solid blue;
+    border-radius: 4px 4px 4px 4px;
+    font-size: 20px;
+    margin: 5px 0;
+    padding: 5px;
+}
+
+div#spec-results
+{
+    border-radius: 4px 4px 4px 4px;
+    margin: 5px 0;
+    padding: 2px 0;
+}
+
+div.suite
+{
+    border-radius: 4px 4px 4px 4px;
+    margin: 3px 3px 3px 5px;
+    padding: 2px 15px;
+}
+
+    div.suite.passed
+    {
+        background-color: #BBFFBB;
+        border: 1px solid green;
+    }
+
+    div.suite.failed
+    {
+        background-color: #FFDDDD;
+        border: 1px solid red;
+    }
+
+    div.suite.running
+    {
+        background-color: #EEEEFF;
+        border: 1px solid blue;
+    }
+
+    div.suite.undefined
+    {
+        background-color: #FCFCBF;
+        border: 1px solid orange;
+    }
+
+div.suite-name
+{
+    text-decoration: underline;
+}
+
+div.suite.skipped
+{
+    background-color: #F4F4F4;
+    border: 1px solid #CCCCCC;
+    color: #AAAAAA;
+}
+
+div.spec
+{
+    border-radius: 4px 4px 4px 4px;
+    margin: 3px 3px 3px 5px;
+    padding: 2px 15px;
+}
+
+    div.spec.passed
+    {
+        background-color: lightgreen;
+        border: 1px solid green;
+    }
+
+    div.spec.failed
+    {
+        background-color: lightpink;
+        border: 1px solid red;
+    }
+
+    div.spec.running
+    {
+        background-color: lightblue;
+        border: 1px solid blue;
+    }
+
+    div.spec.undefined
+    {
+        background-color: #FCFC8F;
+        border: 1px solid orange;
+    }
+
+    div.spec.skipped
+    {
+        background-color: #EEEEEE;
+        border: 1px solid #CCCCCC;
+        color: #AAAAAA;
+    }
+
+div.spec-name
+{
+    text-decoration: underline;
+}
+
+div.spec-step
+{
+    color: #880000;
+    padding-left: 15px;
+}

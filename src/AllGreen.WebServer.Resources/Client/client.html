@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>AllGreen Test runner</title>
+    <link rel="stylesheet" type="text/css" href="Client/client.css" />
+</head>
+<body>
+    <div id="server-status">Connecting...</div>
+    <div id="runner-status">Waiting...</div>
+    <div id="spec-results"></div>
+
+    <script src="Scripts/jquery.js"></script>
+    <script src="Scripts/jquery.signalR.js"></script>
+    <!--script src="Scripts/underscore.js"></script-->
+
+    <script src="Client/allgreen.js"></script>
+    <script type="text/javascript">if (AllGreen) AllGreen.startApp();</script>
+    <script src="Client/reporter.js"></script>
+    <script src="Client/hub.js"></script>
+
+    <iframe id="runner" src="about:blank"></iframe>
+    <script type="text/javascript">$('#runner').prop('src', 'about:blank');</script>
+</body>
+</html>
