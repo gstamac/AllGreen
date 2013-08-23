@@ -1,11 +1,11 @@
 /// <reference path="../../Scripts/typings/jasmine/jasmine.d.ts" />
-/// <reference path="../../Client/ReporterAdapters/jasmineAdapter.ts" />
+/// <reference path="../../Client/reporterAdapters/jasmineAdapter.ts" />
 
 describe("AllGreen JasmineAdapterFactory", () => {
-    it("Creates Jasmine adapter", () => {
+    it("Creates Jasmine this.adapter", () => {
         var factory = new AllGreen.JasmineAdapterFactory();
-        reporter = jasmine.createSpyObj('reporter', ['reset', 'setServerStatus', 'setRunnerStatus', 'setSpecStatus']);
-        var adapter = factory.create(reporter);
+        var reporter = jasmine.createSpyObj('this.reporter', ['reset', 'setServerStatus', 'started', 'finished', 'specUpdated']);
+        var adapter = factory.create(this.reporter);
 
         expect(adapter).toBeDefined();
         expect(adapter.start).toBeDefined();
@@ -18,13 +18,7 @@ declare module jasmine {
     }
 }
 
-var reporter;
-var adapter;
-var runner;
-var spec;
-var spec2;
-
-describe("AllGreen Jasmine Adapter", () => {
+describe("AllGreen Jasmine this.adapter", () => {
     var createSpecResults = function (ispassed: boolean, isskipped: boolean, steps: any[] = []): Function {
         return () => {
             return {
@@ -80,20 +74,20 @@ describe("AllGreen Jasmine Adapter", () => {
             },
         });
 
-        reporter = jasmine.createSpyObj('reporter', ['reset', 'setServerStatus', 'setRunnerStatus', 'setSpecStatus']);
-        adapter = new AllGreen.JasmineAdapter(reporter);
+        this.reporter = jasmine.createSpyObj('reporter', ['reset', 'setServerStatus', 'started', 'finished', 'specUpdated']);
+        this.adapter = new AllGreen.JasmineAdapter(this.reporter);
 
         var suite1 = {
             id: 881,
             description: 'Suite 1'
         };
-        spec = {
+        this.spec = {
             id: 244,
             description: 'test 1',
             suite: suite1,
             results: createSpecResults(false, false)
         };
-        spec2 = {
+        this.spec2 = {
             id: 344,
             description: 'test 2',
             suite: suite1,
@@ -102,38 +96,38 @@ describe("AllGreen Jasmine Adapter", () => {
     });
 
     afterEach(() => {
-        adapter = null;
+        this.adapter = null;
     });
 
-    it("Resets reporter on runner starting and displays reporter as started", () => {
-        adapter.reportRunnerStarting(runner);
-        expect(reporter.setRunnerStatus).toHaveBeenCalledWith('Running...');
+    it("Resets reporter on runner starting and displays this.reporter as started", () => {
+        this.adapter.reportRunnerStarting(this.runner);
+        expect(this.reporter.started).toHaveBeenCalled();
     });
 
     it("Displays reporter as finished on runner finished", () => {
-        adapter.reportRunnerResults(runner);
-        expect(reporter.setRunnerStatus).toHaveBeenCalledWith('Finished');
+        this.adapter.reportRunnerResults(this.runner);
+        expect(this.reporter.finished).toHaveBeenCalled();
     });
 
     it("Shows started specs as running", () => {
-        adapter.reportSpecStarting(spec);
-        expect(reporter.setSpecStatus).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Running, null);
+        this.adapter.reportSpecStarting(this.spec);
+        expect(this.reporter.specUpdated).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Running, null);
     });
 
     it("Shows passed specs as passed", () => {
-        spec.results = createSpecResults(true, false);
-        adapter.reportSpecResults(spec);
-        expect(reporter.setSpecStatus).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Passed, null);
+        this.spec.results = createSpecResults(true, false);
+        this.adapter.reportSpecResults(this.spec);
+        expect(this.reporter.specUpdated).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Passed, null);
     });
 
     it("Shows failed specs as failed", () => {
-        spec.results = createSpecResults(false, false, [
+        this.spec.results = createSpecResults(false, false, [
             createSpecResultLogStep('log message'),
             createSpecResultExpectStep(true, 'expected something and succeded', ''),
             createSpecResultExpectStep(false, 'expected something and failed', 'trace 1\ntrace 2')
         ]);
-        adapter.reportSpecResults(spec);
-        expect(reporter.setSpecStatus).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Failed, [
+        this.adapter.reportSpecResults(this.spec);
+        expect(this.reporter.specUpdated).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Failed, [
             { message: 'log message' },
             { message: 'expected something and failed', status: AllGreen.SpecStatus.Failed, trace: 'trace 1\ntrace 2' }
         ]);
@@ -148,26 +142,26 @@ describe("AllGreen Jasmine Adapter", () => {
             'jasmine.Queue.prototype.next_/onComplete@http://localhost:8080/Scripts/jasmine.js:2092' +
             'jasmine.Suite.prototype.finish@http://localhost:8080/Scripts/jasmine.js:2478' +
             'jasmine.Suite.prototype.execute/<@http://localhost:8080/Scripts/jasmine.js:2522';
-        spec.results = createSpecResults(false, false, [
+        this.spec.results = createSpecResults(false, false, [
             createSpecResultExpectStep(false, 'msg', trace)
         ]);
-        adapter.reportSpecResults(spec);
-        expect(reporter.setSpecStatus).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Failed, [
+        this.adapter.reportSpecResults(this.spec);
+        expect(this.reporter.specUpdated).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Failed, [
             { message: 'msg', status: AllGreen.SpecStatus.Failed, trace: 'trace 1\ntrace 2' }
         ]);
     });
 
     it("Shows skipped specs as skipped", () => {
-        spec.results = createSpecResults(false, true);
-        adapter.reportSpecResults(spec);
-        expect(reporter.setSpecStatus).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Skipped, null);
+        this.spec.results = createSpecResults(false, true);
+        this.adapter.reportSpecResults(this.spec);
+        expect(this.reporter.specUpdated).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Skipped, null);
     });
 
     it("Shows specs from same suite as results from same suite", () => {
-        adapter.reportSpecResults(spec);
-        adapter.reportSpecResults(spec2);
-        expect(reporter.setSpecStatus).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Failed, null);
-        expect(reporter.setSpecStatus).toHaveBeenCalledForSpec(344, 'test 2', 881, 'Suite 1', AllGreen.SpecStatus.Failed, null);
+        this.adapter.reportSpecResults(this.spec);
+        this.adapter.reportSpecResults(this.spec2);
+        expect(this.reporter.specUpdated).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Failed, null);
+        expect(this.reporter.specUpdated).toHaveBeenCalledForSpec(344, 'test 2', 881, 'Suite 1', AllGreen.SpecStatus.Failed, null);
     });
 
     it("Shows nested suites", () => {
@@ -179,11 +173,11 @@ describe("AllGreen Jasmine Adapter", () => {
                 description: 'Suite 1',
             }
         };
-        spec.suite = suite2;
-        spec2.suite = suite2;
-        adapter.reportSpecResults(spec);
-        adapter.reportSpecResults(spec2);
-        expect(reporter.setSpecStatus).toHaveBeenCalledWith(jasmine.objectContaining({
+        this.spec.suite = suite2;
+        this.spec2.suite = suite2;
+        this.adapter.reportSpecResults(this.spec);
+        this.adapter.reportSpecResults(this.spec2);
+        expect(this.reporter.specUpdated).toHaveBeenCalledWith(jasmine.objectContaining({
             id: 244,
             name: 'test 1',
             suite: jasmine.objectContaining({
@@ -196,7 +190,7 @@ describe("AllGreen Jasmine Adapter", () => {
             }),
             status: AllGreen.SpecStatus.Failed
         }));
-        expect(reporter.setSpecStatus).toHaveBeenCalledWith(jasmine.objectContaining({
+        expect(this.reporter.specUpdated).toHaveBeenCalledWith(jasmine.objectContaining({
             id: 344,
             name: 'test 2',
             suite: jasmine.objectContaining({

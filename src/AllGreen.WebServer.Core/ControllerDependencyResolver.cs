@@ -26,7 +26,7 @@ namespace AllGreen.WebServer.Core
 
         public object GetService(Type serviceType)
         {
-            object service;
+            object service = null;
             if (!_TinyIoCContainer.CanResolve(serviceType) || !_TinyIoCContainer.TryResolve(serviceType, out service))
                 service = null;
             return service;

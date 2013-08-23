@@ -2,56 +2,60 @@
 /// <reference path="../Scripts/typings/jquery/jquery.d.ts" />
 var AllGreen;
 (function (AllGreen) {
-    (function (SpecStatus) {
-        SpecStatus[SpecStatus["Running"] = 0] = "Running";
-        SpecStatus[SpecStatus["Failed"] = 1] = "Failed";
-        SpecStatus[SpecStatus["Undefined"] = 2] = "Undefined";
-        SpecStatus[SpecStatus["Passed"] = 3] = "Passed";
-        SpecStatus[SpecStatus["Skipped"] = 4] = "Skipped";
-    })(AllGreen.SpecStatus || (AllGreen.SpecStatus = {}));
-    var SpecStatus = AllGreen.SpecStatus;
-
-    var Reporter = (function () {
-        function Reporter() {
+    var ServerReporter = (function () {
+        function ServerReporter() {
             this.DEFAULT_SERVER_STATUS = 'Connecting...';
+        }
+        ServerReporter.prototype.setServerStatus = function (status) {
+            this.getServerStatusElement().html(status);
+        };
+
+        ServerReporter.prototype.getServerStatusElement = function () {
+            return $('#server-status');
+        };
+        return ServerReporter;
+    })();
+    AllGreen.ServerReporter = ServerReporter;
+
+    var RunnerReporter = (function () {
+        function RunnerReporter() {
             this.DEFAULT_RUNNER_STATUS = 'Waiting...';
             this.totalStatus = null;
         }
-        Reporter.prototype.reset = function () {
-            this.setServerStatus(this.DEFAULT_SERVER_STATUS);
+        RunnerReporter.prototype.reset = function () {
             this.setRunnerStatus(this.DEFAULT_RUNNER_STATUS);
             this.getSpecResultsElement().text('');
             this.totalStatus = null;
         };
 
-        Reporter.prototype.setServerStatus = function (status) {
-            this.getServerStatusElement().html(status);
+        RunnerReporter.prototype.started = function () {
+            this.setRunnerStatus('Running...');
         };
 
-        Reporter.prototype.setRunnerStatus = function (status) {
-            this.getRunnerStatusElement().html(status);
-        };
-
-        Reporter.prototype.setSpecStatus = function (spec) {
+        RunnerReporter.prototype.specUpdated = function (spec) {
             var specElement = this.getSpecElement(spec);
             this.setSpecElementClass(specElement, spec.status);
             this.setSpecElementSteps(specElement, spec.steps);
             this.updateSuiteStatus(spec.suite, spec.status);
         };
 
-        Reporter.prototype.getServerStatusElement = function () {
-            return $('#server-status');
+        RunnerReporter.prototype.finished = function () {
+            this.setRunnerStatus('Finished');
         };
 
-        Reporter.prototype.getRunnerStatusElement = function () {
+        RunnerReporter.prototype.setRunnerStatus = function (status) {
+            this.getRunnerStatusElement().html(status);
+        };
+
+        RunnerReporter.prototype.getRunnerStatusElement = function () {
             return $('#runner-status');
         };
 
-        Reporter.prototype.getSpecResultsElement = function () {
+        RunnerReporter.prototype.getSpecResultsElement = function () {
             return $('#spec-results');
         };
 
-        Reporter.prototype.getSpecElement = function (spec) {
+        RunnerReporter.prototype.getSpecElement = function (spec) {
             var specElement = $('#spec-' + spec.id);
             if (specElement.length <= 0) {
                 specElement = this.createSpecElement(spec);
@@ -59,7 +63,7 @@ var AllGreen;
             return specElement;
         };
 
-        Reporter.prototype.createSpecElement = function (spec) {
+        RunnerReporter.prototype.createSpecElement = function (spec) {
             var suiteElement = this.getSuiteContentElement(spec.suite);
             var specElement = $('<div/>').addClass('spec').prop('id', 'spec-' + spec.id);
             $('<a/>').prop('href', '#').html(spec.name).addClass('spec-name').click(function () {
@@ -70,11 +74,11 @@ var AllGreen;
             return specElement;
         };
 
-        Reporter.prototype.setSpecElementClass = function (element, status) {
+        RunnerReporter.prototype.setSpecElementClass = function (element, status) {
             element.prop('class', 'spec ' + this.statusClass(status));
         };
 
-        Reporter.prototype.setSpecElementSteps = function (specElement, steps) {
+        RunnerReporter.prototype.setSpecElementSteps = function (specElement, steps) {
             var stepsElement = specElement.children('.spec-steps');
             if (steps && steps.length) {
                 if (!stepsElement.length) {
@@ -100,7 +104,7 @@ else
             }
         };
 
-        Reporter.prototype.updateSuiteStatus = function (suite, specStatus) {
+        RunnerReporter.prototype.updateSuiteStatus = function (suite, specStatus) {
             if (suite) {
                 var suiteElement = $('#suite-' + suite.id);
                 if (suiteElement) {
@@ -117,7 +121,7 @@ else
             }
         };
 
-        Reporter.prototype.investigateSuiteStatus = function (suiteContentElement) {
+        RunnerReporter.prototype.investigateSuiteStatus = function (suiteContentElement) {
             if (suiteContentElement.children('.running').length)
                 return AllGreen.SpecStatus.Running;
             if (suiteContentElement.children('.failed').length)
@@ -129,11 +133,11 @@ else
             return AllGreen.SpecStatus.Skipped;
         };
 
-        Reporter.prototype.setSuiteElementClass = function (element, status) {
+        RunnerReporter.prototype.setSuiteElementClass = function (element, status) {
             element.prop('class', 'suite ' + this.statusClass(status));
         };
 
-        Reporter.prototype.getSuiteContentElement = function (suite) {
+        RunnerReporter.prototype.getSuiteContentElement = function (suite) {
             if (suite) {
                 var suiteElement = $('#suite-' + suite.id + ' > .suite-content');
                 if (suiteElement.length <= 0) {
@@ -146,7 +150,7 @@ else
             }
         };
 
-        Reporter.prototype.createSuiteElement = function (suite) {
+        RunnerReporter.prototype.createSuiteElement = function (suite) {
             var parentElement = this.getSuiteContentElement(suite.parentSuite);
             var suiteElement = $('<div/>').addClass('suite').prop('id', 'suite-' + suite.id);
             $('<a/>').prop('href', '#').html(suite.name).addClass('suite-name').click(function () {
@@ -157,19 +161,20 @@ else
             return suiteElement;
         };
 
-        Reporter.prototype.statusClass = function (status) {
-            var statusName = SpecStatus[status];
+        RunnerReporter.prototype.statusClass = function (status) {
+            var statusName = AllGreen.SpecStatus[status];
             return statusName.toLowerCase();
         };
-        return Reporter;
+        return RunnerReporter;
     })();
-    AllGreen.Reporter = Reporter;
+    AllGreen.RunnerReporter = RunnerReporter;
 })(AllGreen || (AllGreen = {}));
 
 (function () {
     var app = AllGreen.App.getCurrent();
     if (app != null) {
         console.log('registering reporter factory');
-        app.setReporter(new AllGreen.Reporter());
+        app.setServerReporter(new AllGreen.ServerReporter());
+        app.registerRunnerReporter(new AllGreen.RunnerReporter());
     }
 })();

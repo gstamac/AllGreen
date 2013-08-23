@@ -7,21 +7,27 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Owin;
 using TinyIoC;
+using Microsoft.AspNet.SignalR;
 
 namespace AllGreen.WebServer.Core
 {
-    public class OwinStartup
+    public class OwinStartup : IDisposable
     {
+        TinyIoCContainer _TinyIoCContainer;
+
+        public OwinStartup(TinyIoCContainer tinyIoCContainer)
+        {
+            _TinyIoCContainer = tinyIoCContainer;
+        }
+
         public void Configuration(IAppBuilder app)
         {
-            TinyIoCContainer tinyIoCContainer = new TinyIoCContainer();
-            tinyIoCContainer.Register<IWebResources>(new EmbededResources(@"AllGreen.WebServer.Resources", Assembly.Load("AllGreen.WebServer.Resources")));
-            tinyIoCContainer.Register<IRunnerResources, RunnerResources>();
-            //tinyIoCContainer.Register<ClientController>();
+            var config = new HttpConfiguration() { DependencyResolver = new ControllerDependencyResolver(_TinyIoCContainer) };
 
-            var config = new HttpConfiguration() { DependencyResolver = new ControllerDependencyResolver(tinyIoCContainer) };
-
-            app.MapHubs();
+            SignalRDependencyResolver resolver = new SignalRDependencyResolver(_TinyIoCContainer);
+            GlobalHost.DependencyResolver = resolver;
+            HubConfiguration hubConfiguration = new HubConfiguration() { Resolver = resolver };
+            app.MapHubs(hubConfiguration);
             app.UseWebApi(config);
             SetupRoutes(config);
         }
@@ -31,6 +37,11 @@ namespace AllGreen.WebServer.Core
             config.Routes.MapHttpRoute("Scripts", "Scripts/{*path}", new { controller = "Scripts", action = "Get", path = RouteParameter.Optional });
             config.Routes.MapHttpRoute("Client Explicit", "Client/{*path}", new { controller = "Client", action = "Get", path = "client.html" });
             config.Routes.MapHttpRoute("Client", "{*path}", new { controller = "Client", action = "Get", path = "client.html" });
+        }
+
+        public void Dispose()
+        {
+            _TinyIoCContainer.Dispose();
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Owin.Testing;
+using TinyIoC;
 
 namespace AllGreen.WebServer.Core.Tests
 {
@@ -18,7 +19,7 @@ namespace AllGreen.WebServer.Core.Tests
         [TestInitialize]
         public void Setup()
         {
-            _OwinStartup = new OwinStartup();
+            _OwinStartup = new OwinStartup(new TinyIoCContainer());
         }
 
         [TestClass]
@@ -43,7 +44,7 @@ namespace AllGreen.WebServer.Core.Tests
             [Ignore]
             public async Task Test()
             {
-                TestServer testServer = TestServer.Create(appBuilder => new OwinStartup().Configuration(appBuilder));
+                TestServer testServer = TestServer.Create(appBuilder => new OwinStartup(new TinyIoCContainer()).Configuration(appBuilder));
                 HttpClient httpClient = testServer.HttpClient;
                 HttpResponseMessage response = await httpClient.GetAsync(@"http://localhost");
                 Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);

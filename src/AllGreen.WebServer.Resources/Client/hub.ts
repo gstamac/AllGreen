@@ -5,53 +5,56 @@
 module AllGreen {
     export class Hub {
         private connection: HubConnection;
-        private env: App;
+        private app: App;
 
-        constructor(connection: HubConnection, env: App) {
+        constructor(connection: HubConnection, app: App) {
             this.connection = connection;
-            this.env = env;
-            env.setServerStatus('Disconnected');
+            this.app = app;
+            app.setServerStatus('Disconnected');
         }
 
-        public connect() {
-            this.attachToHub(this.connection, this.env);
-            this.attachToConnectionEvents(this.connection, this.env);
-            this.startConnection(this.connection, this.env);
+        public connect(): HubProxy {
+            var hubProxy = this.attachToHub(this.connection, this.app);
+            this.attachToConnectionEvents(this.connection, this.app);
+            this.startConnection(this.connection, this.app);
+            return hubProxy;
         }
 
-        private attachToHub(connection: HubConnection, env: App) {
-            connection.createHubProxy('runnerHub').on('reload', () => {
+        private attachToHub(connection: HubConnection, app: App): HubProxy {
+            var hubProxy = connection.createHubProxy('runnerHub');
+            hubProxy.on('reload', () => {
                 console.log('reloading...');
-                env.reload();
+                app.reload();
             });
+            return hubProxy;
         }
 
-        private attachToConnectionEvents(connection: HubConnection, env: App) {
+        private attachToConnectionEvents(connection: HubConnection, app: App) {
             connection.stateChanged((change) => {
                 console.log('state changed ', change, this.stateString(change.oldState), ' -> ', this.stateString(change.newState));
             });
             connection.error((error) => {
                 console.log('error', error);
-                env.setServerStatus('Error: ' + error);
+                app.setServerStatus('Error: ' + error);
             });
             connection.reconnecting(() => {
                 console.log('reconnecting');
-                env.setServerStatus('Reconnecting...');
+                app.setServerStatus('Reconnecting...');
             });
             connection.reconnected(() => {
                 console.log('reconnected');
-                env.setServerStatus('Reconnected');
+                app.setServerStatus('Reconnected');
             });
             connection.disconnected(() => {
                 console.log('disconnected');
-                env.setServerStatus('Disconnected');
+                app.setServerStatus('Disconnected');
             });
         }
 
-        private startConnection(connection: HubConnection, env: App) {
+        private startConnection(connection: HubConnection, app: App) {
             connection.start().done(() => {
                 console.log('done');
-                env.setServerStatus('Done');
+                app.setServerStatus('Done');
             });
         }
 
@@ -66,6 +69,31 @@ module AllGreen {
                 return 'disconnected';
         }
     }
+
+    export class HubReporter implements IRunnerReporter {
+        private hubProxy: HubProxy;
+
+        constructor(hubProxy: HubProxy) {
+            this.hubProxy = hubProxy;
+        }
+
+        public reset() {
+            this.hubProxy.invoke('reset');
+        }
+
+        public started() {
+            this.hubProxy.invoke('started');
+        }
+
+        public specUpdated(spec: ISpec) {
+            this.hubProxy.invoke('specUpdated', spec);
+        }
+
+        public finished() {
+            this.hubProxy.invoke('finished');
+        }
+
+    }
 }
 
 () => {
@@ -74,6 +102,7 @@ module AllGreen {
         console.log('registering signalR hub');
         var connection = $.hubConnection();
         var hub = new AllGreen.Hub(connection, app);
-        hub.connect();
+        var hubProxy = hub.connect();
+        app.registerRunnerReporter(new AllGreen.HubReporter(hubProxy));
     }
 } ();

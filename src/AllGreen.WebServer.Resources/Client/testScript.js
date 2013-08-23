@@ -36,7 +36,7 @@ describe("Suite 2", function () {
     });
 });
 
-/*allGreen.reporter.setServerStatus('Started');
+/*allGreen.reporter.setHubStatus('Started');
 allGreen.reporter.setRunnerStatus('Finished');
 */
 /*var suite1 = { id: 444, name: 'suite 1', parent_suite: null };

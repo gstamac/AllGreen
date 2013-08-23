@@ -6,15 +6,55 @@ module AllGreen {
         App.startApp();
     }
 
+    export interface IServerReporter {
+        setServerStatus(status: string);
+    }
+
+    export interface IRunnerReporter {
+        reset();
+        started();
+        specUpdated(spec: ISpec);
+        finished();
+    }
+
+    export enum SpecStatus {
+        Running = 0,
+        Failed = 1,
+        Undefined = 2,
+        Passed = 3,
+        Skipped = 4
+    }
+
+    export interface ISpec {
+        id: any;
+        name: string;
+        suite: ISuite;
+        status: SpecStatus;
+        steps: ISpecStep[];
+    }
+
+    export interface ISuite {
+        id: any;
+        name: string;
+        parentSuite: ISuite;
+        status: SpecStatus;
+    }
+
+    export interface ISpecStep {
+        message: string;
+        status: SpecStatus;
+        trace: string;
+    }
+
     export interface IAdapter {
         start();
     }
 
     export interface IAdapterFactory {
-        create(reporter: IReporter): IAdapter;
+        create(reporter: IRunnerReporter): IAdapter;
     }
 
-    export class App {
+    export class App implements IServerReporter, IRunnerReporter {
         constructor() { }
 
         private static currentApp: App = null;
@@ -27,12 +67,18 @@ module AllGreen {
             return this.currentApp;
         }
 
-        private reporter: IReporter;
+        private serverReporter: IServerReporter = null;
+        private runnerReporters: IRunnerReporter[] = [];
         private adapterFactories: IAdapterFactory[] = [];
 
-        public setReporter(newReporter: IReporter) {
-            if (newReporter != null)
-                this.reporter = newReporter;
+        public setServerReporter(serverReporter: IServerReporter) {
+            if (serverReporter != null)
+                this.serverReporter = serverReporter;
+        }
+
+        public registerRunnerReporter(runnerReporter: IRunnerReporter) {
+            if (runnerReporter != null)
+                this.runnerReporters.push(runnerReporter);
         }
 
         public registerAdapterFactory(adapterFactory: IAdapterFactory) {
@@ -40,22 +86,41 @@ module AllGreen {
         }
 
         public start = function () {
-            $.each(this.adapterFactories,
-                (index, adapterFactory: IAdapterFactory) =>
-                { adapterFactory.create(this.reporter).start(); });
+            var reporter = this;
+            this.adapterFactories.forEach((adapterFactory: IAdapterFactory) =>
+            { adapterFactory.create(reporter).start(); });
         }
 
         public setServerStatus(status: string) {
-            this.reporter.setServerStatus(status);
+            this.serverReporter.setServerStatus(status);
         }
 
         public reset() {
-            this.adapterFactories = [];
-            this.reporter.reset();
-            $('#runner').prop('src', 'about:blank');
+            this.runnerReporters.forEach((runnerReporter) => {
+                runnerReporter.reset();
+            });
+        }
+
+        public started() {
+            this.runnerReporters.forEach((runnerReporter) => {
+                runnerReporter.started();
+            });
+        }
+
+        public specUpdated(spec: ISpec) {
+            this.runnerReporters.forEach((runnerReporter) => {
+                runnerReporter.specUpdated(spec);
+            });
+        }
+
+        public finished() {
+            this.runnerReporters.forEach((runnerReporter) => {
+                runnerReporter.finished();
+            });
         }
 
         public reload() {
+            this.adapterFactories = [];
             this.reset();
             $('#runner').prop('src', 'runner.html');
         }

@@ -17,26 +17,27 @@ describe("App", function () {
         _this.app = null;
     });
 
-    it("Can use custom reporter", function () {
-        var reporter = {};
-        _this.app.setReporter(reporter);
-
-        var adapterFactory1 = jasmine.createSpyObj('adapterFactory1', ['create']);
-        adapterFactory1['create'].andReturn({ start: function () {
-            } });
-        _this.app.registerAdapterFactory(adapterFactory1);
-        _this.app.start();
-
-        expect(adapterFactory1.create).toHaveBeenCalledWith(reporter);
-    });
-
-    it("Sets server status", function () {
-        var reporter = jasmine.createSpyObj('reporter', ['setServerStatus']);
-        _this.app.setReporter(reporter);
+    it("Reports server status", function () {
+        var serverReporter = jasmine.createSpyObj('serverReporter', ['setServerStatus']);
+        _this.app.setServerReporter(serverReporter);
 
         _this.app.setServerStatus('server status');
 
-        expect(reporter.setServerStatus).toHaveBeenCalledWith('server status');
+        expect(serverReporter.setServerStatus).toHaveBeenCalledWith('server status');
+    });
+
+    ['reset', 'started', 'finished', 'specUpdated'].forEach(function (method) {
+        it("Forwards '" + method + "' to multiple reporters", function () {
+            var runnerReporter1 = jasmine.createSpyObj('runnerReporter1', [method]);
+            _this.app.registerRunnerReporter(runnerReporter1);
+            var runnerReporter2 = jasmine.createSpyObj('runnerReporter2', [method]);
+            _this.app.registerRunnerReporter(runnerReporter2);
+
+            _this.app[method]();
+
+            expect(runnerReporter1[method]).toHaveBeenCalled();
+            expect(runnerReporter2[method]).toHaveBeenCalled();
+        });
     });
 
     it("Creates adapters on start", function () {
@@ -50,8 +51,8 @@ describe("App", function () {
         _this.app.registerAdapterFactory(adapterFactory1);
         _this.app.registerAdapterFactory(adapterFactory2);
         _this.app.start();
-        expect(adapterFactory1.create).toHaveBeenCalled();
-        expect(adapterFactory2.create).toHaveBeenCalled();
+        expect(adapterFactory1.create).toHaveBeenCalledWith(_this.app);
+        expect(adapterFactory2.create).toHaveBeenCalledWith(_this.app);
     });
 
     it("Adapters start is called", function () {
@@ -69,25 +70,9 @@ describe("App", function () {
         expect(adapter2.start).toHaveBeenCalled();
     });
 
-    it("Can be reset", function () {
-        var reporter = jasmine.createSpyObj('reporter', ['reset']);
-        _this.app.setReporter(reporter);
-
-        var adapterFactory1 = jasmine.createSpyObj('adapterFactory1', ['create']);
-        adapterFactory1['create'].andReturn({ start: function () {
-            } });
-        _this.app.registerAdapterFactory(adapterFactory1);
-
-        _this.app.reset();
-        expect(reporter.reset).toHaveBeenCalled();
-        _this.app.start();
-        expect(adapterFactory1.create).not.toHaveBeenCalled();
-        expect($('#runner')).toHaveAttr('src', 'about:blank');
-    });
-
     it("Can be reloaded", function () {
-        var reporter = jasmine.createSpyObj('reporter', ['reset']);
-        _this.app.setReporter(reporter);
+        var runnerReporter = jasmine.createSpyObj('runnerReporter', ['reset']);
+        _this.app.registerRunnerReporter(runnerReporter);
 
         var adapterFactory1 = jasmine.createSpyObj('adapterFactory1', ['create']);
         adapterFactory1['create'].andReturn({ start: function () {
@@ -95,6 +80,9 @@ describe("App", function () {
         _this.app.registerAdapterFactory(adapterFactory1);
 
         _this.app.reload();
+        expect(runnerReporter.reset).toHaveBeenCalled();
         expect($('#runner')).toHaveAttr('src', 'runner.html');
+        _this.app.start();
+        expect(adapterFactory1.create).not.toHaveBeenCalled();
     });
 });

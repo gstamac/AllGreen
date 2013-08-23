@@ -71,13 +71,16 @@
     <Compile Include="EmbededResources.cs" />
     <Compile Include="HttpRequestMessageExtensions.cs" />
     <Compile Include="HttpResponseMessageExtensions.cs" />
+    <Compile Include="IReporter.cs" />
     <Compile Include="IRunnerResources.cs" />
+    <Compile Include="Spec.cs" />
     <Compile Include="IWebResources.cs" />
     <Compile Include="OwinStartup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunnerHub.cs" />
     <Compile Include="RunnerResources.cs" />
     <Compile Include="ScriptsController.cs" />
+    <Compile Include="SignalRDependencyResolver.cs" />
     <Compile Include="TinyIoC.cs" />
   </ItemGroup>
   <ItemGroup>

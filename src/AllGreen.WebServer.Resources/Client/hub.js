@@ -4,51 +4,54 @@
 var AllGreen;
 (function (AllGreen) {
     var Hub = (function () {
-        function Hub(connection, env) {
+        function Hub(connection, app) {
             this.connection = connection;
-            this.env = env;
-            env.setServerStatus('Disconnected');
+            this.app = app;
+            app.setServerStatus('Disconnected');
         }
         Hub.prototype.connect = function () {
-            this.attachToHub(this.connection, this.env);
-            this.attachToConnectionEvents(this.connection, this.env);
-            this.startConnection(this.connection, this.env);
+            var hubProxy = this.attachToHub(this.connection, this.app);
+            this.attachToConnectionEvents(this.connection, this.app);
+            this.startConnection(this.connection, this.app);
+            return hubProxy;
         };
 
-        Hub.prototype.attachToHub = function (connection, env) {
-            connection.createHubProxy('runnerHub').on('reload', function () {
+        Hub.prototype.attachToHub = function (connection, app) {
+            var hubProxy = connection.createHubProxy('runnerHub');
+            hubProxy.on('reload', function () {
                 console.log('reloading...');
-                env.reload();
+                app.reload();
             });
+            return hubProxy;
         };
 
-        Hub.prototype.attachToConnectionEvents = function (connection, env) {
+        Hub.prototype.attachToConnectionEvents = function (connection, app) {
             var _this = this;
             connection.stateChanged(function (change) {
                 console.log('state changed ', change, _this.stateString(change.oldState), ' -> ', _this.stateString(change.newState));
             });
             connection.error(function (error) {
                 console.log('error', error);
-                env.setServerStatus('Error: ' + error);
+                app.setServerStatus('Error: ' + error);
             });
             connection.reconnecting(function () {
                 console.log('reconnecting');
-                env.setServerStatus('Reconnecting...');
+                app.setServerStatus('Reconnecting...');
             });
             connection.reconnected(function () {
                 console.log('reconnected');
-                env.setServerStatus('Reconnected');
+                app.setServerStatus('Reconnected');
             });
             connection.disconnected(function () {
                 console.log('disconnected');
-                env.setServerStatus('Disconnected');
+                app.setServerStatus('Disconnected');
             });
         };
 
-        Hub.prototype.startConnection = function (connection, env) {
+        Hub.prototype.startConnection = function (connection, app) {
             connection.start().done(function () {
                 console.log('done');
-                env.setServerStatus('Done');
+                app.setServerStatus('Done');
             });
         };
 
@@ -65,6 +68,29 @@ var AllGreen;
         return Hub;
     })();
     AllGreen.Hub = Hub;
+
+    var HubReporter = (function () {
+        function HubReporter(hubProxy) {
+            this.hubProxy = hubProxy;
+        }
+        HubReporter.prototype.reset = function () {
+            this.hubProxy.invoke('reset');
+        };
+
+        HubReporter.prototype.started = function () {
+            this.hubProxy.invoke('started');
+        };
+
+        HubReporter.prototype.specUpdated = function (spec) {
+            this.hubProxy.invoke('specUpdated', spec);
+        };
+
+        HubReporter.prototype.finished = function () {
+            this.hubProxy.invoke('finished');
+        };
+        return HubReporter;
+    })();
+    AllGreen.HubReporter = HubReporter;
 })(AllGreen || (AllGreen = {}));
 
 (function () {
@@ -73,6 +99,7 @@ var AllGreen;
         console.log('registering signalR hub');
         var connection = $.hubConnection();
         var hub = new AllGreen.Hub(connection, app);
-        hub.connect();
+        var hubProxy = hub.connect();
+        app.registerRunnerReporter(new AllGreen.HubReporter(hubProxy));
     }
 })();

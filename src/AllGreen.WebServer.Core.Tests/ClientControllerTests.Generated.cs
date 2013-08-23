@@ -40,13 +40,13 @@ namespace AllGreen.WebServer.Core.Tests
 		{
 			GetClientResponse(@"reporter.js", @"reporter.js", @"text/js");
 		}
-		// DataRow(@"ReporterAdapters/jasmine.js", @"ReporterAdapters/jasmine.js", @"text/js")
+		// DataRow(@"ReporterAdapters/jasmineAdapter.js", @"ReporterAdapters/jasmineAdapter.js", @"text/js")
 		[TestMethod]
-		[Description("GetClientResponse(@\"ReporterAdapters/jasmine.js\", @\"ReporterAdapters/jasmine.js\"," +
-		    " @\"text/js\")")]
-		public void GetClientResponse___ReporterAdapters_jasmine_js_____ReporterAdapters_jasmine_js_____text_js_()
+		[Description("GetClientResponse(@\"ReporterAdapters/jasmineAdapter.js\", @\"ReporterAdapters/jasmi" +
+		    "neAdapter.js\", @\"text/js\")")]
+		public void GetClientResponse___ReporterAdapters_jasmineAdapter_js_____ReporterAdapters_jasmineAdapter_js_____text_js_()
 		{
-			GetClientResponse(@"ReporterAdapters/jasmine.js", @"ReporterAdapters/jasmine.js", @"text/js");
+			GetClientResponse(@"ReporterAdapters/jasmineAdapter.js", @"ReporterAdapters/jasmineAdapter.js", @"text/js");
 		}
 		// DataRow(@"Client/allgreen.js", @"allgreen.js", @"text/js")
 		[TestMethod]
@@ -83,13 +83,13 @@ namespace AllGreen.WebServer.Core.Tests
 		{
 			GetClientResponse(@"Client/reporter.js", @"reporter.js", @"text/js");
 		}
-		// DataRow(@"Client/ReporterAdapters/jasmine.js", @"ReporterAdapters/jasmine.js", @"text/js")
+		// DataRow(@"Client/ReporterAdapters/jasmineAdapter.js", @"ReporterAdapters/jasmineAdapter.js", @"text/js")
 		[TestMethod]
-		[Description("GetClientResponse(@\"Client/ReporterAdapters/jasmine.js\", @\"ReporterAdapters/jasmi" +
-		    "ne.js\", @\"text/js\")")]
-		public void GetClientResponse___Client_ReporterAdapters_jasmine_js_____ReporterAdapters_jasmine_js_____text_js_()
+		[Description("GetClientResponse(@\"Client/ReporterAdapters/jasmineAdapter.js\", @\"ReporterAdapter" +
+		    "s/jasmineAdapter.js\", @\"text/js\")")]
+		public void GetClientResponse___Client_ReporterAdapters_jasmineAdapter_js_____ReporterAdapters_jasmineAdapter_js_____text_js_()
 		{
-			GetClientResponse(@"Client/ReporterAdapters/jasmine.js", @"ReporterAdapters/jasmine.js", @"text/js");
+			GetClientResponse(@"Client/ReporterAdapters/jasmineAdapter.js", @"ReporterAdapters/jasmineAdapter.js", @"text/js");
 		}
 	}
 }

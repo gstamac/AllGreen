@@ -3,44 +3,44 @@
 
 module AllGreen {
     export class JasmineAdapterFactory implements IAdapterFactory {
-        public create(reporter: IReporter): IAdapter {
+        public create(reporter: IRunnerReporter): IAdapter {
             return new JasmineAdapter(reporter);
         }
     }
 
     export class JasmineAdapter implements IAdapter, jasmine.Reporter {
-        private reporter: IReporter;
+        private reporter: IRunnerReporter;
 
-        constructor(reporter: IReporter) {
+        constructor(reporter: IRunnerReporter) {
             this.reporter = reporter;
         }
 
-        reportRunnerStarting(runner) {
-            this.reporter.setRunnerStatus('Running...');
+        reportRunnerStarting(runner: jasmine.Runner) {
+            this.reporter.started();
             //tc.info({ total: runner.specs().length });
         }
 
-        reportRunnerResults(runner) {
-            this.reporter.setRunnerStatus('Finished');
+        reportRunnerResults(runner: jasmine.Runner) {
+            this.reporter.finished();
             /*tc.complete({
                 coverage: window.__coverage__
             });*/
         }
 
-        reportSuiteResults(jasmineSuite) {
+        reportSuiteResults(jasmineSuite: jasmine.Suite) {
             // memory clean up
             /*suite.after_ = null;
             suite.before_ = null;
             suite.queue = null;*/
         }
 
-        reportSpecStarting(jasmineSpec) {
+        reportSpecStarting(jasmineSpec: jasmine.Spec) {
             var spec = new JasmineAdapterSpec(jasmineSpec, AllGreen.SpecStatus.Running);
-            this.reporter.setSpecStatus(spec);
+            this.reporter.specUpdated(spec);
         }
 
-        reportSpecResults(jasmineSpec) {
-            this.reporter.setSpecStatus(new JasmineAdapterSpec(jasmineSpec));
+        reportSpecResults(jasmineSpec: jasmine.Spec) {
+            this.reporter.specUpdated(new JasmineAdapterSpec(jasmineSpec));
             /*var result = {
                 id: spec.id,
                 description: spec.description,
@@ -77,11 +77,7 @@ module AllGreen {
         log() { }
 
         specFilter(jasmineSpec) {
-            /*if (!focusedSpecName()) {
-                return true;
-            }
-
-            return spec.getFullName().indexOf(focusedSpecName()) === 0;*/
+            return true;
         }
 
         start() {
@@ -129,15 +125,18 @@ module AllGreen {
                 this.steps = [];
 
                 for (var i = 0; i < resultItems.length; i++) {
-                    var step = resultItems[i];
+                    var result = resultItems[i];
 
-                    if (step.type === 'log') {
-                        this.steps.push({ message: step.toString(), status: AllGreen.SpecStatus.Undefined, trace: '' });
-                    } else if (step.type === 'expect' && !step.passed()) {
-                        if (step.trace.stack) {
-                            this.steps.push({ message: step.message, status: AllGreen.SpecStatus.Failed, trace: this.formatTraceStack(step.trace.stack) });
-                        } else {
-                            this.steps.push({ message: step.message, status: AllGreen.SpecStatus.Failed, trace: '' });
+                    if (result.type === 'log') {
+                        this.steps.push({ message: result.toString(), status: AllGreen.SpecStatus.Undefined, trace: '' });
+                    } else if (result.type === 'expect') {
+                        var expectationResult = <jasmine.ExpectationResult>result;
+                        if (!expectationResult.passed()) {
+                            if (expectationResult.trace.stack) {
+                                this.steps.push({ message: expectationResult.message, status: AllGreen.SpecStatus.Failed, trace: this.formatTraceStack(expectationResult.trace.stack) });
+                            } else {
+                                this.steps.push({ message: expectationResult.message, status: AllGreen.SpecStatus.Failed, trace: '' });
+                            }
                         }
                     }
                 }
@@ -155,7 +154,7 @@ module AllGreen {
         public parentSuite: ISuite;
         public status: SpecStatus;
 
-        constructor(suite) {
+        constructor(suite: jasmine.Suite) {
             this.id = suite.id;
             this.name = suite.description;
             this.parentSuite = null;

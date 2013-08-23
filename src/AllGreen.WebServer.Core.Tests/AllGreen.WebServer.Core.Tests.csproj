@@ -118,6 +118,7 @@
     </Compile>
     <Compile Include="OwinStartupTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RunnerHubTests.cs" />
     <Compile Include="ScriptsControllerTests.cs">
       <Template>AddDataMsTests.tt</Template>
       <Generator>T4Toolbox.TemplatedFileGenerator</Generator>

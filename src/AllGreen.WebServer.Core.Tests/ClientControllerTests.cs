@@ -58,13 +58,13 @@ namespace AllGreen.WebServer.Core.Tests
         [DataRow(@"client.css", @"client.css", @"text/css")]
         [DataRow(@"runner.html", @"runner.html", @"text/html")]
         [DataRow(@"reporter.js", @"reporter.js", @"text/js")]
-        [DataRow(@"ReporterAdapters/jasmine.js", @"ReporterAdapters/jasmine.js", @"text/js")]
+        [DataRow(@"ReporterAdapters/jasmineAdapter.js", @"ReporterAdapters/jasmineAdapter.js", @"text/js")]
         [DataRow(@"Client/allgreen.js", @"allgreen.js", @"text/js")]
         [DataRow(@"Client/client.html", @"client.html", @"text/html")]
         [DataRow(@"Client/client.css", @"client.css", @"text/css")]
         [DataRow(@"Client/runner.html", @"runner.html", @"text/html")]
         [DataRow(@"Client/reporter.js", @"reporter.js", @"text/js")]
-        [DataRow(@"Client/ReporterAdapters/jasmine.js", @"ReporterAdapters/jasmine.js", @"text/js")]
+        [DataRow(@"Client/ReporterAdapters/jasmineAdapter.js", @"ReporterAdapters/jasmineAdapter.js", @"text/js")]
         public void GetClientResponse(string filename, string path, string contentType)
         {
             ClientController clientController = CreateClientController(filename, path);
@@ -82,13 +82,13 @@ namespace AllGreen.WebServer.Core.Tests
         public void RunnerScriptsInject()
         {
             ClientController clientController = CreateClientController(@"runner.html", @"runner.html");
-            Mock.Get(_RunnerResources).Setup(rr => rr.GetScriptFiles()).Returns(new string[] { "Scripts/jasmine.js", "Client/ReporterAdapters/jasmine.js", "Client/testScript.js" });
+            Mock.Get(_RunnerResources).Setup(rr => rr.GetScriptFiles()).Returns(new string[] { "Scripts/jasmine.js", "Client/ReporterAdapters/jasmineAdapter.js", "Client/testScript.js" });
 
             HttpResponseMessage httpResponseMessage = clientController.Get();
 
             string responseContent = httpResponseMessage.Content.ReadAsStringAsync().Result;
             responseContent.Should().Contain("<script src=\"Scripts/jasmine.js\"></script>");
-            responseContent.Should().Contain("<script src=\"Client/ReporterAdapters/jasmine.js\"></script>");
+            responseContent.Should().Contain("<script src=\"Client/ReporterAdapters/jasmineAdapter.js\"></script>");
             responseContent.Should().Contain("<script src=\"Client/testScript.js\"></script>");
         }
     }

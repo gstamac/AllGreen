@@ -9,10 +9,7 @@ declare module jasmine {
     }
 }
 
-var reporter = null;
-var suite1 = null;
-
-describe("App", () => {
+describe("AllGreen.this.runnerReporter", () => {
     beforeEach(() => {
         jasmine.getEnv().currentSpec.addMatchers({
             toBeSpecElement: function (specName, statusClass) {
@@ -68,13 +65,15 @@ describe("App", () => {
         clientHtml = clientHtml.replace(/<script[^>]*>[^<]*AllGreen\.startApp()[^<]*<\/script>/g, '');
         setFixtures(clientHtml);
 
-        reporter = new AllGreen.Reporter();
+        this.serverReporter = new AllGreen.ServerReporter();
+        this.runnerReporter = new AllGreen.RunnerReporter();
 
-        suite1 = { id: 444, name: 'suite 1', parentSuite: null };
+        this.suite1 = { id: 444, name: 'suite 1', parentSuite: null };
     });
 
     afterEach(() => {
-        reporter = null;
+        this.serverReporter = null;
+        this.runnerReporter = null;
     });
 
     it("Is Default", () => {
@@ -84,28 +83,26 @@ describe("App", () => {
     });
     
     it("Can be reset", () => {
-        reporter.setServerStatus('NEW SERVER STATUS');
-        reporter.setRunnerStatus('NEW RUNNER STATUS');
-        reporter.setSpecStatus({ id: 123, name: 'test 1', suite: suite1, status: AllGreen.SpecStatus.Passed });
-        reporter.reset();
-        expect($('#server-status')).toHaveHtml('Connecting...');
+        this.runnerReporter.started();
+        this.runnerReporter.specUpdated({ id: 123, name: 'test 1', suite: this.suite1, status: AllGreen.SpecStatus.Passed });
+        this.runnerReporter.reset();
         expect($('#runner-status')).toHaveHtml('Waiting...');
         expect($('#spec-results')).toBeEmpty();
     });
 
     it("Updates server status", () => {
-        reporter.setServerStatus('NEW SERVER STATUS');
+        this.serverReporter.setServerStatus('NEW SERVER STATUS');
         expect($('#server-status')).toHaveHtml('NEW SERVER STATUS');
     });
 
     it("Updates runner status", () => {
-        reporter.setRunnerStatus('NEW RUNNER STATUS');
-        expect($('#runner-status')).toHaveHtml('NEW RUNNER STATUS');
+        this.runnerReporter.started();
+        expect($('#runner-status')).toHaveHtml('Running...');
     });
 
     it("Displays spec status", () => {
-        reporter.setSpecStatus({ id: 123, name: 'test 1', suite: suite1, status: AllGreen.SpecStatus.Passed });
-        expect(suite1.status).toBe(AllGreen.SpecStatus.Passed);
+        this.runnerReporter.specUpdated({ id: 123, name: 'test 1', suite: this.suite1, status: AllGreen.SpecStatus.Passed });
+        expect(this.suite1.status).toBe(AllGreen.SpecStatus.Passed);
         expect($('#spec-results > #suite-444 > .suite-content > #spec-123')).toBeSpecElement('test 1', 'passed');
         expect($('#spec-results > #suite-444')).toBeSuiteElement('suite 1', 'passed');
         expect($('#spec-results')).toHaveClass('passed');
@@ -117,7 +114,7 @@ describe("App", () => {
             { message: 'expected something and succeded', status: AllGreen.SpecStatus.Passed },
             { message: 'expected something and failed', status: AllGreen.SpecStatus.Failed, trace: 'trace 1\ntrace 2' }
         ];
-        reporter.setSpecStatus({ id: 123, name: 'test 1', suite: suite1, status: AllGreen.SpecStatus.Failed, steps: steps });
+        this.runnerReporter.specUpdated({ id: 123, name: 'test 1', suite: this.suite1, status: AllGreen.SpecStatus.Failed, steps: steps });
         expect($('#spec-results > #suite-444 > .suite-content > #spec-123')).toBeSpecElement('test 1', 'failed');
         expect($('#spec-results > #suite-444 > .suite-content > #spec-123 > .spec-steps > .spec-step')).toHaveLength(3);
         expect($('#spec-results > #suite-444 > .suite-content > #spec-123 > .spec-steps > .spec-step.log')).toHaveLength(1);
@@ -127,18 +124,18 @@ describe("App", () => {
     });
 
     it("Updates spec status", () => {
-        reporter.setSpecStatus({ id: 123, name: 'test 1', suite: suite1, status: AllGreen.SpecStatus.Passed });
-        reporter.setSpecStatus({ id: 123, name: 'test 1', suite: suite1, status: AllGreen.SpecStatus.Failed });
-        expect(suite1.status).toBe(AllGreen.SpecStatus.Failed);
+        this.runnerReporter.specUpdated({ id: 123, name: 'test 1', suite: this.suite1, status: AllGreen.SpecStatus.Passed });
+        this.runnerReporter.specUpdated({ id: 123, name: 'test 1', suite: this.suite1, status: AllGreen.SpecStatus.Failed });
+        expect(this.suite1.status).toBe(AllGreen.SpecStatus.Failed);
         expect($('#spec-results > #suite-444 > .suite-content > #spec-123')).toBeSpecElement('test 1', 'failed');
         expect($('#spec-results > #suite-444')).toBeSuiteElement('suite 1', 'failed');
         expect($('#spec-results')).toHaveClass('failed');
     });
 
     it("Updates suite status", () => {
-        reporter.setSpecStatus({ id: 123, name: 'test 1', suite: suite1, status: AllGreen.SpecStatus.Passed });
-        reporter.setSpecStatus({ id: 323, name: 'test 2', suite: suite1, status: AllGreen.SpecStatus.Failed });
-        expect(suite1.status).toBe(AllGreen.SpecStatus.Failed);
+        this.runnerReporter.specUpdated({ id: 123, name: 'test 1', suite: this.suite1, status: AllGreen.SpecStatus.Passed });
+        this.runnerReporter.specUpdated({ id: 323, name: 'test 2', suite: this.suite1, status: AllGreen.SpecStatus.Failed });
+        expect(this.suite1.status).toBe(AllGreen.SpecStatus.Failed);
         expect($('#spec-results > #suite-444 > .suite-content > #spec-123')).toBeSpecElement('test 1', 'passed');
         expect($('#spec-results > #suite-444 > .suite-content > #spec-323')).toBeSpecElement('test 2', 'failed');
         expect($('#spec-results > #suite-444')).toBeSuiteElement('suite 1', 'failed');
@@ -147,11 +144,11 @@ describe("App", () => {
 
     it("Supports nested suites", () => {
         var suite2 = {
-            id: 744, name: 'suite 2', parentSuite: suite1, status: AllGreen.SpecStatus.Undefined
+            id: 744, name: 'suite 2', parentSuite: this.suite1, status: AllGreen.SpecStatus.Undefined
         };
-        reporter.setSpecStatus({ id: 123, name: 'test 1', suite: suite2, status: AllGreen.SpecStatus.Passed });
-        reporter.setSpecStatus({ id: 323, name: 'test 2', suite: suite2, status: AllGreen.SpecStatus.Failed });
-        expect(suite1.status).toBe(AllGreen.SpecStatus.Failed);
+        this.runnerReporter.specUpdated({ id: 123, name: 'test 1', suite: suite2, status: AllGreen.SpecStatus.Passed });
+        this.runnerReporter.specUpdated({ id: 323, name: 'test 2', suite: suite2, status: AllGreen.SpecStatus.Failed });
+        expect(this.suite1.status).toBe(AllGreen.SpecStatus.Failed);
         expect(suite2.status).toBe(AllGreen.SpecStatus.Failed);
         expect($('#spec-results > #suite-444 > .suite-content > #suite-744 > .suite-content > #spec-123')).toBeSpecElement('test 1', 'passed');
         expect($('#spec-results > #suite-444 > .suite-content > #suite-744 > .suite-content > #spec-323')).toBeSpecElement('test 2', 'failed');
@@ -161,17 +158,17 @@ describe("App", () => {
     });
 
     it("Shows final suite status", () => {
-        reporter.setSpecStatus({ id: 123, name: 'test 1', suite: suite1, status: AllGreen.SpecStatus.Running });
-        reporter.setSpecStatus({ id: 223, name: 'test 2', suite: suite1, status: AllGreen.SpecStatus.Running });
-        expect(suite1.status).toBe(AllGreen.SpecStatus.Running);
+        this.runnerReporter.specUpdated({ id: 123, name: 'test 1', suite: this.suite1, status: AllGreen.SpecStatus.Running });
+        this.runnerReporter.specUpdated({ id: 223, name: 'test 2', suite: this.suite1, status: AllGreen.SpecStatus.Running });
+        expect(this.suite1.status).toBe(AllGreen.SpecStatus.Running);
         expect($('#spec-results > #suite-444')).toBeSuiteElement('suite 1', 'running');
         expect($('#spec-results')).toHaveClass('running');
-        reporter.setSpecStatus({ id: 123, name: 'test 1', suite: suite1, status: AllGreen.SpecStatus.Passed });
-        expect(suite1.status).toBe(AllGreen.SpecStatus.Running);
+        this.runnerReporter.specUpdated({ id: 123, name: 'test 1', suite: this.suite1, status: AllGreen.SpecStatus.Passed });
+        expect(this.suite1.status).toBe(AllGreen.SpecStatus.Running);
         expect($('#spec-results > #suite-444')).toBeSuiteElement('suite 1', 'running');
         expect($('#spec-results')).toHaveClass('running');
-        reporter.setSpecStatus({ id: 223, name: 'test 2', suite: suite1, status: AllGreen.SpecStatus.Failed });
-        expect(suite1.status).toBe(AllGreen.SpecStatus.Failed);
+        this.runnerReporter.specUpdated({ id: 223, name: 'test 2', suite: this.suite1, status: AllGreen.SpecStatus.Failed });
+        expect(this.suite1.status).toBe(AllGreen.SpecStatus.Failed);
         expect($('#spec-results > #suite-444')).toBeSuiteElement('suite 1', 'failed');
         expect($('#spec-results')).toHaveClass('failed');
     });

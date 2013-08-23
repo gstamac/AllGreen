@@ -2,45 +2,19 @@
 /// <reference path="../Scripts/typings/jquery/jquery.d.ts" />
 
 module AllGreen {
-    export interface IReporter {
-        reset();
-        setServerStatus(status: string);
-        setRunnerStatus(status: string);
-        setSpecStatus(spec: ISpec);
-    }
-
-    export enum SpecStatus {
-        Running,
-        Failed,
-        Undefined,
-        Passed,
-        Skipped
-    }
-
-    export interface ISpec {
-        id: any;
-        name: string;
-        suite: ISuite;
-        status: SpecStatus;
-        steps: ISpecStep[];
-    }
-
-    export interface ISpecStep {
-        message: string;
-        status: SpecStatus;
-        trace: string;
-    }
-
-    export interface ISuite {
-        id: any;
-        name: string;
-        parentSuite: ISuite;
-        status: SpecStatus;
-    }
-
-    export class Reporter implements IReporter {
-
+    export class ServerReporter implements IServerReporter {
         private DEFAULT_SERVER_STATUS: string = 'Connecting...';
+
+        setServerStatus(status: string) {
+            this.getServerStatusElement().html(status);
+        }
+
+        private getServerStatusElement() {
+            return $('#server-status');
+        }
+    }
+
+    export class RunnerReporter implements IRunnerReporter {
         private DEFAULT_RUNNER_STATUS: string = 'Waiting...';
 
         private totalStatus = null;
@@ -48,29 +22,28 @@ module AllGreen {
         constructor() { }
 
         public reset() {
-            this.setServerStatus(this.DEFAULT_SERVER_STATUS);
             this.setRunnerStatus(this.DEFAULT_RUNNER_STATUS);
             this.getSpecResultsElement().text('');
             this.totalStatus = null;
         }
 
-        setServerStatus(status: string) {
-            this.getServerStatusElement().html(status);
+        started() {
+            this.setRunnerStatus('Running...');
         }
 
-        setRunnerStatus(status: string) {
-            this.getRunnerStatusElement().html(status);
-        }
-
-        setSpecStatus(spec: ISpec) {
+        specUpdated(spec: ISpec) {
             var specElement = this.getSpecElement(spec);
             this.setSpecElementClass(specElement, spec.status);
             this.setSpecElementSteps(specElement, spec.steps);
             this.updateSuiteStatus(spec.suite, spec.status);
         }
 
-        private getServerStatusElement() {
-            return $('#server-status');
+        finished() {
+            this.setRunnerStatus('Finished');
+        }
+
+        private setRunnerStatus(status: string) {
+            this.getRunnerStatusElement().html(status);
         }
 
         private getRunnerStatusElement() {
@@ -217,6 +190,7 @@ module AllGreen {
     var app = AllGreen.App.getCurrent();
     if (app != null) {
         console.log('registering reporter factory');
-        app.setReporter(new AllGreen.Reporter());
+        app.setServerReporter(new AllGreen.ServerReporter());
+        app.registerRunnerReporter(new AllGreen.RunnerReporter());
     }
 } ();

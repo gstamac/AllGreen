@@ -17,12 +17,12 @@ var AllGreen;
             this.reporter = reporter;
         }
         JasmineAdapter.prototype.reportRunnerStarting = function (runner) {
-            this.reporter.setRunnerStatus('Running...');
+            this.reporter.started();
             //tc.info({ total: runner.specs().length });
         };
 
         JasmineAdapter.prototype.reportRunnerResults = function (runner) {
-            this.reporter.setRunnerStatus('Finished');
+            this.reporter.finished();
             /*tc.complete({
             coverage: window.__coverage__
             });*/
@@ -37,11 +37,11 @@ var AllGreen;
 
         JasmineAdapter.prototype.reportSpecStarting = function (jasmineSpec) {
             var spec = new JasmineAdapterSpec(jasmineSpec, AllGreen.SpecStatus.Running);
-            this.reporter.setSpecStatus(spec);
+            this.reporter.specUpdated(spec);
         };
 
         JasmineAdapter.prototype.reportSpecResults = function (jasmineSpec) {
-            this.reporter.setSpecStatus(new JasmineAdapterSpec(jasmineSpec));
+            this.reporter.specUpdated(new JasmineAdapterSpec(jasmineSpec));
             /*var result = {
             id: spec.id,
             description: spec.description,
@@ -79,11 +79,7 @@ var AllGreen;
         };
 
         JasmineAdapter.prototype.specFilter = function (jasmineSpec) {
-            /*if (!focusedSpecName()) {
             return true;
-            }
-            
-            return spec.getFullName().indexOf(focusedSpecName()) === 0;*/
         };
 
         JasmineAdapter.prototype.start = function () {
@@ -129,15 +125,18 @@ else {
                 this.steps = [];
 
                 for (var i = 0; i < resultItems.length; i++) {
-                    var step = resultItems[i];
+                    var result = resultItems[i];
 
-                    if (step.type === 'log') {
-                        this.steps.push({ message: step.toString(), status: AllGreen.SpecStatus.Undefined, trace: '' });
-                    } else if (step.type === 'expect' && !step.passed()) {
-                        if (step.trace.stack) {
-                            this.steps.push({ message: step.message, status: AllGreen.SpecStatus.Failed, trace: this.formatTraceStack(step.trace.stack) });
-                        } else {
-                            this.steps.push({ message: step.message, status: AllGreen.SpecStatus.Failed, trace: '' });
+                    if (result.type === 'log') {
+                        this.steps.push({ message: result.toString(), status: AllGreen.SpecStatus.Undefined, trace: '' });
+                    } else if (result.type === 'expect') {
+                        var expectationResult = result;
+                        if (!expectationResult.passed()) {
+                            if (expectationResult.trace.stack) {
+                                this.steps.push({ message: expectationResult.message, status: AllGreen.SpecStatus.Failed, trace: this.formatTraceStack(expectationResult.trace.stack) });
+                            } else {
+                                this.steps.push({ message: expectationResult.message, status: AllGreen.SpecStatus.Failed, trace: '' });
+                            }
                         }
                     }
                 }

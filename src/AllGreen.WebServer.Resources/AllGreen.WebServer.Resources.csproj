@@ -138,6 +138,9 @@
       <DependentUpon>jquery-2.0.3.js</DependentUpon>
     </None>
     <None Include="Scripts\jquery-2.0.3.min.map" />
+    <None Include="spec\AllGreenReporterSpecs.min.js.map">
+      <DependentUpon>AllGreenReporterSpecs.js</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
