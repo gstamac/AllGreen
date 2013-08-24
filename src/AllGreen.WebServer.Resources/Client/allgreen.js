@@ -60,9 +60,9 @@ var AllGreen;
             });
         };
 
-        App.prototype.started = function () {
+        App.prototype.started = function (totalSpecs) {
             this.runnerReporters.forEach(function (runnerReporter) {
-                runnerReporter.started();
+                runnerReporter.started(totalSpecs);
             });
         };
 
@@ -82,6 +82,14 @@ var AllGreen;
             this.adapterFactories = [];
             this.reset();
             $('#runner').prop('src', 'runner.html');
+        };
+
+        App.prototype.log = function (message) {
+            var optionalParams = [];
+            for (var _i = 0; _i < (arguments.length - 1); _i++) {
+                optionalParams[_i] = arguments[_i + 1];
+            }
+            console.log(message, optionalParams);
         };
         App.currentApp = null;
         return App;

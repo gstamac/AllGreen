@@ -12,7 +12,7 @@ describe("AllGreen JasmineAdapterFactory", function () {
     });
 });
 
-describe("AllGreen Jasmine this.adapter", function () {
+describe("AllGreen JasmineAdapter", function () {
     var createSpecResults = function (ispassed, isskipped, steps) {
         if (typeof steps === "undefined") { steps = []; }
         return function () {
@@ -83,43 +83,49 @@ describe("AllGreen Jasmine this.adapter", function () {
             id: 881,
             description: 'Suite 1'
         };
+        _this.suite1Guid = '00000000-0000-0000-0000-000000000881';
         _this.spec = {
             id: 244,
             description: 'test 1',
             suite: suite1,
             results: createSpecResults(false, false)
         };
+        _this.specGuid = '00000000-0000-0000-0000-000000000244';
         _this.spec2 = {
             id: 344,
             description: 'test 2',
             suite: suite1,
             results: createSpecResults(false, false)
         };
+        _this.spec2Guid = '00000000-0000-0000-0000-000000000344';
     });
 
     afterEach(function () {
         _this.adapter = null;
     });
 
-    it("Resets reporter on runner starting and displays this.reporter as started", function () {
-        _this.adapter.reportRunnerStarting(_this.runner);
-        expect(_this.reporter.started).toHaveBeenCalled();
+    it("Resets reporter on runner starting and displays reporter as started", function () {
+        var runner = jasmine.createSpyObj('runner', ['specs']);
+        runner['specs'].andReturn({ length: 10 });
+        _this.adapter.reportRunnerStarting(runner);
+        expect(_this.reporter.started).toHaveBeenCalledWith(10);
     });
 
     it("Displays reporter as finished on runner finished", function () {
+        var runner = jasmine.createSpyObj('runner', ['specs']);
         _this.adapter.reportRunnerResults(_this.runner);
         expect(_this.reporter.finished).toHaveBeenCalled();
     });
 
     it("Shows started specs as running", function () {
         _this.adapter.reportSpecStarting(_this.spec);
-        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Running, null);
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Running, null);
     });
 
     it("Shows passed specs as passed", function () {
         _this.spec.results = createSpecResults(true, false);
         _this.adapter.reportSpecResults(_this.spec);
-        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Passed, null);
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Passed, null);
     });
 
     it("Shows failed specs as failed", function () {
@@ -129,7 +135,7 @@ describe("AllGreen Jasmine this.adapter", function () {
             createSpecResultExpectStep(false, 'expected something and failed', 'trace 1\ntrace 2')
         ]);
         _this.adapter.reportSpecResults(_this.spec);
-        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Failed, [
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, [
             { message: 'log message' },
             { message: 'expected something and failed', status: AllGreen.SpecStatus.Failed, trace: 'trace 1\ntrace 2' }
         ]);
@@ -141,7 +147,7 @@ describe("AllGreen Jasmine this.adapter", function () {
             createSpecResultExpectStep(false, 'msg', trace)
         ]);
         _this.adapter.reportSpecResults(_this.spec);
-        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Failed, [
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, [
             { message: 'msg', status: AllGreen.SpecStatus.Failed, trace: 'trace 1\ntrace 2' }
         ]);
     });
@@ -149,14 +155,14 @@ describe("AllGreen Jasmine this.adapter", function () {
     it("Shows skipped specs as skipped", function () {
         _this.spec.results = createSpecResults(false, true);
         _this.adapter.reportSpecResults(_this.spec);
-        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Skipped, null);
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Skipped, null);
     });
 
     it("Shows specs from same suite as results from same suite", function () {
         _this.adapter.reportSpecResults(_this.spec);
         _this.adapter.reportSpecResults(_this.spec2);
-        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(244, 'test 1', 881, 'Suite 1', AllGreen.SpecStatus.Failed, null);
-        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(344, 'test 2', 881, 'Suite 1', AllGreen.SpecStatus.Failed, null);
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, null);
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.spec2Guid, 'test 2', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, null);
     });
 
     it("Shows nested suites", function () {
@@ -173,30 +179,41 @@ describe("AllGreen Jasmine this.adapter", function () {
         _this.adapter.reportSpecResults(_this.spec);
         _this.adapter.reportSpecResults(_this.spec2);
         expect(_this.reporter.specUpdated).toHaveBeenCalledWith(jasmine.objectContaining({
-            id: 244,
+            id: _this.specGuid,
             name: 'test 1',
             suite: jasmine.objectContaining({
-                id: 981,
+                id: '00000000-0000-0000-0000-000000000981',
                 name: 'Suite 2',
                 parentSuite: jasmine.objectContaining({
-                    id: 881,
+                    id: _this.suite1Guid,
                     name: 'Suite 1'
                 })
             }),
             status: AllGreen.SpecStatus.Failed
         }));
         expect(_this.reporter.specUpdated).toHaveBeenCalledWith(jasmine.objectContaining({
-            id: 344,
+            id: _this.spec2Guid,
             name: 'test 2',
             suite: jasmine.objectContaining({
-                id: 981,
+                id: '00000000-0000-0000-0000-000000000981',
                 name: 'Suite 2',
                 parentSuite: jasmine.objectContaining({
-                    id: 881,
+                    id: _this.suite1Guid,
                     name: 'Suite 1'
                 })
             }),
             status: AllGreen.SpecStatus.Failed
         }));
+    });
+
+    it("Should convert number to GUID", function () {
+        [
+            { id: 123, guid: '00000000-0000-0000-0000-000000000123' },
+            { id: 9000000123, guid: '00000000-0000-0000-0000-009000000123' },
+            { id: 80009000000123, guid: '00000000-0000-0000-0080-009000000123' },
+            { id: 70000009000000120, guid: '00000000-0000-0007-0000-009000000120' }
+        ].forEach(function (data) {
+            expect(AllGreen.JasmineAdapter.convertIdToGuid(data.id)).toBe(data.guid);
+        });
     });
 });

@@ -9,7 +9,7 @@ declare module jasmine {
     }
 }
 
-describe("AllGreen.this.runnerReporter", () => {
+describe("AllGreen.RunnerReporter", () => {
     beforeEach(() => {
         jasmine.getEnv().currentSpec.addMatchers({
             toBeSpecElement: function (specName, statusClass) {
@@ -96,8 +96,8 @@ describe("AllGreen.this.runnerReporter", () => {
     });
 
     it("Updates runner status", () => {
-        this.runnerReporter.started();
-        expect($('#runner-status')).toHaveHtml('Running...');
+        this.runnerReporter.started(20);
+        expect($('#runner-status')).toHaveHtml('Running 20 tests...');
     });
 
     it("Displays spec status", () => {

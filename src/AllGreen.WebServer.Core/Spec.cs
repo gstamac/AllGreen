@@ -15,7 +15,7 @@ namespace AllGreen.WebServer.Core
         steps: ISpecStep[];
         */
 
-        public object Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public Suite Suite { get; set; }
         public SpecStatus Status { get; set; }
@@ -30,7 +30,7 @@ namespace AllGreen.WebServer.Core
         parentSuite: ISuite;
         status: SpecStatus;
         */
-        public object Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public Suite ParentSuite { get; set; }
         public SpecStatus Status { get; set; }

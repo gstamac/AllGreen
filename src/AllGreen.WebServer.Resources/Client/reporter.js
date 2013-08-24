@@ -28,8 +28,8 @@ var AllGreen;
             this.totalStatus = null;
         };
 
-        RunnerReporter.prototype.started = function () {
-            this.setRunnerStatus('Running...');
+        RunnerReporter.prototype.started = function (totalSpecs) {
+            this.setRunnerStatus('Running ' + totalSpecs + ' tests...');
         };
 
         RunnerReporter.prototype.specUpdated = function (spec) {
@@ -173,7 +173,7 @@ else
 (function () {
     var app = AllGreen.App.getCurrent();
     if (app != null) {
-        console.log('registering reporter factory');
+        app.log('registering reporter factory');
         app.setServerReporter(new AllGreen.ServerReporter());
         app.registerRunnerReporter(new AllGreen.RunnerReporter());
     }

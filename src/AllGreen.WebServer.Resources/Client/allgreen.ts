@@ -12,7 +12,7 @@ module AllGreen {
 
     export interface IRunnerReporter {
         reset();
-        started();
+        started(totalSpecs: number);
         specUpdated(spec: ISpec);
         finished();
     }
@@ -101,9 +101,9 @@ module AllGreen {
             });
         }
 
-        public started() {
+        public started(totalSpecs: number) {
             this.runnerReporters.forEach((runnerReporter) => {
-                runnerReporter.started();
+                runnerReporter.started(totalSpecs);
             });
         }
 
@@ -124,6 +124,11 @@ module AllGreen {
             this.reset();
             $('#runner').prop('src', 'runner.html');
         }
+
+        public log(message?: any, ...optionalParams: any[]): void {
+            console.log(message, optionalParams);
+        }
+
     }
 
 }

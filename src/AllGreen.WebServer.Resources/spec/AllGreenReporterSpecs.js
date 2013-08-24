@@ -2,7 +2,7 @@
 /// <reference path="../Scripts/typings/jasmine-jquery/jasmine-jquery.d.ts" />
 /// <reference path="../Client/reporter.ts" />
 var _this = this;
-describe("AllGreen.this.runnerReporter", function () {
+describe("AllGreen.RunnerReporter", function () {
     beforeEach(function () {
         jasmine.getEnv().currentSpec.addMatchers({
             toBeSpecElement: function (specName, statusClass) {
@@ -88,8 +88,8 @@ describe("AllGreen.this.runnerReporter", function () {
     });
 
     it("Updates runner status", function () {
-        _this.runnerReporter.started();
-        expect($('#runner-status')).toHaveHtml('Running...');
+        _this.runnerReporter.started(20);
+        expect($('#runner-status')).toHaveHtml('Running 20 tests...');
     });
 
     it("Displays spec status", function () {

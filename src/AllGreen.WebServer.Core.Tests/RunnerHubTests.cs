@@ -22,7 +22,7 @@ namespace AllGreen.WebServer.Core.Tests
         public class AllClientsMock
         {
             public bool reloadCalled = false;
-            public void reload() 
+            public void reload()
             {
                 reloadCalled = true;
             }
@@ -35,26 +35,71 @@ namespace AllGreen.WebServer.Core.Tests
             AllClientsMock allClientsMock = new AllClientsMock();
             clientsMock.Setup(c => c.All).Returns(allClientsMock);
             IHubContext hubContext = Mock.Of<IHubContext>(hc => hc.Clients == clientsMock.Object);
-            RunnerHub runnerHub = new RunnerHub(hubContext, Mock.Of<IReporter>());
-            
-            runnerHub.Reload();
-            
+            RunnerHub _RunnerHub = new RunnerHub(hubContext, Mock.Of<IReporter>());
+
+            _RunnerHub.Reload();
+
             allClientsMock.reloadCalled.Should().BeTrue();
         }
 
-        [TestMethod]
-        public void ReceiveSpecResultTest()
+        [TestClass]
+        public class ReceiveTests
         {
-            IHubContext hubContext = Mock.Of<IHubContext>();
-            Spec reportedSpec = null;
-            var reporterMock = new Mock<IReporter>();
-            reporterMock.Setup(r => r.SpecUpdated(It.IsAny<Spec>())).Callback<Spec>(s => reportedSpec = s);
-            RunnerHub runnerHub = new RunnerHub(hubContext, reporterMock.Object);
-            Spec spec = Mock.Of<Spec>();
-            
-            runnerHub.SpecUpdated(spec);
+            private Mock<IReporter> _ReporterMock;
+            private RunnerHub _RunnerHub;
+            private Guid _ConnectionId;
 
-            reportedSpec.Should().BeSameAs(spec);
+            [TestInitialize]
+            public void Setup()
+            {
+                IHubContext hubContext = Mock.Of<IHubContext>();
+                _ReporterMock = new Mock<IReporter>();
+                _RunnerHub = new RunnerHub(hubContext, _ReporterMock.Object);
+
+                _ConnectionId = Guid.NewGuid();
+            }
+
+            [TestMethod]
+            public void ReceiveResetTest()
+            {
+                _RunnerHub.Reset(_ConnectionId);
+
+                _ReporterMock.Verify(r => r.Reset(_ConnectionId));
+            }
+
+            [TestMethod]
+            public void ReceiveStartedTest()
+            {
+                _RunnerHub.Started(_ConnectionId, 20);
+
+                _ReporterMock.Verify(r => r.Started(_ConnectionId, 20));
+            }
+
+            [TestMethod]
+            public void ReceiveSpecResultTest()
+            {
+                Spec spec = new Spec();
+
+                _RunnerHub.SpecUpdated(_ConnectionId, spec);
+
+                _ReporterMock.Verify(r => r.SpecUpdated(_ConnectionId, spec));
+            }
+
+            [TestMethod]
+            public void ReceiveFinishedTest()
+            {
+                _RunnerHub.Finished(_ConnectionId);
+
+                _ReporterMock.Verify(r => r.Finished(_ConnectionId));
+            }
+
+            [TestMethod]
+            public void ReceiveRegisterTest()
+            {
+                _RunnerHub.Register(_ConnectionId, "userAgent");
+
+                _ReporterMock.Verify(r => r.Register(_ConnectionId, "userAgent"));
+            }
         }
     }
 }

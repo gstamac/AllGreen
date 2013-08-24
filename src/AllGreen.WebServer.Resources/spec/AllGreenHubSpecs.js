@@ -4,9 +4,10 @@
 var _this = this;
 describe("AllGreen SignalR Hub", function () {
     beforeEach(function () {
-        _this.app = jasmine.createSpyObj('app', ['reload', 'setServerStatus', 'specUpdated']);
+        _this.app = jasmine.createSpyObj('app', ['reload', 'setServerStatus', 'specUpdated', 'log']);
 
-        _this.hubProxy = jasmine.createSpyObj('hubProxy', ['on']);
+        //this.app['log'].andCallFake(console.log);
+        _this.hubProxy = jasmine.createSpyObj('hubProxy', ['on', 'invoke']);
         _this.proxyCallback = null;
         _this.hubProxy['on'].andCallFake(function (eventName, callback) {
             _this.proxyCallback = callback;
@@ -18,6 +19,7 @@ describe("AllGreen SignalR Hub", function () {
         _this.connection['start'].andReturn({ done: function (callback) {
                 _this.connectionCallbacks['done'] = callback;
             } });
+        _this.connection.id = 'connectionId';
         _this.connectionCallbacks = [];
         callbacks.forEach(function (callbackName) {
             _this.connection[callbackName].andCallFake(function (callback) {
@@ -42,7 +44,13 @@ describe("AllGreen SignalR Hub", function () {
         expect(_this.proxyCallback).toEqual(jasmine.any(Function));
         expect(_this.connectionCallbacks['done']).toEqual(jasmine.any(Function));
         _this.connectionCallbacks['done']();
-        expect(_this.app.setServerStatus).toHaveBeenCalledWith('Done');
+        expect(_this.app.setServerStatus).toHaveBeenCalledWith('Connected');
+    });
+
+    it("Should initialize after connect", function () {
+        var hubProxy = _this.hub.connect();
+        _this.connectionCallbacks['done']();
+        expect(hubProxy.invoke).toHaveBeenCalledWith('register', 'connectionId', jasmine.any(String));
     });
 
     it("Calls Env.reload on reload message", function () {
@@ -75,20 +83,27 @@ describe("AllGreen SignalR Hub", function () {
 });
 
 describe("AllGreen SignalR HubReporter", function () {
-    ['reset', 'started', 'finished'].forEach(function (method) {
+    beforeEach(function () {
+        _this.hubProxy = jasmine.createSpyObj('hubProxy', ['invoke']);
+        _this.hubProxy.connection = { id: 'connectionId' };
+        _this.hubReporter = new AllGreen.HubReporter(_this.hubProxy);
+    });
+
+    it("Should report started", function () {
+        _this.hubReporter.started(10);
+        expect(_this.hubProxy.invoke).toHaveBeenCalledWith('started', 'connectionId', 10);
+    });
+
+    ['reset', 'finished'].forEach(function (method) {
         it("Should report " + method, function () {
-            var hubProxy = jasmine.createSpyObj('hubProxy', ['invoke']);
-            var hubReporter = new AllGreen.HubReporter(hubProxy);
-            hubReporter[method]();
-            expect(hubProxy.invoke).toHaveBeenCalledWith(method);
+            _this.hubReporter[method]();
+            expect(_this.hubProxy.invoke).toHaveBeenCalledWith(method, 'connectionId');
         });
     });
 
     it("Should report specUpdated", function () {
-        var hubProxy = jasmine.createSpyObj('hubProxy', ['invoke']);
-        var hubReporter = new AllGreen.HubReporter(hubProxy);
         var spec = { id: 123, name: 'test 1', suite: null, status: AllGreen.SpecStatus.Passed, steps: [] };
-        hubReporter.specUpdated(spec);
-        expect(hubProxy.invoke).toHaveBeenCalledWith('specUpdated', spec);
+        _this.hubReporter.specUpdated(spec);
+        expect(_this.hubProxy.invoke).toHaveBeenCalledWith('specUpdated', 'connectionId', spec);
     });
 });

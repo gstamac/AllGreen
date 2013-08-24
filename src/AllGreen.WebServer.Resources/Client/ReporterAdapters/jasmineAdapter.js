@@ -17,22 +17,15 @@ var AllGreen;
             this.reporter = reporter;
         }
         JasmineAdapter.prototype.reportRunnerStarting = function (runner) {
-            this.reporter.started();
-            //tc.info({ total: runner.specs().length });
+            this.reporter.started(runner.specs().length);
         };
 
         JasmineAdapter.prototype.reportRunnerResults = function (runner) {
             this.reporter.finished();
-            /*tc.complete({
-            coverage: window.__coverage__
-            });*/
         };
 
         JasmineAdapter.prototype.reportSuiteResults = function (jasmineSuite) {
-            // memory clean up
-            /*suite.after_ = null;
-            suite.before_ = null;
-            suite.queue = null;*/
+            // TODO
         };
 
         JasmineAdapter.prototype.reportSpecStarting = function (jasmineSpec) {
@@ -42,51 +35,25 @@ var AllGreen;
 
         JasmineAdapter.prototype.reportSpecResults = function (jasmineSpec) {
             this.reporter.specUpdated(new JasmineAdapterSpec(jasmineSpec));
-            /*var result = {
-            id: spec.id,
-            description: spec.description,
-            suite: [],
-            success: spec.results_.failedCount === 0,
-            skipped: spec.results_.skipped,
-            time: spec.results_.skipped ? 0 : new Date().getTime() - spec.results_.time,
-            log: []
-            };
-            
-            var suitePointer = spec.suite;
-            while (suitePointer) {
-            result.suite.unshift(suitePointer.description);
-            suitePointer = suitePointer.parentSuite;
-            }
-            
-            if (!result.success) {
-            var steps = spec.results_.items_;
-            for (var i = 0; i < steps.length; i++) {
-            if (!steps[i].passed_) {
-            result.log.push(formatFailedStep(steps[i]));
-            }
-            }
-            }
-            
-            tc.result(result);
-            */
-            // memory clean up
-            /*spec.results_ = null;
-            spec.spies_ = null;
-            spec.queue = null;*/
         };
 
         JasmineAdapter.prototype.log = function () {
         };
 
         JasmineAdapter.prototype.specFilter = function (jasmineSpec) {
+            // TODO
             return true;
         };
 
         JasmineAdapter.prototype.start = function () {
             var jasmineEnv = jasmine.getEnv();
-
             jasmineEnv.addReporter(this);
             jasmineEnv.execute();
+        };
+
+        JasmineAdapter.convertIdToGuid = function (id) {
+            var id16 = '000000000000000000000000000000000000000' + id;
+            return id16.substr(-32, 8) + '-' + id16.substr(-24, 4) + '-' + id16.substr(-20, 4) + '-' + id16.substr(-16, 4) + '-' + id16.substr(-12);
         };
         return JasmineAdapter;
     })();
@@ -95,9 +62,11 @@ var AllGreen;
     var JasmineAdapterSpec = (function () {
         function JasmineAdapterSpec(jasmineSpec, status) {
             if (typeof status === "undefined") { status = AllGreen.SpecStatus.Undefined; }
-            this.id = jasmineSpec.id;
+            this.id = JasmineAdapter.convertIdToGuid(jasmineSpec.id);
             this.name = jasmineSpec.description;
             this.status = status;
+
+            //TODO: time: spec.results_.skipped ? 0 : new Date().getTime() - spec.results_.time,
             this.steps = [];
             this.suite = new JasmineAdapterSuite(jasmineSpec.suite);
 
@@ -151,7 +120,7 @@ else {
 
     var JasmineAdapterSuite = (function () {
         function JasmineAdapterSuite(suite) {
-            this.id = suite.id;
+            this.id = JasmineAdapter.convertIdToGuid(suite.id);
             this.name = suite.description;
             this.parentSuite = null;
 
@@ -165,7 +134,7 @@ else {
 (function () {
     var app = AllGreen.App.getCurrent();
     if (app != null) {
-        console.log('registering Jasmine adapter factory');
+        app.log('registering Jasmine adapter factory');
         app.registerAdapterFactory(new AllGreen.JasmineAdapterFactory());
     }
     ;

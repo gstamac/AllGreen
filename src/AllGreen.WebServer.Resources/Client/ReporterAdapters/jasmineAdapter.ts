@@ -16,22 +16,15 @@ module AllGreen {
         }
 
         reportRunnerStarting(runner: jasmine.Runner) {
-            this.reporter.started();
-            //tc.info({ total: runner.specs().length });
+            this.reporter.started(runner.specs().length);
         }
 
         reportRunnerResults(runner: jasmine.Runner) {
             this.reporter.finished();
-            /*tc.complete({
-                coverage: window.__coverage__
-            });*/
         }
 
         reportSuiteResults(jasmineSuite: jasmine.Suite) {
-            // memory clean up
-            /*suite.after_ = null;
-            suite.before_ = null;
-            suite.queue = null;*/
+            // TODO
         }
 
         reportSpecStarting(jasmineSpec: jasmine.Spec) {
@@ -41,64 +34,44 @@ module AllGreen {
 
         reportSpecResults(jasmineSpec: jasmine.Spec) {
             this.reporter.specUpdated(new JasmineAdapterSpec(jasmineSpec));
-            /*var result = {
-                id: spec.id,
-                description: spec.description,
-                suite: [],
-                success: spec.results_.failedCount === 0,
-                skipped: spec.results_.skipped,
-                time: spec.results_.skipped ? 0 : new Date().getTime() - spec.results_.time,
-                log: []
-            };
-
-            var suitePointer = spec.suite;
-            while (suitePointer) {
-                result.suite.unshift(suitePointer.description);
-                suitePointer = suitePointer.parentSuite;
-            }
-
-            if (!result.success) {
-                var steps = spec.results_.items_;
-                for (var i = 0; i < steps.length; i++) {
-                    if (!steps[i].passed_) {
-                        result.log.push(formatFailedStep(steps[i]));
-                    }
-                }
-            }
-
-            tc.result(result);
-            */
-            // memory clean up
-            /*spec.results_ = null;
-            spec.spies_ = null;
-            spec.queue = null;*/
         }
 
         log() { }
 
-        specFilter(jasmineSpec) {
+        specFilter(jasmineSpec: jasmine.Spec) {
+            // TODO
             return true;
         }
 
         start() {
             var jasmineEnv = jasmine.getEnv();
-
             jasmineEnv.addReporter(this);
             jasmineEnv.execute();
+        }
+
+        static convertIdToGuid(id: number): string {
+            var id16 = '000000000000000000000000000000000000000' + id;
+            return id16.substr(-32, 8) + '-' +
+                id16.substr(-24, 4) + '-' +
+                id16.substr(-20, 4) + '-' +
+                id16.substr(-16, 4) + '-' +
+                id16.substr(-12);
         }
     }
 
     class JasmineAdapterSpec implements ISpec {
-        public id: any;
+        public id: string;
         public name: string;
         public suite: ISuite;
         public status: SpecStatus;
+        public duration: number;
         public steps: ISpecStep[];
 
         constructor(jasmineSpec: jasmine.Spec, status: SpecStatus = AllGreen.SpecStatus.Undefined) {
-            this.id = jasmineSpec.id;
+            this.id = JasmineAdapter.convertIdToGuid(jasmineSpec.id);
             this.name = jasmineSpec.description;
             this.status = status;
+            //TODO: time: spec.results_.skipped ? 0 : new Date().getTime() - spec.results_.time,
             this.steps = [];
             this.suite = new JasmineAdapterSuite(jasmineSpec.suite);
 
@@ -149,13 +122,13 @@ module AllGreen {
     }
 
     class JasmineAdapterSuite implements ISuite {
-        public id: any;
+        public id: string;
         public name: string;
         public parentSuite: ISuite;
         public status: SpecStatus;
 
         constructor(suite: jasmine.Suite) {
-            this.id = suite.id;
+            this.id = JasmineAdapter.convertIdToGuid(suite.id);
             this.name = suite.description;
             this.parentSuite = null;
 
@@ -168,7 +141,7 @@ module AllGreen {
 () => {
     var app = AllGreen.App.getCurrent();
     if (app != null) {
-        console.log('registering Jasmine adapter factory');
+        app.log('registering Jasmine adapter factory');
         app.registerAdapterFactory(new AllGreen.JasmineAdapterFactory());
     };
 } ();

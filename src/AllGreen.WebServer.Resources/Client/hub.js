@@ -10,16 +10,16 @@ var AllGreen;
             app.setServerStatus('Disconnected');
         }
         Hub.prototype.connect = function () {
-            var hubProxy = this.attachToHub(this.connection, this.app);
+            this.hubProxy = this.attachToHub(this.connection, this.app);
             this.attachToConnectionEvents(this.connection, this.app);
             this.startConnection(this.connection, this.app);
-            return hubProxy;
+            return this.hubProxy;
         };
 
         Hub.prototype.attachToHub = function (connection, app) {
             var hubProxy = connection.createHubProxy('runnerHub');
             hubProxy.on('reload', function () {
-                console.log('reloading...');
+                app.log('reloading...');
                 app.reload();
             });
             return hubProxy;
@@ -28,31 +28,37 @@ var AllGreen;
         Hub.prototype.attachToConnectionEvents = function (connection, app) {
             var _this = this;
             connection.stateChanged(function (change) {
-                console.log('state changed ', change, _this.stateString(change.oldState), ' -> ', _this.stateString(change.newState));
+                app.log('state changed ', change, _this.stateString(change.oldState), ' -> ', _this.stateString(change.newState));
             });
             connection.error(function (error) {
-                console.log('error', error);
+                app.log('error', error);
                 app.setServerStatus('Error: ' + error);
             });
             connection.reconnecting(function () {
-                console.log('reconnecting');
+                app.log('reconnecting');
                 app.setServerStatus('Reconnecting...');
             });
             connection.reconnected(function () {
-                console.log('reconnected');
+                app.log('reconnected');
                 app.setServerStatus('Reconnected');
             });
             connection.disconnected(function () {
-                console.log('disconnected');
+                app.log('disconnected');
                 app.setServerStatus('Disconnected');
             });
         };
 
         Hub.prototype.startConnection = function (connection, app) {
+            var _this = this;
             connection.start().done(function () {
-                console.log('done');
-                app.setServerStatus('Done');
+                app.log('connected as ' + connection.id);
+                app.setServerStatus('Connected');
+                _this.register();
             });
+        };
+
+        Hub.prototype.register = function () {
+            this.hubProxy.invoke('register', this.connection.id, navigator.userAgent);
         };
 
         Hub.prototype.stateString = function (state) {
@@ -74,19 +80,19 @@ var AllGreen;
             this.hubProxy = hubProxy;
         }
         HubReporter.prototype.reset = function () {
-            this.hubProxy.invoke('reset');
+            this.hubProxy.invoke('reset', this.hubProxy.connection.id);
         };
 
-        HubReporter.prototype.started = function () {
-            this.hubProxy.invoke('started');
+        HubReporter.prototype.started = function (totalSpecs) {
+            this.hubProxy.invoke('started', this.hubProxy.connection.id, totalSpecs);
         };
 
         HubReporter.prototype.specUpdated = function (spec) {
-            this.hubProxy.invoke('specUpdated', spec);
+            this.hubProxy.invoke('specUpdated', this.hubProxy.connection.id, spec);
         };
 
         HubReporter.prototype.finished = function () {
-            this.hubProxy.invoke('finished');
+            this.hubProxy.invoke('finished', this.hubProxy.connection.id);
         };
         return HubReporter;
     })();
@@ -96,7 +102,7 @@ var AllGreen;
 (function () {
     var app = AllGreen.App.getCurrent();
     if (app != null) {
-        console.log('registering signalR hub');
+        app.log('registering signalR hub');
         var connection = $.hubConnection();
         var hub = new AllGreen.Hub(connection, app);
         var hubProxy = hub.connect();

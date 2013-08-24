@@ -27,18 +27,18 @@ module AllGreen {
             this.totalStatus = null;
         }
 
-        started() {
-            this.setRunnerStatus('Running...');
+        public started(totalSpecs: number) {
+            this.setRunnerStatus('Running ' + totalSpecs + ' tests...');
         }
 
-        specUpdated(spec: ISpec) {
+        public specUpdated(spec: ISpec) {
             var specElement = this.getSpecElement(spec);
             this.setSpecElementClass(specElement, spec.status);
             this.setSpecElementSteps(specElement, spec.steps);
             this.updateSuiteStatus(spec.suite, spec.status);
         }
 
-        finished() {
+        public finished() {
             this.setRunnerStatus('Finished');
         }
 
@@ -189,7 +189,7 @@ module AllGreen {
 () => {
     var app = AllGreen.App.getCurrent();
     if (app != null) {
-        console.log('registering reporter factory');
+        app.log('registering reporter factory');
         app.setServerReporter(new AllGreen.ServerReporter());
         app.registerRunnerReporter(new AllGreen.RunnerReporter());
     }

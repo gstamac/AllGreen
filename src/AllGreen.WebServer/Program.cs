@@ -13,38 +13,6 @@ using TinyIoC;
 
 namespace AllGreen.WebServer
 {
-    public class ConsoleReporter : IReporter
-    {
-        public void SpecUpdated(Spec spec)
-        {
-            Console.WriteLine("Spec updated");
-            OutputSpec(spec);
-        }
-
-        private void OutputSpec(Spec spec)
-        {
-            Console.WriteLine(String.Format("ID: {0}, Name: {1}, Status: {2}", spec.Id, spec.Name, spec.Status));
-            foreach (SpecStep step in spec.Steps)
-            {
-                OutputStep(step);
-            }
-            if (spec.Suite != null)
-                OutputSuite("\tGROUP", spec.Suite);
-        }
-
-        public void OutputSuite(string prefix, Suite suite)
-        {
-            Console.WriteLine(String.Format("{0} ID: {1}, Name: {2}, Status: {3}", prefix, suite.Id, suite.Name, suite.Status));
-            if (suite.ParentSuite != null)
-                OutputSuite("\t\tPARENT GROUP", suite.ParentSuite);
-        }
-
-        public void OutputStep(SpecStep specStep)
-        {
-            Console.WriteLine(String.Format("\tMessage: {0}, Status: {1}, Trace: {2}", specStep.Message, specStep.Status, specStep.Trace));
-        }
-    }
-
     class Program
     {
         static void Main(string[] args)
