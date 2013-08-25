@@ -19,7 +19,7 @@ namespace AllGreen.WebServer.Core.Tests
     [TestClass]
     public class RunnerHubTests
     {
-        public class AllClientsMock
+        public class ReloadSender
         {
             public bool reloadCalled = false;
             public void reload()
@@ -32,14 +32,14 @@ namespace AllGreen.WebServer.Core.Tests
         public void SendTest()
         {
             var clientsMock = new Mock<IHubConnectionContext>();
-            AllClientsMock allClientsMock = new AllClientsMock();
-            clientsMock.Setup(c => c.All).Returns(allClientsMock);
+            ReloadSender reloadSender = new ReloadSender();
+            clientsMock.Setup(c => c.All).Returns(reloadSender);
             IHubContext hubContext = Mock.Of<IHubContext>(hc => hc.Clients == clientsMock.Object);
             RunnerHub _RunnerHub = new RunnerHub(hubContext, Mock.Of<IReporter>());
 
             _RunnerHub.Reload();
 
-            allClientsMock.reloadCalled.Should().BeTrue();
+            reloadSender.reloadCalled.Should().BeTrue();
         }
 
         [TestClass]
@@ -96,9 +96,14 @@ namespace AllGreen.WebServer.Core.Tests
             [TestMethod]
             public void ReceiveRegisterTest()
             {
+                var clientsMock = new Mock<IHubCallerConnectionContext>();
+                ReloadSender reloadSender = new ReloadSender();
+                clientsMock.Setup(c => c.Caller).Returns(reloadSender);
+                _RunnerHub.Clients = clientsMock.Object;
                 _RunnerHub.Register(_ConnectionId, "userAgent");
 
                 _ReporterMock.Verify(r => r.Register(_ConnectionId, "userAgent"));
+                reloadSender.reloadCalled.Should().BeTrue();
             }
         }
     }

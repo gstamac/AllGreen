@@ -47,7 +47,8 @@ namespace AllGreen.WebServer.Core
 
         public void Register(Guid connectionId, string userAgent)
         {
-            _Reporter.Register(connectionId, userAgent);   
+            _Reporter.Register(connectionId, userAgent);
+            Clients.Caller.reload();
         }
     }
 }
