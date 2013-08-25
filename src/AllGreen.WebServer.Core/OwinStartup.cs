@@ -27,7 +27,7 @@ namespace AllGreen.WebServer.Core
             SignalRDependencyResolver resolver = new SignalRDependencyResolver(_TinyIoCContainer);
             GlobalHost.DependencyResolver = resolver;
             HubConfiguration hubConfiguration = new HubConfiguration() { Resolver = resolver };
-            app.MapHubs(hubConfiguration);
+            app.MapSignalR(hubConfiguration);
             app.UseWebApi(config);
             SetupRoutes(config);
         }

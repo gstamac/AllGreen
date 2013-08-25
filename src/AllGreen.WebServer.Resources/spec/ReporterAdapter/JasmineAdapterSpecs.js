@@ -61,6 +61,7 @@ describe("AllGreen JasmineAdapter", function () {
                         name: suiteName
                     }),
                     status: specStatus,
+                    time: jasmine.any(Number),
                     steps: []
                 };
                 if (steps) {

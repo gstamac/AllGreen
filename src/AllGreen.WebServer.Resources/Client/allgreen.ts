@@ -30,6 +30,7 @@ module AllGreen {
         name: string;
         suite: ISuite;
         status: SpecStatus;
+        time: number;
         steps: ISpecStep[];
     }
 

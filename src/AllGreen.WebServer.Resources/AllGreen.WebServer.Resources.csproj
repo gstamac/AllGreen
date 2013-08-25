@@ -70,8 +70,6 @@
     <Content Include="Client\ReporterAdapters\jasmineAdapter.min.js">
       <DependentUpon>jasmineAdapter.ts</DependentUpon>
     </Content>
-    <EmbeddedResource Include="Scripts\jquery.signalR-2.0.0-beta2.js" />
-    <Content Include="Scripts\jquery.signalR-2.0.0-beta2.min.js" />
     <TypeScriptCompile Include="Client\ReporterAdapters\jasmineAdapter.ts" />
     <EmbeddedResource Include="Client\allgreen.js">
       <DependentUpon>allgreen.ts</DependentUpon>
@@ -80,6 +78,8 @@
       <DependentUpon>allgreen.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="spec\AllGreenHubSpecs.ts" />
+    <EmbeddedResource Include="Scripts\jquery.signalR-2.0.0-rc1.js" />
+    <Content Include="Scripts\jquery.signalR-2.0.0-rc1.min.js" />
     <Content Include="spec\AllGreenAppSpecs.js">
       <DependentUpon>AllGreenAppSpecs.ts</DependentUpon>
     </Content>

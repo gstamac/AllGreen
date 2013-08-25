@@ -65,8 +65,7 @@ var AllGreen;
             this.id = JasmineAdapter.convertIdToGuid(jasmineSpec.id);
             this.name = jasmineSpec.description;
             this.status = status;
-
-            //TODO: time: spec.results_.skipped ? 0 : new Date().getTime() - spec.results_.time,
+            this.time = Date.now();
             this.steps = [];
             this.suite = new JasmineAdapterSuite(jasmineSpec.suite);
 

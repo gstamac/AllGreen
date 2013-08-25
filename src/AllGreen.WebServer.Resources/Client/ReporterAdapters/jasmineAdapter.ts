@@ -64,14 +64,14 @@ module AllGreen {
         public name: string;
         public suite: ISuite;
         public status: SpecStatus;
-        public duration: number;
+        public time: number;
         public steps: ISpecStep[];
 
         constructor(jasmineSpec: jasmine.Spec, status: SpecStatus = AllGreen.SpecStatus.Undefined) {
             this.id = JasmineAdapter.convertIdToGuid(jasmineSpec.id);
             this.name = jasmineSpec.description;
             this.status = status;
-            //TODO: time: spec.results_.skipped ? 0 : new Date().getTime() - spec.results_.time,
+            this.time = Date.now();
             this.steps = [];
             this.suite = new JasmineAdapterSuite(jasmineSpec.suite);
 
