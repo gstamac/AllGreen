@@ -27,7 +27,7 @@ describe("AllGreen SignalR Hub", function () {
             });
         });
 
-        _this.hub = new AllGreen.Hub(_this.connection, _this.app);
+        _this.hub = new AllGreen.Hub(_this.connection, _this.app, 1);
     });
 
     it("Starts as disconnected", function () {
@@ -79,6 +79,16 @@ describe("AllGreen SignalR Hub", function () {
             _this.connectionCallbacks[data.method]();
             expect(_this.app.setServerStatus).toHaveBeenCalledWith(data.status);
         });
+    });
+
+    it("Reconnects after disconnect", function () {
+        _this.hub.connect();
+
+        expect(_this.connectionCallbacks['disconnected']).toEqual(jasmine.any(Function));
+        _this.connectionCallbacks['disconnected']();
+        waitsFor(function () {
+            return _this.connection.start.callCount == 2;
+        }, "Reconnect wasn't called", 10);
     });
 });
 

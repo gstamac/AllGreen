@@ -21,7 +21,7 @@ describe("AllGreen SignalR Hub", () => {
             this.connection[callbackName].andCallFake((callback) => { this.connectionCallbacks[callbackName] = callback; });
         });
 
-        this.hub = new AllGreen.Hub(this.connection, this.app);
+        this.hub = new AllGreen.Hub(this.connection, this.app, 1);
     });
 
     it("Starts as disconnected", () => {
@@ -72,6 +72,14 @@ describe("AllGreen SignalR Hub", () => {
             this.connectionCallbacks[data.method]();
             expect(this.app.setServerStatus).toHaveBeenCalledWith(data.status);
         });
+    });
+
+    it("Reconnects after disconnect", () => {
+        this.hub.connect();
+
+        expect(this.connectionCallbacks['disconnected']).toEqual(jasmine.any(Function));
+        this.connectionCallbacks['disconnected']();
+        waitsFor(() => this.connection.start.callCount == 2, "Reconnect wasn't called", 10);
     });
 });
 

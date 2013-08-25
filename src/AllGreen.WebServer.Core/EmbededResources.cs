@@ -49,7 +49,7 @@ namespace AllGreen.WebServer.Core
             {
                 string extension = Path.GetExtension(resourcePath);
                 string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(resourcePath);
-                Regex regex = new Regex(fileNameWithoutExtension + @"-\d+\.\d+\.\d+(-beta[^\.]*|-rc[^\.]*)?(.min)?" + extension);
+                Regex regex = new Regex(fileNameWithoutExtension + @"(-\d+\.\d+\.\d+)?(-beta[^\.]*|-rc[^\.]*)?(.min)?" + extension);
                 string resourceName = manifestResourceNames.Where(rn => regex.IsMatch(rn)).FirstOrDefault();
                 if (!String.IsNullOrEmpty(resourceName))
                     resourcePath = resourceName;

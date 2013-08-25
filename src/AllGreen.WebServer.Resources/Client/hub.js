@@ -4,9 +4,11 @@
 var AllGreen;
 (function (AllGreen) {
     var Hub = (function () {
-        function Hub(connection, app) {
+        function Hub(connection, app, reconnectTimeout) {
+            if (typeof reconnectTimeout === "undefined") { reconnectTimeout = 5000; }
             this.connection = connection;
             this.app = app;
+            this.reconnectTimeout = reconnectTimeout;
             app.setServerStatus('Disconnected');
         }
         Hub.prototype.connect = function () {
@@ -45,6 +47,10 @@ var AllGreen;
             connection.disconnected(function () {
                 app.log('disconnected');
                 app.setServerStatus('Disconnected');
+                app.log('reconnecting in 5s');
+                setTimeout(function () {
+                    _this.startConnection(connection, app);
+                }, _this.reconnectTimeout);
             });
         };
 

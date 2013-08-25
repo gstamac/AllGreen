@@ -7,10 +7,12 @@ module AllGreen {
         private connection: HubConnection;
         private hubProxy: HubProxy;
         private app: App;
+        private reconnectTimeout: number;
 
-        constructor(connection: HubConnection, app: App) {
+        constructor(connection: HubConnection, app: App, reconnectTimeout: number = 5000) {
             this.connection = connection;
             this.app = app;
+            this.reconnectTimeout = reconnectTimeout;
             app.setServerStatus('Disconnected');
         }
 
@@ -49,6 +51,10 @@ module AllGreen {
             connection.disconnected(() => {
                 app.log('disconnected');
                 app.setServerStatus('Disconnected');
+                app.log('reconnecting in 5s');
+                setTimeout(() => {
+                    this.startConnection(connection, app);
+                }, this.reconnectTimeout); // Restart connection after 5 seconds.
             });
         }
 
