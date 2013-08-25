@@ -64,6 +64,12 @@
     <Content Include="..\..\..\DefinitelyTyped\signalr\signalr.d.ts">
       <Link>Scripts\typings\signalr\signalr.d.ts</Link>
     </Content>
+    <EmbeddedResource Include="Client\client.min.css">
+      <DependentUpon>client.less</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="Client\client.css">
+      <DependentUpon>client.less</DependentUpon>
+    </Content>
     <Content Include="Client\hub.min.js">
       <DependentUpon>hub.ts</DependentUpon>
     </Content>
@@ -124,9 +130,9 @@
     <EmbeddedResource Include="Client\testScript.js" />
     <EmbeddedResource Include="Client\runner.html" />
     <EmbeddedResource Include="Client\client.html" />
-    <EmbeddedResource Include="Client\client.css" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Client\client.less" />
     <None Include="Client\hub.min.js.map">
       <DependentUpon>hub.js</DependentUpon>
     </None>

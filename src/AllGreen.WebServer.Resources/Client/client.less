@@ -1,0 +1,185 @@
+﻿body
+{
+    background-color: #F9F9FF;
+    margin: 5px;
+    overflow-y: scroll;
+    padding: 0;
+}
+
+iframe
+{
+    border: medium none;
+    height: 0;
+    width: 0;
+}
+
+@passed_color_light: #BBFFBB;
+@passed_color_dark: #137C11;
+@failed_color_light: #FFDDDD;
+@failed_color_dark: red;
+@running_color_light: #EEEEFF;
+@running_color_dark: #0b4ca7;
+@undefined_color_light: #FCFCBF;
+@undefined_color_dark: #EB8E09;
+@skipped_color_light: #F4F4F4;
+@skipped_color_dark: #CCCCCC;
+
+div#server-status
+{
+    border: 1px solid @failed_color_dark;
+    border-radius: 4px 4px 4px 4px;
+    font-size: 20px;
+    margin: 5px 0;
+    padding: 5px;
+}
+
+div#runner-status
+{
+    border: 1px solid blue;
+    border-radius: 4px 4px 4px 4px;
+    font-size: 20px;
+    margin: 5px 0;
+    padding: 5px;
+}
+
+div#spec-results
+{
+    border-radius: 4px 4px 4px 4px;
+    margin: 5px 0;
+    padding: 2px 0;
+
+    &.passed
+    {
+        background-color: @passed_color_light;
+        border: 1px solid @passed_color_dark;
+    }
+
+    &.failed
+    {
+        background-color: @failed_color_light;
+        border: 1px solid @failed_color_dark;
+    }
+}
+
+.suite(@background, @border, @link)
+{
+    background-color: @background;
+    border: 1px solid @border;
+    a
+    {
+        color: @link;
+    }
+}
+
+div.suite
+{
+    border-radius: 4px 4px 4px 4px;
+    margin: 3px 3px 3px 5px;
+    padding: 2px 15px;
+
+    a
+    {
+        text-decoration: none;
+
+        &:hover
+        {
+            text-decoration: underline;
+        }
+    }
+
+    &.passed
+    {
+        .suite(@passed_color_light, @passed_color_dark, @passed_color_dark);
+    }
+
+    &.failed
+    {
+        .suite(@failed_color_light, @failed_color_dark, @failed_color_dark);
+    }
+
+    &.running
+    {
+        .suite(@running_color_light, @running_color_dark, @running_color_dark);
+    }
+
+    &.undefined
+    {
+        .suite(@undefined_color_light, @undefined_color_dark, @undefined_color_dark);
+    }
+
+    &.skipped
+    {
+        .suite(@skipped_color_light, @skipped_color_dark, @skipped_color_dark);
+        color: #AAAAAA;
+    }
+}
+
+div.suite-name
+{
+}
+
+.spec(@background, @border, @link)
+{
+    background-color: @background;
+    border: 1px solid @border;
+    a
+    {
+        color: @link;
+    }
+}
+
+div.spec
+{
+    border-radius: 4px 4px 4px 4px;
+    margin: 3px 3px 3px 5px;
+    padding: 2px 15px;
+
+    a
+    {
+        text-decoration: none;
+        &:hover
+        {
+            text-decoration: none;
+        }
+    }
+
+    &.passed
+    {
+        .spec(@passed_color_light, @passed_color_dark, @passed_color_dark);
+    }
+
+    &.failed
+    {
+        .spec(@failed_color_light, @failed_color_dark, @failed_color_dark);
+        a:hover
+        {
+            text-decoration: underline;
+        }
+    }
+
+    &.running
+    {
+        .spec(@running_color_light, @running_color_dark, @running_color_dark);
+    }
+
+    &.undefined
+    {
+        .spec(@undefined_color_light, @undefined_color_dark, @undefined_color_dark);
+    }
+
+    &.skipped
+    {
+        .spec(@skipped_color_light, @skipped_color_dark, @skipped_color_dark);
+        color: #AAAAAA;
+    }
+}
+
+div.spec-name
+{
+}
+
+div.spec-step
+{
+    color: #880000;
+    padding-left: 15px;
+}

@@ -1,132 +1,139 @@
-﻿
-body
-{
-    background-color: #F9F9FF;
-    margin: 5px;
-    overflow-y: scroll;
-    padding: 0;
+﻿body {
+  background-color: #F9F9FF;
+  margin: 5px;
+  overflow-y: scroll;
+  padding: 0;
 }
-
-iframe
-{
-    border: medium none;
-    height: 0;
-    width: 0;
+iframe {
+  border: medium none;
+  height: 0;
+  width: 0;
 }
-
-div#server-status
-{
-    border: 1px solid red;
-    border-radius: 4px 4px 4px 4px;
-    font-size: 20px;
-    margin: 5px 0;
-    padding: 5px;
+div#server-status {
+  border: 1px solid #ff0000;
+  border-radius: 4px 4px 4px 4px;
+  font-size: 20px;
+  margin: 5px 0;
+  padding: 5px;
 }
-
-div#runner-status
-{
-    border: 1px solid blue;
-    border-radius: 4px 4px 4px 4px;
-    font-size: 20px;
-    margin: 5px 0;
-    padding: 5px;
+div#runner-status {
+  border: 1px solid blue;
+  border-radius: 4px 4px 4px 4px;
+  font-size: 20px;
+  margin: 5px 0;
+  padding: 5px;
 }
-
-div#spec-results
-{
-    border-radius: 4px 4px 4px 4px;
-    margin: 5px 0;
-    padding: 2px 0;
+div#spec-results {
+  border-radius: 4px 4px 4px 4px;
+  margin: 5px 0;
+  padding: 2px 0;
 }
-
-div.suite
-{
-    border-radius: 4px 4px 4px 4px;
-    margin: 3px 3px 3px 5px;
-    padding: 2px 15px;
+div#spec-results.passed {
+  background-color: #bbffbb;
+  border: 1px solid #137c11;
 }
-
-    div.suite.passed
-    {
-        background-color: #BBFFBB;
-        border: 1px solid green;
-    }
-
-    div.suite.failed
-    {
-        background-color: #FFDDDD;
-        border: 1px solid red;
-    }
-
-    div.suite.running
-    {
-        background-color: #EEEEFF;
-        border: 1px solid blue;
-    }
-
-    div.suite.undefined
-    {
-        background-color: #FCFCBF;
-        border: 1px solid orange;
-    }
-
-div.suite-name
-{
-    text-decoration: underline;
+div#spec-results.failed {
+  background-color: #ffdddd;
+  border: 1px solid #ff0000;
 }
-
-div.suite.skipped
-{
-    background-color: #F4F4F4;
-    border: 1px solid #CCCCCC;
-    color: #AAAAAA;
+div.suite {
+  border-radius: 4px 4px 4px 4px;
+  margin: 3px 3px 3px 5px;
+  padding: 2px 15px;
 }
-
-div.spec
-{
-    border-radius: 4px 4px 4px 4px;
-    margin: 3px 3px 3px 5px;
-    padding: 2px 15px;
+div.suite a {
+  text-decoration: none;
 }
-
-    div.spec.passed
-    {
-        background-color: lightgreen;
-        border: 1px solid green;
-    }
-
-    div.spec.failed
-    {
-        background-color: lightpink;
-        border: 1px solid red;
-    }
-
-    div.spec.running
-    {
-        background-color: lightblue;
-        border: 1px solid blue;
-    }
-
-    div.spec.undefined
-    {
-        background-color: #FCFC8F;
-        border: 1px solid orange;
-    }
-
-    div.spec.skipped
-    {
-        background-color: #EEEEEE;
-        border: 1px solid #CCCCCC;
-        color: #AAAAAA;
-    }
-
-div.spec-name
-{
-    text-decoration: underline;
+div.suite a:hover {
+  text-decoration: underline;
 }
-
-div.spec-step
-{
-    color: #880000;
-    padding-left: 15px;
+div.suite.passed {
+  background-color: #bbffbb;
+  border: 1px solid #137c11;
+}
+div.suite.passed a {
+  color: #137c11;
+}
+div.suite.failed {
+  background-color: #ffdddd;
+  border: 1px solid #ff0000;
+}
+div.suite.failed a {
+  color: #ff0000;
+}
+div.suite.running {
+  background-color: #eeeeff;
+  border: 1px solid #0b4ca7;
+}
+div.suite.running a {
+  color: #0b4ca7;
+}
+div.suite.undefined {
+  background-color: #fcfcbf;
+  border: 1px solid #eb8e09;
+}
+div.suite.undefined a {
+  color: #eb8e09;
+}
+div.suite.skipped {
+  background-color: #f4f4f4;
+  border: 1px solid #cccccc;
+  color: #AAAAAA;
+}
+div.suite.skipped a {
+  color: #cccccc;
+}
+div.spec {
+  border-radius: 4px 4px 4px 4px;
+  margin: 3px 3px 3px 5px;
+  padding: 2px 15px;
+}
+div.spec a {
+  text-decoration: none;
+}
+div.spec a:hover {
+  text-decoration: none;
+}
+div.spec.passed {
+  background-color: #bbffbb;
+  border: 1px solid #137c11;
+}
+div.spec.passed a {
+  color: #137c11;
+}
+div.spec.failed {
+  background-color: #ffdddd;
+  border: 1px solid #ff0000;
+}
+div.spec.failed a {
+  color: #ff0000;
+}
+div.spec.failed a:hover {
+  text-decoration: underline;
+}
+div.spec.running {
+  background-color: #eeeeff;
+  border: 1px solid #0b4ca7;
+}
+div.spec.running a {
+  color: #0b4ca7;
+}
+div.spec.undefined {
+  background-color: #fcfcbf;
+  border: 1px solid #eb8e09;
+}
+div.spec.undefined a {
+  color: #eb8e09;
+}
+div.spec.skipped {
+  background-color: #f4f4f4;
+  border: 1px solid #cccccc;
+  color: #AAAAAA;
+}
+div.spec.skipped a {
+  color: #cccccc;
+}
+div.spec-step {
+  color: #880000;
+  padding-left: 15px;
 }
