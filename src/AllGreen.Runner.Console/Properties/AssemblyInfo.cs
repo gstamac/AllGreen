@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("AllGreen.WebServer")]
+[assembly: AssemblyTitle("AllGreen.Runner.Console")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("AllGreen.WebServer")]
+[assembly: AssemblyProduct("AllGreen.Runner.Console")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("4d748475-1901-401e-824e-b71126fb0450")]
+[assembly: Guid("8e109249-32a5-457e-ac1e-3837c11c4719")]
 
 // Version information for an assembly consists of the following four values:
 //

@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Http;
 using AllGreen.WebServer.Core;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Hosting;
-using Owin;
 using TinyIoC;
+using System.Reflection;
 
-namespace AllGreen.WebServer
+namespace AllGreen.Runner.Console
 {
     class Program
     {
@@ -27,12 +25,12 @@ namespace AllGreen.WebServer
 
             using (WebApp.Start(url, appBuilder => new OwinStartup(tinyIoCContainer).Configuration(appBuilder)))
             {
-                Console.WriteLine("Server running at " + url);
-                RunnerHub runnerHub = new RunnerHub(GlobalHost.ConnectionManager.GetHubContext<RunnerHub>(), tinyIoCContainer.Resolve<IReporter>());
+                System.Console.WriteLine("Server running at " + url);
+                RunnerHub runnerHub = tinyIoCContainer.Resolve<RunnerHub>();
                 string command = "";
                 while (command != "x")
                 {
-                    command = Console.ReadLine();
+                    command = System.Console.ReadLine();
                     runnerHub.Reload();
                 }
             }
