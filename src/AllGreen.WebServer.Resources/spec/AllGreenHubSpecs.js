@@ -53,6 +53,12 @@ describe("AllGreen SignalR Hub", function () {
         expect(hubProxy.invoke).toHaveBeenCalledWith('register', 'connectionId', jasmine.any(String));
     });
 
+    it("Should initialize after reconnect", function () {
+        var hubProxy = _this.hub.connect();
+        _this.connectionCallbacks['reconnected']();
+        expect(hubProxy.invoke).toHaveBeenCalledWith('register', 'connectionId', jasmine.any(String));
+    });
+
     it("Calls Env.reload on reload message", function () {
         _this.hub.connect();
         _this.proxyCallback();
@@ -81,14 +87,29 @@ describe("AllGreen SignalR Hub", function () {
         });
     });
 
-    it("Reconnects after disconnect", function () {
+    it("Reconnects after disconnect if enabled", function () {
         _this.hub.connect();
 
+        _this.app.reconnectEnabled = true;
         expect(_this.connectionCallbacks['disconnected']).toEqual(jasmine.any(Function));
         _this.connectionCallbacks['disconnected']();
         waitsFor(function () {
             return _this.connection.start.callCount == 2;
         }, "Reconnect wasn't called", 10);
+    });
+
+    it("Doesn't reconnect on disconnect if disabled", function () {
+        runs(function () {
+            _this.hub.connect();
+
+            _this.app.reconnectEnabled = false;
+            expect(_this.connectionCallbacks['disconnected']).toEqual(jasmine.any(Function));
+            _this.connectionCallbacks['disconnected']();
+        });
+        waits(10);
+        runs(function () {
+            expect(_this.connection.start.callCount).toBe(1);
+        });
     });
 });
 

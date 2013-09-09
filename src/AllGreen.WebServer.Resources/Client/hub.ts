@@ -47,14 +47,17 @@ module AllGreen {
             connection.reconnected(() => {
                 app.log('reconnected');
                 app.setServerStatus('Reconnected');
+                this.register();
             });
             connection.disconnected(() => {
                 app.log('disconnected');
                 app.setServerStatus('Disconnected');
                 app.log('reconnecting in 5s');
                 setTimeout(() => {
-                    this.startConnection(connection, app);
-                }, this.reconnectTimeout); // Restart connection after 5 seconds.
+                    if (app.reconnectEnabled) {
+                        this.startConnection(connection, app);
+                    }
+                }, this.reconnectTimeout);
             });
         }
 

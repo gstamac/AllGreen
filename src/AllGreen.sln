@@ -6,6 +6,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.WebServer.Core.Tests", "AllGreen.WebServer.Core.Tests\AllGreen.WebServer.Core.Tests.csproj", "{216FCF6A-7B92-4608-A544-70A6532A89B7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{26A04B86-C877-4E45-8EBD-335573BA051B}"
+	ProjectSection(FolderGlobals) = preProject
+		AllGreen_Runner_WPF_Tests_csproj_UseParentNamespace = False
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.WebServer.Resources", "AllGreen.WebServer.Resources\AllGreen.WebServer.Resources.csproj", "{49B3C384-E5A6-4063-9271-BAE47E9D502C}"
 EndProject
@@ -17,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.Runner.WPF", "AllGreen.Runner.WPF\AllGreen.Runner.WPF.csproj", "{E64045A6-56C2-414E-ABA1-19711BCC81C4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.Runner.Console", "AllGreen.Runner.Console\AllGreen.Runner.Console.csproj", "{84DFDB76-3A56-467C-B915-128BC87DFC70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.Runner.WPF.Tests", "AllGreen.Runner.WPF.Tests\AllGreen.Runner.WPF.Tests.csproj", "{09F3E68D-1441-45C1-8217-417B6EDB88A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,11 +49,16 @@ Global
 		{84DFDB76-3A56-467C-B915-128BC87DFC70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84DFDB76-3A56-467C-B915-128BC87DFC70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84DFDB76-3A56-467C-B915-128BC87DFC70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09F3E68D-1441-45C1-8217-417B6EDB88A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09F3E68D-1441-45C1-8217-417B6EDB88A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09F3E68D-1441-45C1-8217-417B6EDB88A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09F3E68D-1441-45C1-8217-417B6EDB88A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{216FCF6A-7B92-4608-A544-70A6532A89B7} = {26A04B86-C877-4E45-8EBD-335573BA051B}
+		{09F3E68D-1441-45C1-8217-417B6EDB88A8} = {26A04B86-C877-4E45-8EBD-335573BA051B}
 	EndGlobalSection
 EndGlobal

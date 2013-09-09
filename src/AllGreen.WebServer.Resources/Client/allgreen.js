@@ -26,6 +26,7 @@ var AllGreen;
                     adapterFactory.create(reporter).start();
                 });
             };
+            this.reconnectEnabled = true;
         }
         App.startApp = function () {
             if (this.currentApp == null)
@@ -90,6 +91,11 @@ var AllGreen;
                 optionalParams[_i] = arguments[_i + 1];
             }
             console.log(message, optionalParams);
+        };
+
+        App.prototype.enableReconnect = function (enabled) {
+            this.log('Reconnect ' + (enabled ? 'enabled' : 'disabled'));
+            this.reconnectEnabled = enabled;
         };
         App.currentApp = null;
         return App;

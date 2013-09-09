@@ -15,9 +15,24 @@ namespace AllGreen.Runner.Console
 {
     public class ConsoleReporter : IReporter
     {
+        public void Connected(Guid connectionId, string userAgent)
+        {
+            System.Console.WriteLine(String.Format("[{0}] Client CONNECTED with UserAgent: {1}", connectionId, userAgent));
+        }
+
+        public void Reconnected(Guid connectionId)
+        {
+            System.Console.WriteLine(String.Format("[{0}] Client RECONNECTED", connectionId));
+        }
+
+        public void Disconnected(Guid connectionId)
+        {
+            System.Console.WriteLine(String.Format("[{0}] Client DISCONNECTED", connectionId));
+        }
+
         public void Register(Guid connectionId, string userAgent)
         {
-            System.Console.WriteLine(String.Format("[{0}] Client connected with UserAgent: {1}", connectionId, userAgent));
+            System.Console.WriteLine(String.Format("[{0}] Client registered with UserAgent: {1}", connectionId, userAgent));
         }
 
         public void Reset(Guid connectionId)
@@ -63,5 +78,6 @@ namespace AllGreen.Runner.Console
         {
             System.Console.WriteLine(String.Format("\tMessage: {0}, Status: {1}, Trace: {2}", specStep.Message, specStep.Status, specStep.Trace));
         }
+
     }
 }

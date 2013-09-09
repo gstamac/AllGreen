@@ -22,6 +22,18 @@ namespace AllGreen.WebServer.Core
         public SpecStatus Status { get; set; }
         public UInt64 Time { get; set; }
         public SpecStep[] Steps { get; set; }
+
+        public string GetFullName()
+        {
+            string fullName = Name;
+            Suite suite = this.Suite;
+            while (suite != null)
+            {
+                fullName = suite.Name + " -> " + fullName;
+                suite = suite.ParentSuite;
+            }
+            return fullName;
+        }
     }
 
     public class Suite

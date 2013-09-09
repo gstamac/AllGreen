@@ -1,15 +1,16 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web.Http;
+using System.Web;
 using Microsoft.AspNet.SignalR;
-using Owin;
+using UAParser;
 
 namespace AllGreen.WebServer.Core
 {
-    public class RunnerHub : Hub, IReporter
+    public class RunnerHub : Hub
     {
         private readonly IHubContext _HubContext;
         private readonly IReporter _Reporter;
@@ -45,10 +46,36 @@ namespace AllGreen.WebServer.Core
             _Reporter.Finished(connectionId);
         }
 
+        public override Task OnConnected()
+        {
+            _Reporter.Connected(new Guid(Context.ConnectionId), CleanupUserAgent(Context.Headers["User-Agent"]));
+            return base.OnConnected();
+        }
+
+        public override Task OnDisconnected()
+        {
+            _Reporter.Disconnected(new Guid(Context.ConnectionId));
+            return base.OnDisconnected();
+        }
+
+        public override Task OnReconnected()
+        {
+            _Reporter.Reconnected(new Guid(Context.ConnectionId));
+            return base.OnReconnected();
+        }
+
         public void Register(Guid connectionId, string userAgent)
         {
-            _Reporter.Register(connectionId, userAgent);
+            _Reporter.Register(connectionId, CleanupUserAgent(userAgent));
             Clients.Caller.reload();
+        }
+
+        private string CleanupUserAgent(string userAgent)
+        {
+            if (String.IsNullOrEmpty(userAgent)) return "";
+
+            Parser uaParser = Parser.GetDefault();
+            return uaParser.Parse(userAgent).ToString();
         }
     }
 }

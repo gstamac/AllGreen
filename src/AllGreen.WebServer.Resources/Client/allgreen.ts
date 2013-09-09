@@ -130,6 +130,12 @@ module AllGreen {
             console.log(message, optionalParams);
         }
 
+        public reconnectEnabled: boolean = true;
+
+        public enableReconnect(enabled: boolean) {
+            this.log('Reconnect ' + (enabled ? 'enabled' : 'disabled'));
+            this.reconnectEnabled = enabled;
+        }
     }
 
 }

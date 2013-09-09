@@ -43,13 +43,16 @@ var AllGreen;
             connection.reconnected(function () {
                 app.log('reconnected');
                 app.setServerStatus('Reconnected');
+                _this.register();
             });
             connection.disconnected(function () {
                 app.log('disconnected');
                 app.setServerStatus('Disconnected');
                 app.log('reconnecting in 5s');
                 setTimeout(function () {
-                    _this.startConnection(connection, app);
+                    if (app.reconnectEnabled) {
+                        _this.startConnection(connection, app);
+                    }
                 }, _this.reconnectTimeout);
             });
         };

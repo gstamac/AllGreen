@@ -85,4 +85,17 @@ describe("App", function () {
         _this.app.start();
         expect(adapterFactory1.create).not.toHaveBeenCalled();
     });
+
+    it("Enables reconnect by default", function () {
+        expect(_this.app.reconnectEnabled).toBeTruthy();
+    });
+
+    it("Can enable/disable reconnect", function () {
+        _this.app.enableReconnect(true);
+        expect(_this.app.reconnectEnabled).toBeTruthy();
+        _this.app.enableReconnect(false);
+        expect(_this.app.reconnectEnabled).toBeFalsy();
+        _this.app.enableReconnect(true);
+        expect(_this.app.reconnectEnabled).toBeTruthy();
+    });
 });

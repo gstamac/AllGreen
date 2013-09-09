@@ -47,6 +47,12 @@ describe("AllGreen SignalR Hub", () => {
         expect(hubProxy.invoke).toHaveBeenCalledWith('register', 'connectionId', jasmine.any(String));
     });
 
+    it("Should initialize after reconnect", () => {
+        var hubProxy = this.hub.connect();
+        this.connectionCallbacks['reconnected']();
+        expect(hubProxy.invoke).toHaveBeenCalledWith('register', 'connectionId', jasmine.any(String));
+    });
+
     it("Calls Env.reload on reload message", () => {
         this.hub.connect();
         this.proxyCallback();
@@ -64,22 +70,37 @@ describe("AllGreen SignalR Hub", () => {
     [{ method: 'reconnecting', status: 'Reconnecting...' },
         { method: 'reconnected', status: 'Reconnected' },
         { method: 'disconnected', status: 'Disconnected' }]
-    .forEach((data) => {
-        it("Displays status on " + data.method, () => {
-            this.hub.connect();
+        .forEach((data) => {
+            it("Displays status on " + data.method, () => {
+                this.hub.connect();
 
-            expect(this.connectionCallbacks[data.method]).toEqual(jasmine.any(Function));
-            this.connectionCallbacks[data.method]();
-            expect(this.app.setServerStatus).toHaveBeenCalledWith(data.status);
+                expect(this.connectionCallbacks[data.method]).toEqual(jasmine.any(Function));
+                this.connectionCallbacks[data.method]();
+                expect(this.app.setServerStatus).toHaveBeenCalledWith(data.status);
+            });
         });
-    });
 
-    it("Reconnects after disconnect", () => {
+    it("Reconnects after disconnect if enabled", () => {
         this.hub.connect();
 
+        this.app.reconnectEnabled = true;
         expect(this.connectionCallbacks['disconnected']).toEqual(jasmine.any(Function));
         this.connectionCallbacks['disconnected']();
         waitsFor(() => this.connection.start.callCount == 2, "Reconnect wasn't called", 10);
+    });
+
+    it("Doesn't reconnect on disconnect if disabled", () => {
+        runs(() => {
+            this.hub.connect();
+
+            this.app.reconnectEnabled = false;
+            expect(this.connectionCallbacks['disconnected']).toEqual(jasmine.any(Function));
+            this.connectionCallbacks['disconnected']();
+        });
+        waits(10);
+        runs(() => {
+            expect(this.connection.start.callCount).toBe(1);
+        });
     });
 });
 
