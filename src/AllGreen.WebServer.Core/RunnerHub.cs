@@ -10,7 +10,7 @@ using UAParser;
 
 namespace AllGreen.WebServer.Core
 {
-    public class RunnerHub : Hub
+    public class RunnerHub : Hub, IRunnerHub
     {
         private readonly IHubContext _HubContext;
         private readonly IReporter _Reporter;
@@ -21,52 +21,53 @@ namespace AllGreen.WebServer.Core
             _Reporter = reporter;
         }
 
-        public void Reload()
+        public void ReloadAll()
         {
             _HubContext.Clients.All.reload();
         }
 
-        public void Reset(Guid connectionId)
+        public void Reset()
         {
-            _Reporter.Reset(connectionId);
+            _Reporter.Reset(Context.ConnectionId);
         }
 
-        public void Started(Guid connectionId, int totalTests)
+        public void Started(int totalTests)
         {
-            _Reporter.Started(connectionId, totalTests);
+            _Reporter.Started(Context.ConnectionId, totalTests);
         }
 
-        public void SpecUpdated(Guid connectionId, Spec spec)
+        public void SpecUpdated(Spec spec)
         {
-            _Reporter.SpecUpdated(connectionId, spec);
+            //Console.WriteLine(String.Format("==> SPEC UPDATED {0}, {1}, {2}", spec.GetFullName(), spec.Status, spec.Time));
+            _Reporter.SpecUpdated(Context.ConnectionId, spec);
         }
 
-        public void Finished(Guid connectionId)
+        public void Finished()
         {
-            _Reporter.Finished(connectionId);
+            _Reporter.Finished(Context.ConnectionId);
         }
 
         public override Task OnConnected()
         {
-            _Reporter.Connected(new Guid(Context.ConnectionId), CleanupUserAgent(Context.Headers["User-Agent"]));
+            _Reporter.Connected(Context.ConnectionId, CleanupUserAgent(Context.Headers["User-Agent"]));
             return base.OnConnected();
         }
 
         public override Task OnDisconnected()
         {
-            _Reporter.Disconnected(new Guid(Context.ConnectionId));
+            _Reporter.Disconnected(Context.ConnectionId);
             return base.OnDisconnected();
         }
 
         public override Task OnReconnected()
         {
-            _Reporter.Reconnected(new Guid(Context.ConnectionId));
+            _Reporter.Reconnected(Context.ConnectionId, CleanupUserAgent(Context.Headers["User-Agent"]));
             return base.OnReconnected();
         }
 
-        public void Register(Guid connectionId, string userAgent)
+        public void Register()
         {
-            _Reporter.Register(connectionId, CleanupUserAgent(userAgent));
+            _Reporter.Register(Context.ConnectionId, CleanupUserAgent(Context.Headers["User-Agent"]));
             Clients.Caller.reload();
         }
 

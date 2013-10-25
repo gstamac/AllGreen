@@ -17,7 +17,9 @@
                     <ColumnDefinition x:Uid="GridColumnDefinitionSpacer0" Width="4" />
                     <ColumnDefinition x:Uid="GridColumnDefinitionDisplayName" Width="*" />
                     <ColumnDefinition x:Uid="GridColumnDefinitionSpacer1" Width="10" />
-                    <ColumnDefinition x:Uid="GridColumnDefinitionDuration" Width="Auto" />
+                    <ColumnDefinition x:Uid="GridColumnDefinitionStatuses" Width="Auto" />
+                    <ColumnDefinition x:Uid="GridColumnDefinitionSpacer2" Width="4" />
+                    <ColumnDefinition x:Uid="GridColumnDefinitionDuration" Width="50" />
                     <ColumnDefinition x:Uid="GridColumnDefinitionSpacer2" Width="4" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding Name}" Width="150" Grid.Column="2" HorizontalAlignment="Left" TextTrimming="CharacterEllipsis"/>
@@ -37,10 +39,13 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <ItemContainerTemplate>
-                            <TextBlock Text="{Binding Status}" TextAlignment="Center" Width="50" Background="{Binding Runner.Background, Mode=OneWay}"/>
+                            <DockPanel Background="{Binding Runner.Background, Mode=OneWay}" Margin="1 0">
+                                <Image Source="{Binding Status, Converter={my:SpecStatusToImageConverter}}" Margin="5 1" Width="16" ToolTip="{Binding}"/>
+                            </DockPanel>
                         </ItemContainerTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+                <TextBlock Text="{Binding Duration}" Width="Auto" Grid.Column="6" HorizontalAlignment="Right"/>
             </Grid>
         </DataTemplate>
 
@@ -55,13 +60,15 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <ListView ItemsSource="{Binding Runners}" Grid.Row="0" >
+        <Button Content="Run All Tests" Command="{Binding RunAllTestsCommand}" Grid.Row="0"/>
+        <ListView ItemsSource="{Binding Runners}" Grid.Row="1" >
             <ListView.Resources>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="Background" Value="{Binding Background, Mode=OneWay}">
@@ -75,7 +82,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <my:StretchingTreeView ItemsSource="{Binding Suites}" VerticalAlignment="Stretch" Grid.Row="1">
+        <my:StretchingTreeView ItemsSource="{Binding Suites}" VerticalAlignment="Stretch" Grid.Row="2">
             <my:StretchingTreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
                     <Setter Property="IsExpanded" Value="True"/>

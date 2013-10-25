@@ -11,6 +11,7 @@ module AllGreen {
     }
 
     export interface IRunnerReporter {
+        isReady(): boolean;
         reset();
         started(totalSpecs: number);
         specUpdated(spec: ISpec);
@@ -18,10 +19,10 @@ module AllGreen {
     }
 
     export enum SpecStatus {
-        Running = 0,
-        Failed = 1,
-        Undefined = 2,
-        Passed = 3,
+        Undefined = 0,
+        Running = 1,
+        Passed = 2,
+        Failed = 3,
         Skipped = 4
     }
 
@@ -87,13 +88,30 @@ module AllGreen {
         }
 
         public start = function () {
-            var reporter = this;
-            this.adapterFactories.forEach((adapterFactory: IAdapterFactory) =>
-            { adapterFactory.create(reporter).start(); });
+            this.delayStartIfNeeded(this, this.adapterFactories);
+        }
+
+        private delayStartIfNeeded(reporter: App, adapterFactories: IAdapterFactory[]) {
+            if (!reporter.isReady()) {
+                setTimeout(() =>  this.delayStartIfNeeded(reporter, adapterFactories), 10);
+            }
+            else {
+                adapterFactories.forEach((adapterFactory: IAdapterFactory) =>
+                    { adapterFactory.create(reporter).start(); });
+            }
         }
 
         public setServerStatus(status: string) {
             this.serverReporter.setServerStatus(status);
+        }
+
+        public isReady(): boolean {
+            for (var i = 0; i < this.runnerReporters.length; i++) {
+                if (!this.runnerReporters[i].isReady()) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public reset() {

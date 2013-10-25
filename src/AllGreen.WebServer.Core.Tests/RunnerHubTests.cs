@@ -36,9 +36,9 @@ namespace AllGreen.WebServer.Core.Tests
             ReloadSender reloadSender = new ReloadSender();
             clientsMock.Setup(c => c.All).Returns(reloadSender);
             IHubContext hubContext = Mock.Of<IHubContext>(hc => hc.Clients == clientsMock.Object);
-            RunnerHub _RunnerHub = new RunnerHub(hubContext, Mock.Of<IReporter>());
+            RunnerHub runnerHub = new RunnerHub(hubContext, Mock.Of<IReporter>());
 
-            _RunnerHub.Reload();
+            runnerHub.ReloadAll();
 
             reloadSender.reloadCalled.Should().BeTrue();
         }
@@ -48,22 +48,20 @@ namespace AllGreen.WebServer.Core.Tests
         {
             private Mock<IReporter> _ReporterMock;
             private RunnerHub _RunnerHub;
-            private Guid _ConnectionId;
+            private string _ConnectionId;
 
             [TestInitialize]
             public void Setup()
             {
-                IHubContext hubContext = Mock.Of<IHubContext>();
                 _ReporterMock = new Mock<IReporter>();
-                _RunnerHub = new RunnerHub(hubContext, _ReporterMock.Object);
-
-                _ConnectionId = Guid.NewGuid();
+                _ConnectionId = Guid.NewGuid().ToString();
+                _RunnerHub = new RunnerHub(Mock.Of<IHubContext>(), _ReporterMock.Object) { Context = CreateContext(_ConnectionId) };
             }
 
             [TestMethod]
             public void ReportsResetTest()
             {
-                _RunnerHub.Reset(_ConnectionId);
+                _RunnerHub.Reset();
 
                 _ReporterMock.Verify(r => r.Reset(_ConnectionId));
             }
@@ -71,7 +69,7 @@ namespace AllGreen.WebServer.Core.Tests
             [TestMethod]
             public void ReportsStartedTest()
             {
-                _RunnerHub.Started(_ConnectionId, 20);
+                _RunnerHub.Started(20);
 
                 _ReporterMock.Verify(r => r.Started(_ConnectionId, 20));
             }
@@ -81,7 +79,7 @@ namespace AllGreen.WebServer.Core.Tests
             {
                 Spec spec = new Spec();
 
-                _RunnerHub.SpecUpdated(_ConnectionId, spec);
+                _RunnerHub.SpecUpdated(spec);
 
                 _ReporterMock.Verify(r => r.SpecUpdated(_ConnectionId, spec));
             }
@@ -89,7 +87,7 @@ namespace AllGreen.WebServer.Core.Tests
             [TestMethod]
             public void ReportsFinishedTest()
             {
-                _RunnerHub.Finished(_ConnectionId);
+                _RunnerHub.Finished();
 
                 _ReporterMock.Verify(r => r.Finished(_ConnectionId));
             }
@@ -97,31 +95,25 @@ namespace AllGreen.WebServer.Core.Tests
             [TestMethod]
             public void ReportsConnectedTest()
             {
-                INameValueCollection headers = Mock.Of<INameValueCollection>();
-                IRequest request = Mock.Of<IRequest>(r => r.Headers == headers);
-                _RunnerHub.Context = new HubCallerContext(request, Guid.NewGuid().ToString());
-                
                 _RunnerHub.OnConnected();
 
-                _ReporterMock.Verify(r => r.Connected(It.IsAny<Guid>(), It.IsAny<String>()));
+                _ReporterMock.Verify(r => r.Connected(_ConnectionId, "Windows 7  Firefox 23.0"));
             }
 
             [TestMethod]
             public void ReportsReconnectedTest()
             {
-                _RunnerHub.Context = new HubCallerContext(null, Guid.NewGuid().ToString());
                 _RunnerHub.OnReconnected();
 
-                _ReporterMock.Verify(r => r.Reconnected(It.IsAny<Guid>()));
+                _ReporterMock.Verify(r => r.Reconnected(_ConnectionId, "Windows 7  Firefox 23.0"));
             }
 
             [TestMethod]
             public void ReportsDisconnectedTest()
             {
-                _RunnerHub.Context = new HubCallerContext(null, Guid.NewGuid().ToString());
                 _RunnerHub.OnDisconnected();
 
-                _ReporterMock.Verify(r => r.Disconnected(It.IsAny<Guid>()));
+                _ReporterMock.Verify(r => r.Disconnected(_ConnectionId));
             }
 
             [TestMethod]
@@ -131,12 +123,32 @@ namespace AllGreen.WebServer.Core.Tests
                 ReloadSender reloadSender = new ReloadSender();
                 clientsMock.Setup(c => c.Caller).Returns(reloadSender);
                 _RunnerHub.Clients = clientsMock.Object;
-                _RunnerHub.Register(_ConnectionId, @"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0");
+                _RunnerHub.Register();
 
                 _ReporterMock.Verify(r => r.Register(_ConnectionId, "Windows 7  Firefox 23.0"));
                 reloadSender.reloadCalled.Should().BeTrue();
             }
 
+            public class NameValueCollection : Dictionary<string, string>, INameValueCollection
+            {
+                public string Get(string key)
+                {
+                    return this[key];
+                }
+
+                public IEnumerable<string> GetValues(string key)
+                {
+                    return null;
+                }
+            }
+
+            private static HubCallerContext CreateContext(string connectionId)
+            {
+                NameValueCollection headers = new NameValueCollection();
+                headers.Add("User-Agent", @"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0");
+                IRequest request = Mock.Of<IRequest>(r => r.Headers == headers);
+                return new HubCallerContext(request, connectionId);
+            }
         }
     }
 }

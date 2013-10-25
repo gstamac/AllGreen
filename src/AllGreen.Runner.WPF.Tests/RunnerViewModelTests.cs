@@ -20,7 +20,7 @@ namespace AllGreen.Runner.WPF.Tests
         public void PropertyChangedTests()
         {
             TestHelper.TestPropertyChanged(_RunnerViewModel)
-                .Action(vm => vm.ConnectionId = Guid.NewGuid()).Changes("ConnectionId").Changes("Name")
+                .Action(vm => vm.ConnectionId = Guid.NewGuid().ToString()).Changes("ConnectionId").Changes("Name")
                 .Action(vm => vm.UserAgent = "NEW USER AGENT").Changes("UserAgent").Changes("Name")
                 .Action(vm => vm.Name = "NEW NAME").Changes("Name")
                 .Action(vm => vm.Status = "NEW STATUS").Changes("Status");
@@ -29,7 +29,7 @@ namespace AllGreen.Runner.WPF.Tests
         [TestMethod]
         public void ConnectionIdShouldBeUsedForName()
         {
-            _RunnerViewModel.ConnectionId = Guid.NewGuid();
+            _RunnerViewModel.ConnectionId = Guid.NewGuid().ToString();
             _RunnerViewModel.Name.Should().Be(_RunnerViewModel.ConnectionId.ToString());
         }
 

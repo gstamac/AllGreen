@@ -27,20 +27,21 @@ namespace AllGreen.Runner.WPF
             Suites = new BindableCollection<SuiteViewModel>();
         }
 
-        public void Connected(Guid connectionId, string userAgent)
+        public void Connected(string connectionId, string userAgent)
         {
             RunnerViewModel runner = GetRunner(connectionId);
             runner.UserAgent = userAgent;
             runner.Status = "Connected";
         }
 
-        public void Reconnected(Guid connectionId)
+        public void Reconnected(string connectionId, string userAgent)
         {
             RunnerViewModel runner = GetRunner(connectionId);
+            runner.UserAgent = userAgent;
             runner.Status = "Reconnected";
         }
 
-        public void Disconnected(Guid connectionId)
+        public void Disconnected(string connectionId)
         {
             RunnerViewModel runner = Runners.Where(r => r.ConnectionId == connectionId).FirstOrDefault();
             if (runner != null)
@@ -50,7 +51,7 @@ namespace AllGreen.Runner.WPF
             }
         }
 
-        public void Register(Guid connectionId, string userAgent)
+        public void Register(string connectionId, string userAgent)
         {
             RunnerViewModel runner = GetRunner(connectionId);
             if (String.IsNullOrEmpty(runner.UserAgent))
@@ -58,25 +59,26 @@ namespace AllGreen.Runner.WPF
             runner.Status = "Registered";
         }
 
-        public void Reset(Guid connectionId)
+        public void Reset(string connectionId)
         {
             RunnerViewModel runner = GetRunner(connectionId);
             runner.Status = "Reset";
+            _Dispatcher.Invoke(() => ClearStatuses(runner.ConnectionId));
         }
 
-        public void Started(Guid connectionId, int totalTests)
+        public void Started(string connectionId, int totalTests)
         {
             RunnerViewModel runner = GetRunner(connectionId);
             runner.Status = String.Format("Started running {0} tests", totalTests);
         }
 
-        public void Finished(Guid connectionId)
+        public void Finished(string connectionId)
         {
             RunnerViewModel runner = GetRunner(connectionId);
             runner.Status = "Finished";
         }
 
-        private RunnerViewModel GetRunner(Guid connectionId)
+        private RunnerViewModel GetRunner(string connectionId)
         {
             RunnerViewModel runner = Runners.Where(r => r.ConnectionId == connectionId).FirstOrDefault();
             if (runner == null)
@@ -99,12 +101,12 @@ namespace AllGreen.Runner.WPF
             _Dispatcher.Invoke(() => ClearStatuses(runner.ConnectionId));
         }
 
-        public void SpecUpdated(Guid connectionId, Spec spec)
+        public void SpecUpdated(string connectionId, Spec spec)
         {
             _Dispatcher.Invoke(() => GetSpecViewModel(connectionId, spec));
         }
 
-        private void ClearStatuses(Guid connectionId)
+        private void ClearStatuses(string connectionId)
         {
             foreach (SuiteViewModel suite in Suites)
             {
@@ -112,7 +114,7 @@ namespace AllGreen.Runner.WPF
             }
         }
 
-        private void ClearStatuses(SuiteViewModel suite, Guid connectionId)
+        private void ClearStatuses(SuiteViewModel suite, string connectionId)
         {
             ClearStatus(suite, connectionId);
             foreach (SuiteViewModel childSuite in suite.Suites)
@@ -125,12 +127,12 @@ namespace AllGreen.Runner.WPF
             }
         }
 
-        private void ClearStatus(SpecOrSuiteViewModel specOrSuiteViewModel, Guid connectionId)
+        private void ClearStatus(SpecOrSuiteViewModel specOrSuiteViewModel, string connectionId)
         {
             specOrSuiteViewModel.ClearStatus(connectionId);
         }
 
-        private SuiteViewModel GetSuiteViewModel(Guid runnerId, Suite suite, UInt64 time)
+        private SuiteViewModel GetSuiteViewModel(string runnerId, Suite suite, UInt64 time)
         {
             if (suite == null) return null;
 
@@ -154,17 +156,13 @@ namespace AllGreen.Runner.WPF
                     Id = suite.Id,
                     Name = suite.Name
                 };
-                suiteViewModel.SetStatus(runnerId, suite.Status, time);
                 suites.Add(suiteViewModel);
             }
-            else
-            {
-                suiteViewModel.SetStatus(runnerId, suite.Status, time);
-            }
+            suiteViewModel.SetStatus(runnerId, suite.Status, time);
             return suiteViewModel;
         }
 
-        private SpecViewModel GetSpecViewModel(Guid runnerId, Spec spec)
+        private SpecViewModel GetSpecViewModel(string runnerId, Spec spec)
         {
             if (spec == null) return null;
 
@@ -180,14 +178,13 @@ namespace AllGreen.Runner.WPF
                     Name = spec.Name,
                     Time = spec.Time
                 };
-                specViewModel.SetStatus(runnerId, spec.Status, spec.Time);
                 suiteViewModel.Specs.Add(specViewModel);
             }
             else
             {
-                specViewModel.SetStatus(runnerId, spec.Status, spec.Time);
                 specViewModel.Time = spec.Time;
             }
+            specViewModel.SetStatus(runnerId, spec.Status, spec.Time);
             return specViewModel;
         }
     }

@@ -22,6 +22,10 @@ var AllGreen;
             this.DEFAULT_RUNNER_STATUS = 'Waiting...';
             this.totalStatus = null;
         }
+        RunnerReporter.prototype.isReady = function () {
+            return true;
+        };
+
         RunnerReporter.prototype.reset = function () {
             this.setRunnerStatus(this.DEFAULT_RUNNER_STATUS);
             this.getSpecResultsElement().text('');

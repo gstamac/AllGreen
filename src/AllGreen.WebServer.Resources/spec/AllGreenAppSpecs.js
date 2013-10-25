@@ -26,6 +26,25 @@ describe("App", function () {
         expect(serverReporter.setServerStatus).toHaveBeenCalledWith('server status');
     });
 
+    it("Checks isReady for all reporters", function () {
+        var runnerReporter1 = { isReady: function () {
+                return true;
+            } };
+        _this.app.registerRunnerReporter(runnerReporter1);
+        var runnerReporter2 = { isReady: function () {
+                return false;
+            } };
+        _this.app.registerRunnerReporter(runnerReporter2);
+
+        expect(_this.app.isReady()).toBeFalsy();
+
+        runnerReporter2.isReady = function () {
+            return true;
+        };
+
+        expect(_this.app.isReady()).toBeTruthy();
+    });
+
     ['reset', 'started', 'finished', 'specUpdated'].forEach(function (method) {
         it("Forwards '" + method + "' to multiple reporters", function () {
             var runnerReporter1 = jasmine.createSpyObj('runnerReporter1', [method]);
@@ -55,6 +74,29 @@ describe("App", function () {
         expect(adapterFactory2.create).toHaveBeenCalledWith(_this.app);
     });
 
+    it("Should start after all reporters are ready", function () {
+        var adapterFactory = jasmine.createSpyObj('adapterFactory', ['create']);
+        var runnerReporter = { isReady: function () {
+                return false;
+            } };
+        runs(function () {
+            adapterFactory['create'].andReturn({ start: function () {
+                } });
+            _this.app.registerAdapterFactory(adapterFactory);
+            _this.app.registerRunnerReporter(runnerReporter);
+
+            _this.app.start();
+            expect(adapterFactory.create.callCount).toBe(0);
+            runnerReporter.isReady = function () {
+                return true;
+            };
+        });
+        waits(20);
+        runs(function () {
+            expect(adapterFactory.create).toHaveBeenCalledWith(_this.app);
+        });
+    });
+
     it("Adapters start is called", function () {
         var adapter1 = jasmine.createSpyObj('adapter1', ['start']);
         var adapterFactory1 = jasmine.createSpyObj('adapterFactory1', ['create']);
@@ -71,7 +113,10 @@ describe("App", function () {
     });
 
     it("Can be reloaded", function () {
-        var runnerReporter = jasmine.createSpyObj('runnerReporter', ['reset']);
+        var runnerReporter = jasmine.createSpyObj('runnerReporter', ['reset', 'isReady']);
+        runnerReporter['isReady'].andCallFake(function () {
+            return true;
+        });
         _this.app.registerRunnerReporter(runnerReporter);
 
         var adapterFactory1 = jasmine.createSpyObj('adapterFactory1', ['create']);

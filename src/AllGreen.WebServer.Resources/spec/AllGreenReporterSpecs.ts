@@ -82,6 +82,10 @@ describe("AllGreen.RunnerReporter", () => {
         expect($('#spec-results')).toBeEmpty();
     });
     
+    it("Should be read", () => {
+        expect(this.runnerReporter.isReady()).toBeTruthy();
+    });
+
     it("Can be reset", () => {
         this.runnerReporter.started();
         this.runnerReporter.specUpdated({ id: 123, name: 'test 1', suite: this.suite1, status: AllGreen.SpecStatus.Passed });

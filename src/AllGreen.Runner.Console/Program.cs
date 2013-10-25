@@ -22,16 +22,17 @@ namespace AllGreen.Runner.Console
             tinyIoCContainer.Register<IRunnerResources, RunnerResources>();
             tinyIoCContainer.Register<IHubContext>((ioc, np) => GlobalHost.ConnectionManager.GetHubContext<RunnerHub>());
             tinyIoCContainer.Register<IReporter, ConsoleReporter>();
+            tinyIoCContainer.Register<IRunnerHub, RunnerHub>();
 
             using (WebApp.Start(url, appBuilder => new OwinStartup(tinyIoCContainer).Configuration(appBuilder)))
             {
                 System.Console.WriteLine("Server running at " + url);
-                RunnerHub runnerHub = tinyIoCContainer.Resolve<RunnerHub>();
+                IRunnerHub runnerHub = tinyIoCContainer.Resolve<IRunnerHub>();
                 string command = "";
                 while (command != "x")
                 {
                     command = System.Console.ReadLine();
-                    runnerHub.Reload();
+                    runnerHub.ReloadAll();
                 }
             }
         }

@@ -21,6 +21,10 @@ module AllGreen {
 
         constructor() { }
 
+        public isReady(): boolean {
+            return true;
+        }
+
         public reset() {
             this.setRunnerStatus(this.DEFAULT_RUNNER_STATUS);
             this.getSpecResultsElement().text('');

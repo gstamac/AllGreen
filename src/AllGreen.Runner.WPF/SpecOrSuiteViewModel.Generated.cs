@@ -6,7 +6,6 @@ using Caliburn.Micro;
 
 namespace AllGreen.Runner.WPF
 {
-
 	partial class SpecOrSuiteViewModel: PropertyChangedBase
 	{
 		private System.Guid _Id;
@@ -23,7 +22,14 @@ namespace AllGreen.Runner.WPF
 			set { ChangeProperty<System.String>("Name", ref _Name, value); }
 		}
 
-		public AllGreen.Runner.WPF.BindableDictionary<System.Guid,AllGreen.Runner.WPF.SpecStatusWithTime> Statuses { get; private set; }
+		public AllGreen.Runner.WPF.BindableDictionary<System.String,AllGreen.Runner.WPF.SpecStatusViewModel> Statuses { get; private set; }
+
+		private System.String _Duration;
+		public System.String Duration
+		{
+			get { return _Duration; }
+			set { ChangeProperty<System.String>("Duration", ref _Duration, value); }
+		}
 
 
 		#region INotifyPropertyChanged implementation

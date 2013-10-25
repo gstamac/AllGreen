@@ -7,10 +7,10 @@ var AllGreen;
     AllGreen.startApp = startApp;
 
     (function (SpecStatus) {
-        SpecStatus[SpecStatus["Running"] = 0] = "Running";
-        SpecStatus[SpecStatus["Failed"] = 1] = "Failed";
-        SpecStatus[SpecStatus["Undefined"] = 2] = "Undefined";
-        SpecStatus[SpecStatus["Passed"] = 3] = "Passed";
+        SpecStatus[SpecStatus["Undefined"] = 0] = "Undefined";
+        SpecStatus[SpecStatus["Running"] = 1] = "Running";
+        SpecStatus[SpecStatus["Passed"] = 2] = "Passed";
+        SpecStatus[SpecStatus["Failed"] = 3] = "Failed";
         SpecStatus[SpecStatus["Skipped"] = 4] = "Skipped";
     })(AllGreen.SpecStatus || (AllGreen.SpecStatus = {}));
     var SpecStatus = AllGreen.SpecStatus;
@@ -21,10 +21,7 @@ var AllGreen;
             this.runnerReporters = [];
             this.adapterFactories = [];
             this.start = function () {
-                var reporter = this;
-                this.adapterFactories.forEach(function (adapterFactory) {
-                    adapterFactory.create(reporter).start();
-                });
+                this.delayStartIfNeeded(this, this.adapterFactories);
             };
             this.reconnectEnabled = true;
         }
@@ -51,8 +48,30 @@ var AllGreen;
             this.adapterFactories.push(adapterFactory);
         };
 
+        App.prototype.delayStartIfNeeded = function (reporter, adapterFactories) {
+            var _this = this;
+            if (!reporter.isReady()) {
+                setTimeout(function () {
+                    return _this.delayStartIfNeeded(reporter, adapterFactories);
+                }, 10);
+            } else {
+                adapterFactories.forEach(function (adapterFactory) {
+                    adapterFactory.create(reporter).start();
+                });
+            }
+        };
+
         App.prototype.setServerStatus = function (status) {
             this.serverReporter.setServerStatus(status);
+        };
+
+        App.prototype.isReady = function () {
+            for (var i = 0; i < this.runnerReporters.length; i++) {
+                if (!this.runnerReporters[i].isReady()) {
+                    return false;
+                }
+            }
+            return true;
         };
 
         App.prototype.reset = function () {

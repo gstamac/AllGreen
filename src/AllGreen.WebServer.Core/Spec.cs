@@ -64,10 +64,10 @@ namespace AllGreen.WebServer.Core
 
     public enum SpecStatus
     {
-        Running = 0,
-        Failed = 1,
-        Undefined = 2,
-        Passed = 3,
+        Undefined = 0,
+        Running = 1,
+        Passed = 2,
+        Failed = 3,
         Skipped = 4
     }
 }

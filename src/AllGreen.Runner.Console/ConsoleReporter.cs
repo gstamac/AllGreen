@@ -15,43 +15,43 @@ namespace AllGreen.Runner.Console
 {
     public class ConsoleReporter : IReporter
     {
-        public void Connected(Guid connectionId, string userAgent)
+        public void Connected(string connectionId, string userAgent)
         {
             System.Console.WriteLine(String.Format("[{0}] Client CONNECTED with UserAgent: {1}", connectionId, userAgent));
         }
 
-        public void Reconnected(Guid connectionId)
+        public void Reconnected(string connectionId, string userAgent)
         {
-            System.Console.WriteLine(String.Format("[{0}] Client RECONNECTED", connectionId));
+            System.Console.WriteLine(String.Format("[{0}] Client RECONNECTED with UserAgent: {1}", connectionId, userAgent));
         }
 
-        public void Disconnected(Guid connectionId)
+        public void Disconnected(string connectionId)
         {
             System.Console.WriteLine(String.Format("[{0}] Client DISCONNECTED", connectionId));
         }
 
-        public void Register(Guid connectionId, string userAgent)
+        public void Register(string connectionId, string userAgent)
         {
             System.Console.WriteLine(String.Format("[{0}] Client registered with UserAgent: {1}", connectionId, userAgent));
         }
 
-        public void Reset(Guid connectionId)
+        public void Reset(string connectionId)
         {
             System.Console.WriteLine(String.Format("[{0}] Runner was reset", connectionId));
         }
 
-        public void Started(Guid connectionId, int totalTests)
+        public void Started(string connectionId, int totalTests)
         {
             System.Console.WriteLine(String.Format("[{0}] Runner started running {1} tests", connectionId, totalTests));
         }
 
-        public void SpecUpdated(Guid connectionId, Spec spec)
+        public void SpecUpdated(string connectionId, Spec spec)
         {
             System.Console.WriteLine(String.Format("[{0}] Spec {1} updated at {2} => {3}", connectionId, spec.Id.ToString().Substring(20), spec.Time, spec.Status));
             OutputSpec(spec);
         }
 
-        public void Finished(Guid connectionId)
+        public void Finished(string connectionId)
         {
             System.Console.WriteLine(String.Format("[{0}] Runner finished", connectionId));
         }

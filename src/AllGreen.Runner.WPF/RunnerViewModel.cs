@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 using System.Windows.Media;
 using TemplateAttributes;
 
@@ -8,7 +9,7 @@ namespace AllGreen.Runner.WPF
 {
     public interface IRunnerViewModel
     {
-        Guid ConnectionId { get; set; }
+        string ConnectionId { get; set; }
         string Name { get; set; }
         string UserAgent { get; set; }
         string Status { get; set; }
@@ -26,9 +27,10 @@ namespace AllGreen.Runner.WPF
             _Background.Freeze();
         }
 
-        protected void OnConnectionIdChanged(Guid oldConnectionId, Guid newConnectionId)
+        protected void OnConnectionIdChanged(string oldConnectionId, string newConnectionId)
         {
-            Name = newConnectionId.ToString();
+            if (String.IsNullOrEmpty(Name))
+                Name = newConnectionId;
         }
 
         protected void OnUserAgentChanged(string oldUserAgent, string newUserAgent)

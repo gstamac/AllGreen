@@ -7,13 +7,13 @@ namespace AllGreen.WebServer.Core
 {
     public interface IReporter
     {
-        void Connected(Guid connectionId, string userAgent);
-        void Reconnected(Guid connectionId);
-        void Disconnected(Guid connectionId);
-        void Register(Guid connectionId, string userAgent);
-        void Reset(Guid connectionId);
-        void Started(Guid connectionId, int totalTests);
-        void Finished(Guid connectionId);
-        void SpecUpdated(Guid connectionId, Spec spec);
+        void Connected(string connectionId, string userAgent);
+        void Reconnected(string connectionId, string userAgent);
+        void Disconnected(string connectionId);
+        void Register(string connectionId, string userAgent);
+        void Reset(string connectionId);
+        void Started(string connectionId, int totalTests);
+        void Finished(string connectionId);
+        void SpecUpdated(string connectionId, Spec spec);
     }
 }

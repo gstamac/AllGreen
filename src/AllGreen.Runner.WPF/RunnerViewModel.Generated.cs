@@ -8,11 +8,11 @@ namespace AllGreen.Runner.WPF
 {
 	partial class RunnerViewModel: PropertyChangedBase
 	{
-		private System.Guid _ConnectionId;
-		public System.Guid ConnectionId
+		private System.String _ConnectionId;
+		public System.String ConnectionId
 		{
 			get { return _ConnectionId; }
-			set { ChangeProperty<System.Guid>("ConnectionId", ref _ConnectionId, value, changedCallback: OnConnectionIdChanged); }
+			set { ChangeProperty<System.String>("ConnectionId", ref _ConnectionId, value, changedCallback: OnConnectionIdChanged); }
 		}
 
 		private System.String _Name;

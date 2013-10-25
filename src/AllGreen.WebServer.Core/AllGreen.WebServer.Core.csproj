@@ -84,7 +84,9 @@
     <Compile Include="EmbededResources.cs" />
     <Compile Include="HttpRequestMessageExtensions.cs" />
     <Compile Include="HttpResponseMessageExtensions.cs" />
+    <Compile Include="FileWatcher.cs" />
     <Compile Include="IReporter.cs" />
+    <Compile Include="IRunnerHub.cs" />
     <Compile Include="IRunnerResources.cs" />
     <Compile Include="Spec.cs" />
     <Compile Include="IWebResources.cs" />

@@ -4,6 +4,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FluentAssertions;
 using AllGreen.WebServer.Core;
 using System.Text.RegularExpressions;
+using TinyIoC;
+using Moq;
 
 namespace AllGreen.Runner.WPF.Tests
 {
@@ -36,6 +38,16 @@ namespace AllGreen.Runner.WPF.Tests
         public void SuitesCollectionChangedTests()
         {
             (new TestHelper.ObservableCollectionTester<SuiteViewModel>(_MainViewModel.Suites)).RunTests();
+        }
+
+        [TestMethod]
+        public void RunAllTestsCommandShouldFireReloadOnAllClients()
+        {
+            Mock<IRunnerHub> mockOfRunnerHub = new Mock<IRunnerHub>();
+            _MainViewModel.ResourceResolver.Register<IRunnerHub>(mockOfRunnerHub.Object);
+            _MainViewModel.RunAllTestsCommand.Execute(null);
+
+            mockOfRunnerHub.Verify(rh => rh.ReloadAll());
         }
     }
 }

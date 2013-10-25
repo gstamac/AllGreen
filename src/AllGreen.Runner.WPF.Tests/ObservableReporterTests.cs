@@ -30,7 +30,7 @@ namespace AllGreen.Runner.WPF.Tests
             [TestMethod]
             public void ConnectedTest()
             {
-                Guid guid = Guid.NewGuid();
+                string guid = Guid.NewGuid().ToString();
                 _Reporter.Connected(guid, "");
                 _Reporter.Runners.Should().OnlyContain(r => r.ConnectionId == guid && r.Name == guid.ToString() && r.UserAgent == "" && r.Status == "Connected");
                 _Reporter.Connected(guid, "USERAGENT");
@@ -40,15 +40,15 @@ namespace AllGreen.Runner.WPF.Tests
             [TestMethod]
             public void ReconnectedTest()
             {
-                Guid guid = Guid.NewGuid();
-                _Reporter.Reconnected(guid);
+                string guid = Guid.NewGuid().ToString();
+                _Reporter.Reconnected(guid, "");
                 _Reporter.Runners.Should().OnlyContain(r => r.ConnectionId == guid && r.Name == guid.ToString() && r.Status == "Reconnected");
             }
 
             [TestMethod]
             public void DisconnectedTest()
             {
-                Guid guid = Guid.NewGuid();
+                string guid = Guid.NewGuid().ToString();
                 _Reporter.Disconnected(guid);
                 _Reporter.Runners.Should().BeEmpty();
                 _Reporter.Connected(guid, "USERAGENT");
@@ -59,12 +59,12 @@ namespace AllGreen.Runner.WPF.Tests
             [TestMethod]
             public void RegisterTest()
             {
-                Guid guid = Guid.NewGuid();
+                string guid = Guid.NewGuid().ToString();
                 _Reporter.Connected(guid, "");
                 _Reporter.Register(guid, "");
                 _Reporter.Runners.Should().OnlyContain(r => r.ConnectionId == guid && r.Name == guid.ToString() && r.Status == "Registered");
 
-                guid = Guid.NewGuid();
+                guid = Guid.NewGuid().ToString();
                 _Reporter.Register(guid, @"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0");
                 _Reporter.Runners.Should().Contain(r => r.ConnectionId == guid && r.Name == "Mozilla/5.0" && r.Status == "Registered");
 
@@ -74,7 +74,7 @@ namespace AllGreen.Runner.WPF.Tests
             [TestMethod]
             public void ResetTest()
             {
-                Guid guid = Guid.NewGuid();
+                string guid = Guid.NewGuid().ToString();
                 _Reporter.Reset(guid);
                 _Reporter.Runners.Should().OnlyContain(r => r.ConnectionId == guid && r.Status == "Reset");
             }
@@ -82,7 +82,7 @@ namespace AllGreen.Runner.WPF.Tests
             [TestMethod]
             public void StartedTest()
             {
-                Guid guid = Guid.NewGuid();
+                string guid = Guid.NewGuid().ToString();
                 _Reporter.Started(guid, 15);
                 _Reporter.Runners.Should().OnlyContain(r => r.ConnectionId == guid && r.Status == "Started running 15 tests");
             }
@@ -90,7 +90,7 @@ namespace AllGreen.Runner.WPF.Tests
             [TestMethod]
             public void FinishedTest()
             {
-                Guid guid = Guid.NewGuid();
+                string guid = Guid.NewGuid().ToString();
                 _Reporter.Finished(guid);
                 _Reporter.Runners.Should().OnlyContain(r => r.ConnectionId == guid && r.Status == "Finished");
             }
@@ -99,7 +99,7 @@ namespace AllGreen.Runner.WPF.Tests
         [TestClass]
         public class SpecUpdatedTests : ObservableReporterTests
         {
-            private Guid _ConnectionId = Guid.NewGuid();
+            private string _ConnectionId = Guid.NewGuid().ToString();
             private static Guid _ParentSuiteId = Guid.NewGuid();
             private static Guid _SuiteId = Guid.NewGuid();
             private static Guid _SpecId = Guid.NewGuid();
@@ -115,7 +115,7 @@ namespace AllGreen.Runner.WPF.Tests
             {
                 Spec spec = CreateSpec();
 
-                _Reporter.SpecUpdated(Guid.NewGuid(), spec);
+                _Reporter.SpecUpdated(Guid.NewGuid().ToString(), spec);
 
                 CheckSpec(spec);
             }
@@ -139,7 +139,7 @@ namespace AllGreen.Runner.WPF.Tests
                 Spec spec = CreateSpec();
                 _Reporter.SpecUpdated(_ConnectionId, spec);
                 spec = CreateSpec(SpecStatus.Passed);
-                _Reporter.SpecUpdated(Guid.NewGuid(), spec);
+                _Reporter.SpecUpdated(Guid.NewGuid().ToString(), spec);
 
                 _Reporter.Suites.First().Suites.First().Specs.First().Statuses.Values
                     .ShouldAllBeEquivalentTo(new SpecStatus[] { SpecStatus.Running, SpecStatus.Passed }, o => o.ExcludingMissingProperties());
@@ -154,6 +154,20 @@ namespace AllGreen.Runner.WPF.Tests
                 _Reporter.Suites.First().Suites.First().Specs.First().Statuses.Values
                     .ShouldAllBeEquivalentTo(new SpecStatus[] { SpecStatus.Running }, o => o.ExcludingMissingProperties());
                 _Reporter.Disconnected(_ConnectionId);
+
+                _Reporter.Suites.First().Suites.First().Specs.First().Statuses.Values
+                    .ShouldAllBeEquivalentTo(new SpecStatus[] { }, o => o.ExcludingMissingProperties());
+            }
+
+            [TestMethod]
+            public void ResetShouldRemoveSpecStatuses()
+            {
+                _Reporter.Connected(_ConnectionId, "USERAGENT");
+                Spec spec = CreateSpec();
+                _Reporter.SpecUpdated(_ConnectionId, spec);
+                _Reporter.Suites.First().Suites.First().Specs.First().Statuses.Values
+                    .ShouldAllBeEquivalentTo(new SpecStatus[] { SpecStatus.Running }, o => o.ExcludingMissingProperties());
+                _Reporter.Reset(_ConnectionId);
 
                 _Reporter.Suites.First().Suites.First().Specs.First().Statuses.Values
                     .ShouldAllBeEquivalentTo(new SpecStatus[] { }, o => o.ExcludingMissingProperties());

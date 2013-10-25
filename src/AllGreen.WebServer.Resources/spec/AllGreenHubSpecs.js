@@ -19,7 +19,6 @@ describe("AllGreen SignalR Hub", function () {
         _this.connection['start'].andReturn({ done: function (callback) {
                 _this.connectionCallbacks['done'] = callback;
             } });
-        _this.connection.id = 'connectionId';
         _this.connectionCallbacks = [];
         callbacks.forEach(function (callbackName) {
             _this.connection[callbackName].andCallFake(function (callback) {
@@ -27,7 +26,8 @@ describe("AllGreen SignalR Hub", function () {
             });
         });
 
-        _this.hub = new AllGreen.Hub(_this.connection, _this.app, 1);
+        _this.hubReporter = jasmine.createSpyObj('hubReporter', ['hubProxyConnected']);
+        _this.hub = new AllGreen.Hub(_this.connection, _this.app, _this.hubReporter, 1);
     });
 
     it("Starts as disconnected", function () {
@@ -35,9 +35,8 @@ describe("AllGreen SignalR Hub", function () {
     });
 
     it("Connects to server", function () {
-        var hubProxy = _this.hub.connect();
+        _this.hub.connect();
 
-        expect(hubProxy).toBeDefined();
         expect(_this.connection.createHubProxy).toHaveBeenCalledWith('runnerHub');
         expect(_this.connection.start).toHaveBeenCalled();
         expect(_this.hubProxy.on).toHaveBeenCalledWith('reload', jasmine.any(Function));
@@ -48,15 +47,17 @@ describe("AllGreen SignalR Hub", function () {
     });
 
     it("Should initialize after connect", function () {
-        var hubProxy = _this.hub.connect();
+        _this.hub.connect();
         _this.connectionCallbacks['done']();
-        expect(hubProxy.invoke).toHaveBeenCalledWith('register', 'connectionId', jasmine.any(String));
+        expect(_this.hubReporter.hubProxyConnected).toHaveBeenCalledWith(_this.hubProxy);
+        expect(_this.hubProxy.invoke).toHaveBeenCalledWith('register');
     });
 
     it("Should initialize after reconnect", function () {
-        var hubProxy = _this.hub.connect();
+        _this.hub.connect();
         _this.connectionCallbacks['reconnected']();
-        expect(hubProxy.invoke).toHaveBeenCalledWith('register', 'connectionId', jasmine.any(String));
+        expect(_this.hubReporter.hubProxyConnected).toHaveBeenCalledWith(_this.hubProxy);
+        expect(_this.hubProxy.invoke).toHaveBeenCalledWith('register');
     });
 
     it("Calls Env.reload on reload message", function () {
@@ -116,25 +117,33 @@ describe("AllGreen SignalR Hub", function () {
 describe("AllGreen SignalR HubReporter", function () {
     beforeEach(function () {
         _this.hubProxy = jasmine.createSpyObj('hubProxy', ['invoke']);
-        _this.hubProxy.connection = { id: 'connectionId' };
-        _this.hubReporter = new AllGreen.HubReporter(_this.hubProxy);
+        _this.hubReporter = new AllGreen.HubReporter();
+    });
+
+    it("Should be ready after registered not before", function () {
+        expect(_this.hubReporter.isReady()).toBeFalsy();
+        _this.hubReporter.hubProxyConnected(_this.hubProxy);
+        expect(_this.hubReporter.isReady()).toBeTruthy();
     });
 
     it("Should report started", function () {
+        _this.hubReporter.hubProxyConnected(_this.hubProxy);
         _this.hubReporter.started(10);
-        expect(_this.hubProxy.invoke).toHaveBeenCalledWith('started', 'connectionId', 10);
+        expect(_this.hubProxy.invoke).toHaveBeenCalledWith('started', 10);
     });
 
     ['reset', 'finished'].forEach(function (method) {
         it("Should report " + method, function () {
+            _this.hubReporter.hubProxyConnected(_this.hubProxy);
             _this.hubReporter[method]();
-            expect(_this.hubProxy.invoke).toHaveBeenCalledWith(method, 'connectionId');
+            expect(_this.hubProxy.invoke).toHaveBeenCalledWith(method);
         });
     });
 
     it("Should report specUpdated", function () {
         var spec = { id: 123, name: 'test 1', suite: null, status: AllGreen.SpecStatus.Passed, steps: [] };
+        _this.hubReporter.hubProxyConnected(_this.hubProxy);
         _this.hubReporter.specUpdated(spec);
-        expect(_this.hubProxy.invoke).toHaveBeenCalledWith('specUpdated', 'connectionId', spec);
+        expect(_this.hubProxy.invoke).toHaveBeenCalledWith('specUpdated', spec);
     });
 });

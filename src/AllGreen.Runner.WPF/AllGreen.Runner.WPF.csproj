@@ -133,6 +133,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>SpecOrSuiteViewModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="SpecStatusViewModel.cs" />
     <Compile Include="SpecViewModel.cs">
       <Template>ImplementPropertyChangedCaliburn.tt</Template>
       <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
@@ -223,10 +224,23 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\help.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\check.png" />
+    <Resource Include="icons\delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\pause.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties MainWindow_xaml_UseParentNamespace="False" MainView_xaml_UseParentNamespace="False" />
+      <UserProperties NewFolder1__UseParentNamespace="False" Properties__UseParentNamespace="False" MainWindow_xaml_UseParentNamespace="False" MainView_xaml_UseParentNamespace="False" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

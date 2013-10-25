@@ -12,7 +12,7 @@ namespace AllGreen.Runner.WPF
     public interface ISpecViewModel : ISpecOrSuiteViewModel
     {
         UInt64 Time { get; set; }
-        //SpecStep[] Steps { get; set; }
+        //string[] Steps { get; set; }
     }
 
     [ImplementPropertyChangedCaliburn(typeof(ISpecViewModel))]

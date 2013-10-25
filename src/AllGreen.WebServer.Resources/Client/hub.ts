@@ -7,20 +7,21 @@ module AllGreen {
         private connection: HubConnection;
         private hubProxy: HubProxy;
         private app: App;
+        private reporter: HubReporter;
         private reconnectTimeout: number;
 
-        constructor(connection: HubConnection, app: App, reconnectTimeout: number = 5000) {
+        constructor(connection: HubConnection, app: App, reporter: HubReporter, reconnectTimeout: number = 5000) {
             this.connection = connection;
             this.app = app;
+            this.reporter = reporter;
             this.reconnectTimeout = reconnectTimeout;
             app.setServerStatus('Disconnected');
         }
 
-        public connect(): HubProxy {
+        public connect() {
             this.hubProxy = this.attachToHub(this.connection, this.app);
             this.attachToConnectionEvents(this.connection, this.app);
             this.startConnection(this.connection, this.app);
-            return this.hubProxy;
         }
 
         private attachToHub(connection: HubConnection, app: App): HubProxy {
@@ -70,7 +71,8 @@ module AllGreen {
         }
 
         private register() {
-            this.hubProxy.invoke('register', this.connection.id, navigator.userAgent);
+            this.reporter.hubProxyConnected(this.hubProxy);
+            this.hubProxy.invoke('register');
         }
 
         private stateString(state) {
@@ -88,24 +90,32 @@ module AllGreen {
     export class HubReporter implements IRunnerReporter {
         private hubProxy: HubProxy;
 
-        constructor(hubProxy: HubProxy) {
+        constructor() {
+            this.hubProxy = null;
+        }
+
+        public isReady(): boolean {
+            return this.hubProxy != null;
+        }
+
+        public hubProxyConnected(hubProxy: HubProxy) {
             this.hubProxy = hubProxy;
         }
 
         public reset() {
-            this.hubProxy.invoke('reset', this.hubProxy.connection.id);
+            this.hubProxy.invoke('reset');
         }
 
         public started(totalSpecs: number) {
-            this.hubProxy.invoke('started', this.hubProxy.connection.id, totalSpecs);
+            this.hubProxy.invoke('started', totalSpecs);
         }
 
         public specUpdated(spec: ISpec) {
-            this.hubProxy.invoke('specUpdated', this.hubProxy.connection.id, spec);
+            this.hubProxy.invoke('specUpdated', spec);
         }
 
         public finished() {
-            this.hubProxy.invoke('finished', this.hubProxy.connection.id);
+            this.hubProxy.invoke('finished');
         }
     }
 }
@@ -114,9 +124,10 @@ module AllGreen {
     var app = AllGreen.App.getCurrent();
     if (app != null) {
         app.log('registering signalR hub');
+        var reporter = new AllGreen.HubReporter();
+        app.registerRunnerReporter(reporter);
         var connection = $.hubConnection();
-        var hub = new AllGreen.Hub(connection, app);
-        var hubProxy = hub.connect();
-        app.registerRunnerReporter(new AllGreen.HubReporter(hubProxy));
+        var hub = new AllGreen.Hub(connection, app, reporter);
+        hub.connect();
     }
 } ();

@@ -26,6 +26,19 @@ describe("App", () => {
         expect(serverReporter.setServerStatus).toHaveBeenCalledWith('server status');
     });
 
+    it("Checks isReady for all reporters", () => {
+        var runnerReporter1 = { isReady: () => true };
+        this.app.registerRunnerReporter(runnerReporter1);
+        var runnerReporter2 = { isReady: () => false };
+        this.app.registerRunnerReporter(runnerReporter2);
+
+        expect(this.app.isReady()).toBeFalsy();
+
+        runnerReporter2.isReady = () => true;
+
+        expect(this.app.isReady()).toBeTruthy();
+    });
+
     ['reset', 'started', 'finished', 'specUpdated'].forEach((method) => {
         it("Forwards '" + method + "' to multiple reporters", () => {
             var runnerReporter1 = jasmine.createSpyObj('runnerReporter1', [method]);
@@ -53,6 +66,24 @@ describe("App", () => {
         expect(adapterFactory2.create).toHaveBeenCalledWith(this.app);
     });
 
+    it("Should start after all reporters are ready", () => {
+        var adapterFactory = jasmine.createSpyObj('adapterFactory', ['create']);
+        var runnerReporter = { isReady: () => false };
+        runs(() => {
+            adapterFactory['create'].andReturn({ start: function () { } });
+            this.app.registerAdapterFactory(adapterFactory);
+            this.app.registerRunnerReporter(runnerReporter);
+
+            this.app.start();
+            expect(adapterFactory.create.callCount).toBe(0);
+            runnerReporter.isReady = () => true;
+        });
+        waits(20);
+        runs(() => {
+            expect(adapterFactory.create).toHaveBeenCalledWith(this.app);
+        });
+    });
+
     it("Adapters start is called", () => {
         var adapter1 = jasmine.createSpyObj('adapter1', ['start']);
         var adapterFactory1 = jasmine.createSpyObj('adapterFactory1', ['create']);
@@ -69,7 +100,8 @@ describe("App", () => {
     });
 
     it("Can be reloaded", () => {
-        var runnerReporter = jasmine.createSpyObj('runnerReporter', ['reset']);
+        var runnerReporter = jasmine.createSpyObj('runnerReporter', ['reset', 'isReady']);
+        runnerReporter['isReady'].andCallFake(() => true);
         this.app.registerRunnerReporter(runnerReporter);
 
         var adapterFactory1 = jasmine.createSpyObj('adapterFactory1', ['create']);
