@@ -32,6 +32,7 @@ declare module jasmine {
     function objectContaining(sample: any): ObjectContaining;
     function createSpy(name: string, originalFn?: Function): Spy;
     function createSpyObj(baseName: string, methodNames: any[]): any;
+    function createSpyObj<T>(baseName: string, methodNames: any[]): T;
     function pp(value: any): string;
     function getEnv(): Env;
 
@@ -269,7 +270,7 @@ declare module jasmine {
     }
 
     interface SpecFunction {
-        (spec?: Spec): void
+        (spec?: Spec): void;
     }
 
     interface SuiteOrSpec {
@@ -293,7 +294,7 @@ declare module jasmine {
 
         getFullName(): string;
         results(): NestedResults;
-        log(arguments): any;
+        log(arguments: any): any;
         runs(func: SpecFunction): Spec;
         addToQueue(block: Block): void;
         addMatcherResult(result: Result): void;

@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Windows.Data;
 using AllGreen.WebServer.Core;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -33,6 +35,18 @@ namespace AllGreen.Runner.WPF.Tests
         public void SuitesCollectionChangedTests()
         {
             (new TestHelper.ObservableCollectionTester<SuiteViewModel>(_SuiteViewModel.Suites)).RunTests();
+        }
+
+        [TestMethod]
+        public void ChildrenTest()
+        {
+            SpecViewModel spec = new SpecViewModel();
+            _SuiteViewModel.Specs.Add(spec);
+            SuiteViewModel suite = new SuiteViewModel();
+            _SuiteViewModel.Suites.Add(suite);
+            ((CollectionContainer)_SuiteViewModel.Children[0]).Collection.Cast<object>()
+                .Union(((CollectionContainer)_SuiteViewModel.Children[1]).Collection.Cast<object>())
+                .ShouldAllBeEquivalentTo(new object[] { spec, suite });
         }
 
         [TestMethod]

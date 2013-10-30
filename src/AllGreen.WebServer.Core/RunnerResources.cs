@@ -13,10 +13,7 @@ namespace AllGreen.WebServer.Core
 
         public IEnumerable<string> GetScriptFiles()
         {
-            if (_FileList == null)
-                return new string[0];
-            else
-                return _FileList.Files;
+            return _FileList.Files;
         }
     }
 }

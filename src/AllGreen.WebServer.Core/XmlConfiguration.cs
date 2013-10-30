@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace AllGreen.WebServer.Core
 {
@@ -17,6 +16,11 @@ namespace AllGreen.WebServer.Core
         public string RootFolder
         {
             get { return @"C:\Work\Projects\AllGreen\src\AllGreen.WebServer.Resources"; }
+        }
+
+        public string ServerUrl
+        {
+            get { return @"http://localhost:8080"; }
         }
 
         public IEnumerable<FolderFilter> ServedFolderFilters

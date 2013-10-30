@@ -123,6 +123,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ClientControllerTests.cs</DependentUpon>
     </Compile>
+    <Compile Include="ControllerDependencyResolverTests.cs" />
     <Compile Include="DynamicScriptListTests.cs" />
     <Compile Include="OwinStartupTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -137,6 +138,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ScriptsControllerTests.cs</DependentUpon>
     </Compile>
+    <Compile Include="SignalRDependencyResolverTests.cs" />
+    <Compile Include="SpecTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AddDataMsTests.tt">

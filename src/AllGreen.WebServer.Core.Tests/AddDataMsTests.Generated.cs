@@ -1,5 +1,6 @@
 ﻿using System;
 
+//ncrunch: no coverage start
 namespace TemplateAttributes
 {
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
@@ -35,3 +36,4 @@ namespace TemplateAttributes
 		public string DisplayName { get; set; }
 	}
 }
+//ncrunch: no coverage end

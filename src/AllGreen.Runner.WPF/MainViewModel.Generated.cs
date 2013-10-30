@@ -15,8 +15,44 @@ namespace AllGreen.Runner.WPF
 			set { ChangeProperty<System.String>("ServerStatus", ref _ServerStatus, value); }
 		}
 
+		private AllGreen.WebServer.Core.IConfiguration _Configuration;
+		public AllGreen.WebServer.Core.IConfiguration Configuration
+		{
+			get { return _Configuration; }
+			private set { ChangeProperty<AllGreen.WebServer.Core.IConfiguration>("Configuration", ref _Configuration, value); }
+		}
+
+		private System.Boolean _ConfigurationVisible;
+		public System.Boolean ConfigurationVisible
+		{
+			get { return _ConfigurationVisible; }
+			set { ChangeProperty<System.Boolean>("ConfigurationVisible", ref _ConfigurationVisible, value); }
+		}
+
+		private System.Windows.Input.ICommand _StartServerCommand;
+		public System.Windows.Input.ICommand StartServerCommand
+		{
+			get { return _StartServerCommand; }
+			private set { ChangeProperty<System.Windows.Input.ICommand>("StartServerCommand", ref _StartServerCommand, value); }
+		}
+
+		private System.Windows.Input.ICommand _RunAllTestsCommand;
+		public System.Windows.Input.ICommand RunAllTestsCommand
+		{
+			get { return _RunAllTestsCommand; }
+			private set { ChangeProperty<System.Windows.Input.ICommand>("RunAllTestsCommand", ref _RunAllTestsCommand, value); }
+		}
+
+		private System.Windows.Input.ICommand _ConfigurationCommand;
+		public System.Windows.Input.ICommand ConfigurationCommand
+		{
+			get { return _ConfigurationCommand; }
+			private set { ChangeProperty<System.Windows.Input.ICommand>("ConfigurationCommand", ref _ConfigurationCommand, value); }
+		}
+
 
 		#region INotifyPropertyChanged implementation
+		//ncrunch: no coverage start
 
 		protected virtual void ChangeProperty<T>(string propertyName, ref T propertyValue, T newValue, Action<T, T> changedCallback = null)
 		{
@@ -32,6 +68,7 @@ namespace AllGreen.Runner.WPF
 			return propertySelector.GetMemberInfo().Name;
 		}
 
+		//ncrunch: no coverage end
 		#endregion
 	}
 }

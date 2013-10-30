@@ -24,7 +24,7 @@ namespace AllGreen.WebServer.Core
         public override IEnumerable<object> GetServices(Type serviceType)
         {
             if (_TinyIoCContainer.CanResolve(serviceType))
-                return _TinyIoCContainer.ResolveAll(serviceType);
+                return _TinyIoCContainer.ResolveAll(serviceType, true);
             return base.GetServices(serviceType);
         }
     }

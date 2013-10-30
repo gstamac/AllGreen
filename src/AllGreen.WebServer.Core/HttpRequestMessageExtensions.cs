@@ -21,6 +21,7 @@ namespace AllGreen.WebServer.Core
             }
         }
 
+        //ncrunch: no coverage start
         public static void DumpToConsole(this HttpRequestMessage request)
         {
             Console.WriteLine("------------- REQUEST --------------");
@@ -35,5 +36,6 @@ namespace AllGreen.WebServer.Core
                 Console.WriteLine(String.Format("CONTENT: {0}", request.Content.ReadAsStringAsync().Result));
             Console.WriteLine("------------------------------------");
         }
+        //ncrunch: no coverage end
     }
 }

@@ -14,40 +14,48 @@ namespace AllGreen.Runner.WPF
     public interface IMainViewModelProperties
     {
         string ServerStatus { get; set; }
+
+        IConfiguration Configuration { get; }
+        bool ConfigurationVisible { get; set; }
+
+        ICommand StartServerCommand { get; }
+        ICommand RunAllTestsCommand { get; }
+        ICommand ConfigurationCommand { get; }
     }
 
     [ImplementPropertyChangedCaliburn(typeof(IMainViewModelProperties))]
     public partial class MainViewModel : IMainViewModelProperties, IDisposable
     {
-        private TinyIoCContainer _ResourceResolver;
-        private ObservableReporter _Reporter; 
         public BindableCollection<RunnerViewModel> Runners { get { return _Reporter.Runners; } }
         public BindableCollection<SuiteViewModel> Suites { get { return _Reporter.Suites; } }
-        public ICommand StartServerCommand { get; set; }
-        public ICommand RunAllTestsCommand { get; private set; }
 
-        FileWatcher _FileWatcher;
+        private TinyIoCContainer _ResourceResolver;
+        private ObservableReporter _Reporter;
+
+        private FileWatcher _FileWatcher;
 
         public MainViewModel(TinyIoCContainer resourceResolver)
         {
             _Reporter = new ObservableReporter();
             StartServerCommand = new RelayCommand(StartServer);
             RunAllTestsCommand = new RelayCommand(RunAllTests);
+            ConfigurationCommand = new RelayCommand(() => ConfigurationVisible = true);
 
             _ResourceResolver = resourceResolver;
             _ResourceResolver.Register<IReporter>(_Reporter);
+
+            Configuration = _ResourceResolver.Resolve<IConfiguration>();
         }
 
+        //ncrunch: no coverage start
         public void StartServer()
         {
-            string url = "http://localhost:8080";
+            WebApp.Start(Configuration.ServerUrl, appBuilder => new OwinStartup(_ResourceResolver).Configuration(appBuilder));
+            ServerStatus = "Server running at " + Configuration.ServerUrl;
 
-            WebApp.Start(url, appBuilder => new OwinStartup(_ResourceResolver).Configuration(appBuilder));
-            ServerStatus = "Server running at " + url;
-
-            IConfiguration configuration = _ResourceResolver.Resolve<IConfiguration>();
-            _FileWatcher = new FileWatcher(_ResourceResolver.Resolve<IRunnerHub>(), configuration.WatchedFolderFilters);
+            _FileWatcher = new FileWatcher(_ResourceResolver.Resolve<IRunnerHub>(), Configuration.WatchedFolderFilters);
         }
+        //ncrunch: no coverage end
 
         private void RunAllTests()
         {
@@ -58,86 +66,6 @@ namespace AllGreen.Runner.WPF
         public void Dispose()
         {
             _ResourceResolver.Dispose();
-        }
-    }
-
-    public class RunnersToStatusesConverter : MarkupExtension, IMultiValueConverter
-    {
-        public RunnersToStatusesConverter()
-        {
-        }
-
-        public override object ProvideValue(IServiceProvider serviceProvider)
-        {
-            return this;
-        }
-
-        public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            if (values.Length < 2) return null;
-
-            BindableCollection<RunnerViewModel> runners = values[0] as BindableCollection<RunnerViewModel>;
-            BindableDictionary<string, SpecStatusViewModel> statuses = values[1] as BindableDictionary<string, SpecStatusViewModel>;
-            if (runners != null)
-                return GetRunnerStatuses(runners, statuses);
-
-            return null;
-        }
-
-        private IEnumerable<SpecStatusViewModel> GetRunnerStatuses(BindableCollection<RunnerViewModel> runners, BindableDictionary<string, SpecStatusViewModel> statuses)
-        {
-            foreach (RunnerViewModel runner in runners)
-            {
-                if (statuses.ContainsKey(runner.ConnectionId))
-                {
-                    SpecStatusViewModel status = statuses[runner.ConnectionId];
-                    status.Runner = runner;
-                    yield return status;
-                }
-                else
-                    yield return null;
-            }
-        }
-
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return null;
-        }
-    }
-
-    public class SpecStatusToImageConverter : MarkupExtension, IValueConverter
-    {
-        public SpecStatusToImageConverter()
-        {
-        }
-
-        public override object ProvideValue(IServiceProvider serviceProvider)
-        {
-            return this;
-        }
-
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            switch ((SpecStatus)value)
-            {
-                case SpecStatus.Undefined:
-                    return new System.Windows.Media.Imaging.BitmapImage(new Uri("icons/help.png", UriKind.Relative));
-                case SpecStatus.Running:
-                    return new System.Windows.Media.Imaging.BitmapImage(new Uri("icons/refresh.png", UriKind.Relative));
-                case SpecStatus.Failed:
-                    return new System.Windows.Media.Imaging.BitmapImage(new Uri("icons/delete.png", UriKind.Relative));
-                case SpecStatus.Passed:
-                    return new System.Windows.Media.Imaging.BitmapImage(new Uri("icons/check.png", UriKind.Relative));
-                case SpecStatus.Skipped:
-                    return new System.Windows.Media.Imaging.BitmapImage(new Uri("icons/pause.png", UriKind.Relative));
-                default:
-                    return new System.Windows.Media.Imaging.BitmapImage(new Uri("icons/help.png", UriKind.Relative));
-            }
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return null;
         }
     }
 

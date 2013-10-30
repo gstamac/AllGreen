@@ -30,7 +30,9 @@ namespace AllGreen.WebServer.Core
                     }
                 }
             }
+            //ncrunch: no coverage start 
             catch { }
+            //ncrunch: no coverage end
             return null;
         }
 

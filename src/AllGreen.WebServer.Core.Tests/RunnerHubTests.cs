@@ -121,24 +121,13 @@ namespace AllGreen.WebServer.Core.Tests
                 reloadSender.reloadCalled.Should().BeTrue();
             }
 
-            public class NameValueCollection : Dictionary<string, string>, INameValueCollection
-            {
-                public string Get(string key)
-                {
-                    return this[key];
-                }
-
-                public IEnumerable<string> GetValues(string key)
-                {
-                    return null;
-                }
-            }
-
             private static HubCallerContext CreateContext(string connectionId)
             {
-                NameValueCollection headers = new NameValueCollection();
-                headers.Add("User-Agent", @"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0");
-                IRequest request = Mock.Of<IRequest>(r => r.Headers == headers);
+                Mock<INameValueCollection> headersMock = new Mock<INameValueCollection>();
+                headersMock.Setup(h => h["User-Agent"]).Returns(@"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0");
+
+                IRequest request = Mock.Of<IRequest>(r => r.Headers == headersMock.Object);
+
                 return new HubCallerContext(request, connectionId);
             }
         }

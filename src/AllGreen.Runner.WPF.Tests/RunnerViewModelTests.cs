@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Media;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -22,7 +23,14 @@ namespace AllGreen.Runner.WPF.Tests
                 .Action(vm => vm.ConnectionId = Guid.NewGuid().ToString()).Changes("ConnectionId").Changes("Name")
                 .Action(vm => vm.UserAgent = "NEW USER AGENT").Changes("UserAgent").Changes("Name")
                 .Action(vm => vm.Name = "NEW NAME").Changes("Name")
-                .Action(vm => vm.Status = "NEW STATUS").Changes("Status");
+                .Action(vm => vm.Status = "NEW STATUS").Changes("Status")
+                .Action(vm => vm.Background = new SolidColorBrush()).Changes("Background");
+
+            _RunnerViewModel.ConnectionId.Should().NotBeNull();
+            _RunnerViewModel.UserAgent.Should().Be("NEW USER AGENT");
+            _RunnerViewModel.Name.Should().Be("NEW NAME");
+            _RunnerViewModel.Status.Should().Be("NEW STATUS");
+            _RunnerViewModel.Background.Should().BeOfType<SolidColorBrush>();
         }
 
         [TestMethod]

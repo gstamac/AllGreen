@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:my="clr-namespace:AllGreen.Runner.WPF"
+             xmlns:myc="clr-namespace:AllGreen.Runner.WPF.ValueConverters"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" Name="mainGrid">
     <UserControl.Resources>
@@ -25,7 +26,7 @@
                 <TextBlock Text="{Binding Name}" Width="150" Grid.Column="2" HorizontalAlignment="Left" TextTrimming="CharacterEllipsis"/>
                 <ItemsControl Grid.Column="4" Height="16">
                     <ItemsControl.ItemsSource>
-                        <MultiBinding Converter="{my:RunnersToStatusesConverter}">
+                        <MultiBinding Converter="{myc:RunnersToStatusesConverter}">
                             <Binding Path="DataContext.Runners" ElementName="mainGrid"/>
                             <Binding Path="Statuses"/>
                             <Binding Path="DataContext.Runners.Count" ElementName="mainGrid"/>
@@ -40,7 +41,7 @@
                     <ItemsControl.ItemTemplate>
                         <ItemContainerTemplate>
                             <DockPanel Background="{Binding Runner.Background, Mode=OneWay}" Margin="1 0">
-                                <Image Source="{Binding Status, Converter={my:SpecStatusToImageConverter}}" Margin="5 1" Width="16" ToolTip="{Binding}"/>
+                                <Image Source="{Binding Status, Converter={myc:SpecStatusToImageConverter}}" Margin="5 1" Width="16" ToolTip="{Binding}"/>
                             </DockPanel>
                         </ItemContainerTemplate>
                     </ItemsControl.ItemTemplate>
@@ -56,9 +57,17 @@
         <HierarchicalDataTemplate DataType="{x:Type my:SpecViewModel}">
             <ContentControl Content="{Binding}" ContentTemplate="{StaticResource specOrSuiteTemplate}" />
         </HierarchicalDataTemplate>
+
+        <DataTemplate x:Key="configurationPopupTemplate">
+            <Border BorderThickness="1" CornerRadius="4" BorderBrush="Black" Background="White" Padding="5">
+                <StackPanel>
+                    <TextBlock Text="{Binding RootFolder}"></TextBlock>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid IsEnabled="{Binding ConfigurationVisible, Converter={myc:NotConverter}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
             <RowDefinition Height="Auto"/>
@@ -67,6 +76,9 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+        <Popup Width="300" Height="200" Placement="Center" IsOpen="{Binding ConfigurationVisible}" AllowsTransparency="True">
+            <ContentControl Content="{Binding Configuration}" ContentTemplate="{StaticResource configurationPopupTemplate}" />
+        </Popup>
         <Menu Grid.Row="0">
             <MenuItem Header="Run All Tests" Command="{Binding RunAllTestsCommand}"/>
             <MenuItem Header="Configuration" Command="{Binding ConfigurationCommand}"/>

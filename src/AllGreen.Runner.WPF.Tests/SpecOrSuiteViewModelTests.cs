@@ -102,8 +102,8 @@ namespace AllGreen.Runner.WPF.Tests
             _SpecOrSuiteViewModel.Duration.Should().Be("6 ms");
             _SpecOrSuiteViewModel.SetStatus(guid1, SpecStatus.Running, 3);
             _SpecOrSuiteViewModel.Duration.Should().Be("6 ms");
-            _SpecOrSuiteViewModel.SetStatus(guid2, SpecStatus.Passed, 6);
-            _SpecOrSuiteViewModel.Duration.Should().Be("8 ms");
+            _SpecOrSuiteViewModel.SetStatus(guid2, SpecStatus.Passed, 6000);
+            _SpecOrSuiteViewModel.Duration.Should().Be("6,002 s");
         }
 
     }

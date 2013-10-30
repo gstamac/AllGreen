@@ -119,6 +119,8 @@
     </Compile>
     <Compile Include="ObservableReporter.cs" />
     <Compile Include="RelayCommand.cs" />
+    <Compile Include="ValueConverters\NotConverter.cs" />
+    <Compile Include="ValueConverters\RunnersToStatusesConverter.cs" />
     <Compile Include="RunnerViewModel.cs">
       <Template>ImplementPropertyChangedCaliburn.tt</Template>
       <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
@@ -137,6 +139,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>SpecOrSuiteViewModel.cs</DependentUpon>
     </Compile>
+    <Compile Include="ValueConverters\SpecStatusToImageConverter.cs" />
     <Compile Include="SpecStatusViewModel.cs" />
     <Compile Include="SpecViewModel.cs">
       <Template>ImplementPropertyChangedCaliburn.tt</Template>
@@ -244,7 +247,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties MainView_xaml_UseParentNamespace="False" MainWindow_xaml_UseParentNamespace="False" Properties__UseParentNamespace="False" NewFolder1__UseParentNamespace="False" />
+      <UserProperties MainView_xaml_UseParentNamespace="False" MainWindow_xaml_UseParentNamespace="False" Properties__UseParentNamespace="False" NewFolder1__UseParentNamespace="False" ValueConverters__UseParentNamespace="False" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

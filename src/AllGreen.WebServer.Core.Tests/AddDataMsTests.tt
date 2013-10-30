@@ -20,6 +20,7 @@
 	} else {
 		WriteLine("using System;");
 		WriteLine("");
+		WriteLine("//ncrunch: no coverage start");
 		WriteLine("namespace " + DataTestMethodAttributeNamespace);
 		WriteLine("{");
 		PushIndent("\t");
@@ -74,6 +75,7 @@
 
 		PopIndent();
         WriteLine("}");
+		WriteLine("//ncrunch: no coverage end");
 	}
 #>
 <#+

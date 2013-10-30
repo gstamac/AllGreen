@@ -26,7 +26,7 @@ namespace AllGreen.WebServer.Core
             Suite suite = this.Suite;
             while (suite != null)
             {
-                fullName = suite.Name + " -> " + fullName;
+                fullName = String.Format("{0} > {1}", suite.Name, fullName);
                 suite = suite.ParentSuite;
             }
             return fullName;
