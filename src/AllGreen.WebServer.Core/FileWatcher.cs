@@ -1,38 +1,39 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace AllGreen.WebServer.Core
 {
     public class FileWatcher : IDisposable
     {
-        List<FileSystemWatcher> _FileSystemWatchers;
         IRunnerHub _RunnerHub;
+        List<FileSystemWatcher> _FileSystemWatchers;
 
-        public FileWatcher(IRunnerHub runnerHub)
+        public FileWatcher(IRunnerHub runnerHub, IEnumerable<FolderFilter> watchedFolderFilters)
         {
             _RunnerHub = runnerHub;
             _FileSystemWatchers = new List<FileSystemWatcher>();
+
+            RegisterWatchers(watchedFolderFilters);
         }
 
-        public void WatchFile(string fileName)
+
+        private void RegisterWatchers(IEnumerable<FolderFilter> watchedFolderFilters)
         {
-            AddWatcher(Path.GetDirectoryName(fileName), Path.GetFileName(fileName));
+            foreach (FolderFilter filter in watchedFolderFilters)
+            {
+                AddWatcher(filter.Folder, filter.FilePattern, filter.IncludeSubfolders);
+            }
         }
 
-        public void WatchFolder(string path)
+        private void AddWatcher(string path, string filter, bool includeSubfolders)
         {
-            AddWatcher(path);
-        }
-
-        private void AddWatcher(string path, string filter = null)
-        {
-            FileSystemWatcher watcher = (filter == null) ? new FileSystemWatcher(path) : new FileSystemWatcher(path, filter);
+            FileSystemWatcher watcher = new FileSystemWatcher(Path.GetFullPath(path), filter);
             watcher.Changed += watcher_Changed;
             watcher.Created += watcher_Created;
             watcher.Deleted += watcher_Deleted;
             watcher.Renamed += watcher_Renamed;
+            watcher.IncludeSubdirectories = includeSubfolders;
             watcher.EnableRaisingEvents = true;
             _FileSystemWatchers.Add(watcher);
         }

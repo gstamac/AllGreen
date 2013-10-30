@@ -1,12 +1,12 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Owin;
-using Moq;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Owin.Testing;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using Owin;
 using TinyIoC;
 
 namespace AllGreen.WebServer.Core.Tests

@@ -84,8 +84,8 @@
       <DependentUpon>allgreen.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="spec\AllGreenHubSpecs.ts" />
-    <EmbeddedResource Include="Scripts\jquery.signalR-2.0.0-rc1.js" />
-    <Content Include="Scripts\jquery.signalR-2.0.0-rc1.min.js" />
+    <EmbeddedResource Include="Scripts\jquery.signalR-2.0.0.js" />
+    <Content Include="Scripts\jquery.signalR-2.0.0.min.js" />
     <Content Include="spec\AllGreenAppSpecs.js">
       <DependentUpon>AllGreenAppSpecs.ts</DependentUpon>
     </Content>
@@ -164,4 +164,9 @@
   <Target Name="CopyLinkedContentFiles" BeforeTargets="Build">
     <Copy SourceFiles="%(Content.Identity)" DestinationFiles="%(Content.Link)" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Condition="'%(Content.Link)' != ''" />
   </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties Scripts__UseParentNamespace="False" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

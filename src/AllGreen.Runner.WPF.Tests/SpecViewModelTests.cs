@@ -1,7 +1,7 @@
 using System;
 using AllGreen.WebServer.Core;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AllGreen.Runner.WPF.Tests
 {

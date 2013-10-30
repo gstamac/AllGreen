@@ -7,6 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.WebServer.Core.Tes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{26A04B86-C877-4E45-8EBD-335573BA051B}"
 	ProjectSection(FolderGlobals) = preProject
+		AllGreen_WebServer_Core_Tests_csproj_UseParentNamespace = False
 		AllGreen_Runner_WPF_Tests_csproj_UseParentNamespace = False
 	EndProjectSection
 EndProject

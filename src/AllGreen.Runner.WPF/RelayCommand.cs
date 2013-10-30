@@ -1,17 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Reflection;
-using System.Windows.Data;
-using System.Windows.Markup;
-using AllGreen.WebServer.Core;
-using Caliburn.Micro;
-using Microsoft.AspNet.SignalR;
-using Microsoft.Owin.Hosting;
-using TemplateAttributes;
-using TinyIoC;
 using System.Windows.Input;
 
 namespace AllGreen.Runner.WPF

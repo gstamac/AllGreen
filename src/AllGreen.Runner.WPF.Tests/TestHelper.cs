@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
-using Caliburn.Micro;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using FluentAssertions;
+using Moq;
 
 namespace AllGreen.Runner.WPF.Tests
 {

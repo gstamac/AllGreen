@@ -1,9 +1,8 @@
 using System;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using FluentAssertions;
 using AllGreen.WebServer.Core;
-using System.Text.RegularExpressions;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AllGreen.Runner.WPF.Tests
 {

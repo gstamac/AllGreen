@@ -1,10 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 using Microsoft.AspNet.SignalR;
 using UAParser;
 
@@ -23,6 +18,7 @@ namespace AllGreen.WebServer.Core
 
         public void ReloadAll()
         {
+            // TODO: Cancel previous run
             _HubContext.Clients.All.reload();
         }
 

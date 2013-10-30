@@ -1,16 +1,12 @@
-using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Owin;
-using Moq;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Net;
-using System.Linq;
-using Microsoft.Owin.Testing;
-using System.Web.Http.Routing;
-using TemplateAttributes;
-using FluentAssertions;
+using System.Net.Http;
 using System.Reflection;
+using System.Web.Http.Routing;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using TemplateAttributes;
 
 namespace AllGreen.WebServer.Core.Tests
 {

@@ -1,16 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Markup;
 using AllGreen.WebServer.Core;
 using Caliburn.Micro;
-using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Hosting;
 using TemplateAttributes;
 using TinyIoC;
-using System.Windows.Input;
 
 namespace AllGreen.Runner.WPF
 {
@@ -23,7 +20,7 @@ namespace AllGreen.Runner.WPF
     public partial class MainViewModel : IMainViewModelProperties, IDisposable
     {
         public TinyIoCContainer ResourceResolver { get; private set; }
-        private ObservableReporter _Reporter;
+        private ObservableReporter _Reporter; 
         public BindableCollection<RunnerViewModel> Runners { get { return _Reporter.Runners; } }
         public BindableCollection<SuiteViewModel> Suites { get { return _Reporter.Suites; } }
         public ICommand StartServerCommand { get; set; }
@@ -31,30 +28,28 @@ namespace AllGreen.Runner.WPF
 
         FileWatcher _FileWatcher;
 
-        public MainViewModel()
+        public MainViewModel() // TODO: provide IoC as param and override App.xaml Startup
         {
             _Reporter = new ObservableReporter();
             StartServerCommand = new RelayCommand(StartServer);
             RunAllTestsCommand = new RelayCommand(RunAllTests);
 
             ResourceResolver = new TinyIoCContainer();
-            ResourceResolver.Register<IWebResources>(new EmbededResources(@"AllGreen.WebServer.Resources", Assembly.Load("AllGreen.WebServer.Resources")));
-            ResourceResolver.Register<IRunnerResources, RunnerResources>();
-            ResourceResolver.Register<IHubContext>((ioc, np) => GlobalHost.ConnectionManager.GetHubContext<RunnerHub>());
+            ResourceResolver.Register<IConfiguration>(new XmlConfiguration(""));
             ResourceResolver.Register<IReporter>(_Reporter);
-            ResourceResolver.Register<IRunnerHub, RunnerHub>();
         }
 
         public void StartServer()
         {
+            Bootstrapper.RegisterServices(ResourceResolver);
+
             string url = "http://localhost:8080";
 
             WebApp.Start(url, appBuilder => new OwinStartup(ResourceResolver).Configuration(appBuilder));
             ServerStatus = "Server running at " + url;
 
-            _FileWatcher = new FileWatcher(ResourceResolver.Resolve<IRunnerHub>());
-            _FileWatcher.WatchFile(@"C:\test\test.txt");
-            _FileWatcher.WatchFolder(@"C:\test\test");
+            IConfiguration configuration = ResourceResolver.Resolve<IConfiguration>();
+            _FileWatcher = new FileWatcher(ResourceResolver.Resolve<IRunnerHub>(), configuration.WatchedFolderFilters);
         }
 
         private void RunAllTests()

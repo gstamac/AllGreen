@@ -1,16 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Threading;
 using AllGreen.WebServer.Core;
 using Caliburn.Micro;
-using Microsoft.AspNet.SignalR;
-using Microsoft.Owin.Hosting;
-using TemplateAttributes;
-using TinyIoC;
 
 namespace AllGreen.Runner.WPF
 {

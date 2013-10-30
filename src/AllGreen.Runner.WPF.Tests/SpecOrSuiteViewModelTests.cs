@@ -1,8 +1,8 @@
 using System;
-using AllGreen.WebServer.Core;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using FluentAssertions;
 using System.Collections.Generic;
+using AllGreen.WebServer.Core;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace AllGreen.Runner.WPF.Tests
 {
