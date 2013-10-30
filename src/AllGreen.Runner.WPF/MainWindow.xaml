@@ -5,12 +5,6 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:my="clr-namespace:AllGreen.Runner.WPF"
         Title="MainWindow" Height="350" Width="800">
-    <Window.Resources>
-        <my:MainViewModel x:Key="mainViewModel"/>
-    </Window.Resources>
-    <Window.DataContext>
-        <StaticResourceExtension ResourceKey="mainViewModel"/>
-    </Window.DataContext>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding StartServerCommand}"/>

@@ -7,6 +7,7 @@ namespace AllGreen.WebServer.Core
     {
         string RootFolder { get; }
         IEnumerable<FolderFilter> ServedFolderFilters { get; }
+        IEnumerable<FolderFilter> ExcludeServedFolderFilters { get; }
         IEnumerable<FolderFilter> WatchedFolderFilters { get; }
     }
 }

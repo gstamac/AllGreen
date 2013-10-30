@@ -1,18 +1,21 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace AllGreen.WebServer.Core
 {
     public class DynamicScriptList : IScriptList
     {
         private readonly string _RootFolder;
-        IEnumerable<FolderFilter> _Filters = new List<FolderFilter>();
+        private readonly IEnumerable<FolderFilter> _FolderFilters = new List<FolderFilter>();
+        private readonly IEnumerable<FolderFilter> _ExcludeFolderFilters;
         private readonly IFileLocator _FileLocator;
 
-        public DynamicScriptList(string rootFolder, IEnumerable<FolderFilter> folderFilters, IFileLocator fileLocator)
+        public DynamicScriptList(IConfiguration configuration, IFileLocator fileLocator)
         {
-            _RootFolder = rootFolder;
-            _Filters = folderFilters;
+            _RootFolder = configuration.RootFolder;
+            _FolderFilters = configuration.ServedFolderFilters;
+            _ExcludeFolderFilters = configuration.ExcludeServedFolderFilters;
             _FileLocator = fileLocator;
         }
 
@@ -20,20 +23,27 @@ namespace AllGreen.WebServer.Core
         {
             get
             {
-                foreach (FolderFilter rule in _Filters)
+                int filenameOffset = _RootFolder.Length + 1;
+                IEnumerable<string> files = GetFiles(_FolderFilters).Except(GetFiles(_ExcludeFolderFilters));
+                foreach (string file in files)
                 {
-                    foreach (string file in GetFilesForFolderFilter(rule))
-                    {
-                        if (file.StartsWith(_RootFolder))
-                            yield return file.Substring(_RootFolder.Length + 1).Replace('\\', '/');
-                        else
-                            yield return file.Replace('\\', '/');
-                    }
+                    yield return file.Substring(filenameOffset).Replace('\\', '/');
                 }
             }
         }
 
-        IEnumerable<string> GetFilesForFolderFilter(FolderFilter folderFilter)
+        private IEnumerable<string> GetFiles(IEnumerable<FolderFilter> filters)
+        {
+            foreach (FolderFilter rule in filters)
+            {
+                foreach (string file in GetFiles(rule))
+                {
+                    yield return file;
+                }
+            }
+        }
+
+        IEnumerable<string> GetFiles(FolderFilter folderFilter)
         {
             string[] files;
             string startFolder = Path.Combine(_RootFolder, folderFilter.Folder);

@@ -82,7 +82,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bootstrapper.cs" />
     <Compile Include="ClientController.cs" />
     <Compile Include="ControllerDependencyResolver.cs" />
     <Compile Include="EmbededResources.cs" />

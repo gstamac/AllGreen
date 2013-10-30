@@ -19,7 +19,7 @@ namespace AllGreen.Runner.WPF
     [ImplementPropertyChangedCaliburn(typeof(IMainViewModelProperties))]
     public partial class MainViewModel : IMainViewModelProperties, IDisposable
     {
-        public TinyIoCContainer ResourceResolver { get; private set; }
+        private TinyIoCContainer _ResourceResolver;
         private ObservableReporter _Reporter; 
         public BindableCollection<RunnerViewModel> Runners { get { return _Reporter.Runners; } }
         public BindableCollection<SuiteViewModel> Suites { get { return _Reporter.Suites; } }
@@ -28,39 +28,36 @@ namespace AllGreen.Runner.WPF
 
         FileWatcher _FileWatcher;
 
-        public MainViewModel() // TODO: provide IoC as param and override App.xaml Startup
+        public MainViewModel(TinyIoCContainer resourceResolver)
         {
             _Reporter = new ObservableReporter();
             StartServerCommand = new RelayCommand(StartServer);
             RunAllTestsCommand = new RelayCommand(RunAllTests);
 
-            ResourceResolver = new TinyIoCContainer();
-            ResourceResolver.Register<IConfiguration>(new XmlConfiguration(""));
-            ResourceResolver.Register<IReporter>(_Reporter);
+            _ResourceResolver = resourceResolver;
+            _ResourceResolver.Register<IReporter>(_Reporter);
         }
 
         public void StartServer()
         {
-            Bootstrapper.RegisterServices(ResourceResolver);
-
             string url = "http://localhost:8080";
 
-            WebApp.Start(url, appBuilder => new OwinStartup(ResourceResolver).Configuration(appBuilder));
+            WebApp.Start(url, appBuilder => new OwinStartup(_ResourceResolver).Configuration(appBuilder));
             ServerStatus = "Server running at " + url;
 
-            IConfiguration configuration = ResourceResolver.Resolve<IConfiguration>();
-            _FileWatcher = new FileWatcher(ResourceResolver.Resolve<IRunnerHub>(), configuration.WatchedFolderFilters);
+            IConfiguration configuration = _ResourceResolver.Resolve<IConfiguration>();
+            _FileWatcher = new FileWatcher(_ResourceResolver.Resolve<IRunnerHub>(), configuration.WatchedFolderFilters);
         }
 
         private void RunAllTests()
         {
-            IRunnerHub runnerHub = ResourceResolver.Resolve<IRunnerHub>();
+            IRunnerHub runnerHub = _ResourceResolver.Resolve<IRunnerHub>();
             runnerHub.ReloadAll();
         }
 
         public void Dispose()
         {
-            ResourceResolver.Dispose();
+            _ResourceResolver.Dispose();
         }
     }
 

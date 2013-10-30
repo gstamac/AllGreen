@@ -34,6 +34,14 @@ namespace AllGreen.WebServer.Core
             }
         }
 
+        public IEnumerable<FolderFilter> ExcludeServedFolderFilters
+        {
+            get
+            {
+                return new FolderFilter[0];
+            }
+        }
+
         public IEnumerable<FolderFilter> WatchedFolderFilters
         {
             get

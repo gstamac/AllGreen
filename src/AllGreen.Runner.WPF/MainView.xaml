@@ -23,7 +23,7 @@
                     <ColumnDefinition x:Uid="GridColumnDefinitionSpacer2" Width="4" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="{Binding Name}" Width="150" Grid.Column="2" HorizontalAlignment="Left" TextTrimming="CharacterEllipsis"/>
-                <ItemsControl Grid.Column="4" >
+                <ItemsControl Grid.Column="4" Height="16">
                     <ItemsControl.ItemsSource>
                         <MultiBinding Converter="{my:RunnersToStatusesConverter}">
                             <Binding Path="DataContext.Runners" ElementName="mainGrid"/>
@@ -67,7 +67,10 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <Button Content="Run All Tests" Command="{Binding RunAllTestsCommand}" Grid.Row="0"/>
+        <Menu Grid.Row="0">
+            <MenuItem Header="Run All Tests" Command="{Binding RunAllTestsCommand}"/>
+            <MenuItem Header="Configuration" Command="{Binding ConfigurationCommand}"/>
+        </Menu>
         <ListView ItemsSource="{Binding Runners}" Grid.Row="1" >
             <ListView.Resources>
                 <Style TargetType="{x:Type ListViewItem}">

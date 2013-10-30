@@ -1,4 +1,6 @@
-﻿using AllGreen.WebServer.Core;
+﻿using System.Reflection;
+using AllGreen.WebServer.Core;
+using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Hosting;
 using TinyIoC;
 
@@ -10,14 +12,22 @@ namespace AllGreen.Runner.Console
         {
             string url = "http://localhost:8080";
 
-            TinyIoCContainer ResourceResolver = new TinyIoCContainer();
-            ResourceResolver.Register<IReporter, ConsoleReporter>();
-            Bootstrapper.RegisterServices(ResourceResolver);
+            XmlConfiguration configuration = new XmlConfiguration("");
 
-            using (WebApp.Start(url, appBuilder => new OwinStartup(ResourceResolver).Configuration(appBuilder)))
+            TinyIoCContainer resourceResolver = new TinyIoCContainer();
+
+            resourceResolver.Register<IConfiguration>(configuration);
+            resourceResolver.Register<IWebResources>(new EmbededResources(@"AllGreen.WebServer.Resources", Assembly.Load("AllGreen.WebServer.Resources")));
+            resourceResolver.Register<IRunnerResources>(new RunnerResources(new DynamicScriptList(configuration, new SystemFileLocator())));
+            resourceResolver.Register<IHubContext>((ioc, np) => GlobalHost.ConnectionManager.GetHubContext<RunnerHub>());
+            resourceResolver.Register<IRunnerHub, RunnerHub>();
+
+            resourceResolver.Register<IReporter, ConsoleReporter>();
+
+            using (WebApp.Start(url, appBuilder => new OwinStartup(resourceResolver).Configuration(appBuilder)))
             {
                 System.Console.WriteLine("Server running at " + url);
-                IRunnerHub runnerHub = ResourceResolver.Resolve<IRunnerHub>();
+                IRunnerHub runnerHub = resourceResolver.Resolve<IRunnerHub>();
                 string command = "";
                 while (command != "x")
                 {

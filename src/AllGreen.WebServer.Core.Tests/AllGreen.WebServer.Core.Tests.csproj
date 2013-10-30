@@ -114,7 +114,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AddDataMsTests.tt</DependentUpon>
     </Compile>
-    <Compile Include="BootstrapperTests.cs" />
     <Compile Include="ClientControllerTests.cs">
       <Template>AddDataMsTests.tt</Template>
       <Generator>T4Toolbox.TemplatedFileGenerator</Generator>

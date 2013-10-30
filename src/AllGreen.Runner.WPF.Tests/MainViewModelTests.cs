@@ -1,6 +1,7 @@
 ﻿using AllGreen.WebServer.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using TinyIoC;
 
 namespace AllGreen.Runner.WPF.Tests
 {
@@ -8,12 +9,14 @@ namespace AllGreen.Runner.WPF.Tests
     [TestClass]
     public class MainViewModelTests
     {
+        protected TinyIoCContainer _ResourceResolver;
         protected MainViewModel _MainViewModel;
 
         [TestInitialize]
         public void Setup()
         {
-            _MainViewModel = new MainViewModel();
+            _ResourceResolver = new TinyIoCContainer();
+            _MainViewModel = new MainViewModel(_ResourceResolver);
         }
 
         [TestMethod]
@@ -39,7 +42,7 @@ namespace AllGreen.Runner.WPF.Tests
         public void RunAllTestsCommandShouldFireReloadOnAllClients()
         {
             Mock<IRunnerHub> mockOfRunnerHub = new Mock<IRunnerHub>();
-            _MainViewModel.ResourceResolver.Register<IRunnerHub>(mockOfRunnerHub.Object);
+            _ResourceResolver.Register<IRunnerHub>(mockOfRunnerHub.Object);
             _MainViewModel.RunAllTestsCommand.Execute(null);
 
             mockOfRunnerHub.Verify(rh => rh.ReloadAll());
