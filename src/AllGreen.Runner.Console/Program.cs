@@ -19,7 +19,6 @@ namespace AllGreen.Runner.Console
             resourceResolver.Register<IConfiguration>(configuration);
             resourceResolver.Register<IWebResources>(new EmbededResources(@"AllGreen.WebServer.Resources", Assembly.Load("AllGreen.WebServer.Resources")));
             resourceResolver.Register<IRunnerResources>(new RunnerResources(new DynamicScriptList(configuration, new SystemFileLocator())));
-            resourceResolver.Register<IHubContext>((ioc, np) => GlobalHost.ConnectionManager.GetHubContext<RunnerHub>());
             resourceResolver.Register<IRunnerHub, RunnerHub>();
 
             resourceResolver.Register<IReporter, ConsoleReporter>();

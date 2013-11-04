@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using FluentAssertions;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hosting;
@@ -12,27 +13,22 @@ namespace AllGreen.WebServer.Core.Tests
     [TestClass]
     public class RunnerHubTests
     {
-        public class ReloadSender
-        {
-            public bool reloadCalled = false;
-            public void reload()
-            {
-                reloadCalled = true;
-            }
-        }
-
         [TestMethod]
         public void SendTest()
         {
-            var clientsMock = new Mock<IHubConnectionContext>();
-            ReloadSender reloadSender = new ReloadSender();
-            clientsMock.Setup(c => c.All).Returns(reloadSender);
-            IHubContext hubContext = Mock.Of<IHubContext>(hc => hc.Clients == clientsMock.Object);
-            RunnerHub runnerHub = new RunnerHub(hubContext, Mock.Of<IReporter>());
+            dynamic all = new ExpandoObject();
+            bool reloadCalled = false;
+            all.reload = new Action(() => reloadCalled = true);
+
+            var clientsMock = new Mock<IHubCallerConnectionContext>();
+            clientsMock.Setup(c => c.All).Returns((ExpandoObject)all);
+
+            RunnerHub runnerHub = new RunnerHub(Mock.Of<IReporter>());
+            runnerHub.Clients = clientsMock.Object;
 
             runnerHub.ReloadAll();
 
-            reloadSender.reloadCalled.Should().BeTrue();
+            reloadCalled.Should().BeTrue();
         }
 
         [TestClass]
@@ -47,7 +43,7 @@ namespace AllGreen.WebServer.Core.Tests
             {
                 _ReporterMock = new Mock<IReporter>();
                 _ConnectionId = Guid.NewGuid().ToString();
-                _RunnerHub = new RunnerHub(Mock.Of<IHubContext>(), _ReporterMock.Object) { Context = CreateContext(_ConnectionId) };
+                _RunnerHub = new RunnerHub(_ReporterMock.Object) { Context = CreateContext(_ConnectionId) };
             }
 
             [TestMethod]
@@ -111,14 +107,17 @@ namespace AllGreen.WebServer.Core.Tests
             [TestMethod]
             public void ReportsRegisterTest()
             {
+                dynamic caller = new ExpandoObject();
+                bool reloadCalled = false;
+                caller.reload = new Action(() => reloadCalled = true);
+
                 var clientsMock = new Mock<IHubCallerConnectionContext>();
-                ReloadSender reloadSender = new ReloadSender();
-                clientsMock.Setup(c => c.Caller).Returns(reloadSender);
+                clientsMock.Setup(c => c.Caller).Returns((ExpandoObject)caller);
                 _RunnerHub.Clients = clientsMock.Object;
                 _RunnerHub.Register();
 
                 _ReporterMock.Verify(r => r.Register(_ConnectionId, "Windows 7  Firefox 23.0"));
-                reloadSender.reloadCalled.Should().BeTrue();
+                reloadCalled.Should().BeTrue();
             }
 
             private static HubCallerContext CreateContext(string connectionId)

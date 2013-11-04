@@ -7,19 +7,17 @@ namespace AllGreen.WebServer.Core
 {
     public class RunnerHub : Hub, IRunnerHub
     {
-        private readonly IHubContext _HubContext;
         private readonly IReporter _Reporter;
 
-        public RunnerHub(IHubContext hubContext, IReporter reporter)
+        public RunnerHub(IReporter reporter)
         {
-            _HubContext = hubContext;
             _Reporter = reporter;
         }
 
         public void ReloadAll()
         {
             // TODO: Cancel previous run
-            _HubContext.Clients.All.reload();
+            Clients.All.reload();
         }
 
         public void Reset()

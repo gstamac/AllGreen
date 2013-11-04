@@ -28,7 +28,7 @@ namespace AllGreen.Runner.WPF.ValueConverters
 
             BindableCollection<RunnerViewModel> runners = values[0] as BindableCollection<RunnerViewModel>;
             BindableDictionary<string, SpecStatusViewModel> statuses = values[1] as BindableDictionary<string, SpecStatusViewModel>;
-            if (runners != null)
+            if (runners != null && statuses != null)
                 return GetRunnerStatuses(runners, statuses);
 
             return null;

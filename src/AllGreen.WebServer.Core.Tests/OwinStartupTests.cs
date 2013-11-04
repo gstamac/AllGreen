@@ -22,6 +22,12 @@ namespace AllGreen.WebServer.Core.Tests
             _OwinStartup = new OwinStartup(new TinyIoCContainer());
         }
 
+        [TestCleanup]
+        public void TearDown()
+        {
+            _OwinStartup.Dispose();
+        }
+
         [TestClass]
         public class ConfigurationTests : OwinStartupTests
         {
@@ -37,11 +43,10 @@ namespace AllGreen.WebServer.Core.Tests
 
                 _OwinStartup.Configuration(app);
 
-                //app.BuildNew
+               // app.Build(typeof(
             }
 
             [TestMethod]
-            [Ignore]
             public async Task Test()
             {
                 TestServer testServer = TestServer.Create(appBuilder => new OwinStartup(new TinyIoCContainer()).Configuration(appBuilder));
