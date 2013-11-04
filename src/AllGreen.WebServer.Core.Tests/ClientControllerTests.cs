@@ -18,7 +18,7 @@ namespace AllGreen.WebServer.Core.Tests
 
         private ClientController CreateClientController(string filename, string path)
         {
-            IWebResources webResources = new EmbededResources(@"AllGreen.WebServer.Resources", Assembly.Load("AllGreen.WebServer.Resources"));
+            IWebResources webResources = new EmbededResources(Assembly.Load("AllGreen.WebServer.Resources"));
             _RunnerResources = Mock.Of<IRunnerResources>();
             ClientController clientController = new ClientController(webResources, _RunnerResources);
             clientController.Request = new HttpRequestMessage(HttpMethod.Get, @"http://localhost/" + filename);

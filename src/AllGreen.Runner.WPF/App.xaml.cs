@@ -17,7 +17,7 @@ namespace AllGreen.Runner.WPF
 
             TinyIoCContainer resourceResolver = new TinyIoCContainer();
             resourceResolver.Register<IConfiguration>(configuration);
-            resourceResolver.Register<IWebResources>(new EmbededResources(@"AllGreen.WebServer.Resources", Assembly.Load("AllGreen.WebServer.Resources")));
+            resourceResolver.Register<IWebResources>(new EmbededResources(Assembly.Load("AllGreen.WebServer.Resources")));
             resourceResolver.Register<IRunnerResources>(new RunnerResources(new DynamicScriptList(configuration, new SystemFileLocator())));
             resourceResolver.Register<IRunnerHub, RunnerHub>();
 

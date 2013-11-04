@@ -6,7 +6,7 @@ using TinyIoC;
 
 namespace AllGreen.WebServer.Core
 {
-    public class OwinStartup : IDisposable
+    public class OwinStartup
     {
         TinyIoCContainer _TinyIoCContainer;
 
@@ -32,11 +32,6 @@ namespace AllGreen.WebServer.Core
             config.Routes.MapHttpRoute("Scripts", "Scripts/{*path}", new { controller = "Scripts", action = "Get", path = RouteParameter.Optional });
             config.Routes.MapHttpRoute("Client Explicit", "Client/{*path}", new { controller = "Client", action = "Get", path = "client.html" });
             config.Routes.MapHttpRoute("Client", "{*path}", new { controller = "Client", action = "Get", path = "client.html" });
-        }
-
-        public void Dispose()
-        {
-            _TinyIoCContainer.Dispose();
         }
     }
 }

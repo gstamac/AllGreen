@@ -15,7 +15,7 @@ namespace AllGreen.WebServer.Core.Tests
     {
         protected ScriptsController CreateScriptsController(string filename, string path)
         {
-            IWebResources webResources = new EmbededResources(@"AllGreen.WebServer.Resources", Assembly.Load("AllGreen.WebServer.Resources"));
+            IWebResources webResources = new EmbededResources(Assembly.Load("AllGreen.WebServer.Resources"));
             ScriptsController scriptsController = new ScriptsController(webResources);
             scriptsController.Request = new HttpRequestMessage(HttpMethod.Get, @"http://localhost/" + filename);
 

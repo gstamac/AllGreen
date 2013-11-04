@@ -8,20 +8,22 @@ namespace AllGreen.WebServer.Core
 {
     public class EmbededResources : IWebResources
     {
-        private string _WebSiteRoot = (typeof(EmbededResources)).Namespace;
-        private Assembly _ExecutingAssembly = Assembly.GetExecutingAssembly();
+        private readonly Assembly _ResourcesAssembly;
+        private readonly string _WebSiteRoot;
+        private string[] _ManifestResourceNames;
 
-        public EmbededResources(string webSiteRoot, Assembly executingAssembly)
+        public EmbededResources(Assembly resourcesAssembly)
         {
-            _WebSiteRoot = webSiteRoot;
-            _ExecutingAssembly = executingAssembly;
+            _ResourcesAssembly = resourcesAssembly;
+            _WebSiteRoot = resourcesAssembly.GetName().Name;
+            _ManifestResourceNames = _ResourcesAssembly.GetManifestResourceNames();
         }
 
         public string GetContent(string path)
         {
             try
             {
-                var stream = _ExecutingAssembly.GetManifestResourceStream(GetResourcePath(path));
+                var stream = _ResourcesAssembly.GetManifestResourceStream(GetResourcePath(path));
                 if (stream != null)
                 {
                     using (StreamReader reader = new StreamReader(stream))
@@ -39,13 +41,12 @@ namespace AllGreen.WebServer.Core
         private string GetResourcePath(string path)
         {
             string resourcePath = String.Format("{0}.{1}", _WebSiteRoot, path.Replace('/', '.'));
-            string[] manifestResourceNames = _ExecutingAssembly.GetManifestResourceNames();
-            if (!manifestResourceNames.Contains(resourcePath))
+            if (!_ManifestResourceNames.Contains(resourcePath))
             {
                 string extension = Path.GetExtension(resourcePath);
                 string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(resourcePath);
-                Regex regex = new Regex(fileNameWithoutExtension + @"(-\d+\.\d+\.\d+)?(-beta[^\.]*|-rc[^\.]*)?(.min)?" + extension);
-                string resourceName = manifestResourceNames.Where(rn => regex.IsMatch(rn)).FirstOrDefault();
+                Regex regex = new Regex(String.Format(@"{0}(-\d+\.\d+\.\d+)?(-beta[^\.]*|-rc[^\.]*)?(.min)?{1}", fileNameWithoutExtension, extension));
+                string resourceName = _ManifestResourceNames.Where(rn => regex.IsMatch(rn)).FirstOrDefault();
                 if (!String.IsNullOrEmpty(resourceName))
                     resourcePath = resourceName;
             }

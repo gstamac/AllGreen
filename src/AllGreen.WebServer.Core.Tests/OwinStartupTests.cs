@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Owin;
 using TinyIoC;
+using FluentAssertions;
 
 namespace AllGreen.WebServer.Core.Tests
 {
@@ -22,37 +23,20 @@ namespace AllGreen.WebServer.Core.Tests
             _OwinStartup = new OwinStartup(new TinyIoCContainer());
         }
 
-        [TestCleanup]
-        public void TearDown()
-        {
-            _OwinStartup.Dispose();
-        }
-
         [TestClass]
         public class ConfigurationTests : OwinStartupTests
         {
             [TestMethod]
-            [Ignore]
-            public void HubsTest()
-            {
-                Dictionary<string, object> appProperties = new Dictionary<string, object>();
-                //appProperties.Add("builder.DefaultApp", "default");
-                appProperties.Add("builder.AddSignatureConversion", new Action<Delegate>((d) => { }));
-
-                IAppBuilder app = Mock.Of<IAppBuilder>(a => a.Properties == appProperties);
-
-                _OwinStartup.Configuration(app);
-
-               // app.Build(typeof(
-            }
-
-            [TestMethod]
             public async Task Test()
             {
-                TestServer testServer = TestServer.Create(appBuilder => new OwinStartup(new TinyIoCContainer()).Configuration(appBuilder));
+                TinyIoCContainer ioc = new TinyIoCContainer();
+                Mock<IWebResources> webResourcesMock = new Mock<IWebResources>();
+                webResourcesMock.Setup(wr => wr.GetContent(It.IsAny<string>())).Returns("");
+                ioc.Register<ClientController>(new ClientController(webResourcesMock.Object, Mock.Of<IRunnerResources>()));
+                TestServer testServer = TestServer.Create(appBuilder => new OwinStartup(ioc).Configuration(appBuilder));
                 HttpClient httpClient = testServer.HttpClient;
                 HttpResponseMessage response = await httpClient.GetAsync(@"http://localhost");
-                Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+                response.StatusCode.Should().Be(HttpStatusCode.OK);
             }
         }
     }
