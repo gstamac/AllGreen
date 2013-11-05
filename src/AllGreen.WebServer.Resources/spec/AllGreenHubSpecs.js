@@ -147,3 +147,4 @@ describe("AllGreen SignalR HubReporter", function () {
         expect(_this.hubProxy.invoke).toHaveBeenCalledWith('specUpdated', spec);
     });
 });
+//# sourceMappingURL=AllGreenHubSpecs.js.map

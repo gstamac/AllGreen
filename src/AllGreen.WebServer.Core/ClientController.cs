@@ -25,16 +25,16 @@ namespace AllGreen.WebServer.Core
 
             System.Web.Http.Routing.IHttpRouteData routeData = Request.GetRouteData();
             string path = routeData.Values.ContainsKey("path") ? routeData.Values["path"] as string : null;
-            Console.WriteLine(String.Format("CLIENT PATH: {0}", path));
+            //Console.WriteLine(String.Format("CLIENT PATH: {0}", path));
 
             return ServeClientFile(path);
         }
 
         private HttpResponseMessage ServeClientFile(string path)
         {
-            string result = _WebResources.GetContent(String.Format(@"Client/{0}", path));
+            string result = _WebResources.GetContent(path);
 
-            if (path.EndsWith("runner.html"))
+            if (path.EndsWith("runner.html") && result != null)
             {
                 result = ModifyRunnerHtml(result);
             }
@@ -47,7 +47,7 @@ namespace AllGreen.WebServer.Core
         private string ModifyRunnerHtml(string result)
         {
             IEnumerable<string> scriptFiles = _RunnerResources.GetScriptFiles();
-            string scripts = String.Join("", scriptFiles.Select(scriptFile => String.Format("<script src=\"{0}\"></script>", scriptFile)));
+            string scripts = String.Join("", scriptFiles.Select(scriptFile => String.Format("<script src=\"/{0}\"></script>", scriptFile)));
             return result.Replace("<!--%SCRIPTS%-->", scripts);
         }
 

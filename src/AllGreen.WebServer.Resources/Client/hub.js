@@ -128,3 +128,4 @@ var AllGreen;
         hub.connect();
     }
 })();
+//# sourceMappingURL=hub.js.map

@@ -141,7 +141,7 @@ module AllGreen {
         public reload() {
             this.adapterFactories = [];
             this.reset();
-            $('#runner').prop('src', 'runner.html');
+            $('#runner').prop('src', 'Client/runner.html');
         }
 
         public log(message?: any, ...optionalParams: any[]): void {

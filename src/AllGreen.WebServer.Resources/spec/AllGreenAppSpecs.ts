@@ -110,7 +110,7 @@ describe("App", () => {
 
         this.app.reload();
         expect(runnerReporter.reset).toHaveBeenCalled();
-        expect($('#runner')).toHaveAttr('src', 'runner.html');
+        expect($('#runner')).toHaveAttr('src', 'Client/runner.html');
         this.app.start();
         expect(adapterFactory1.create).not.toHaveBeenCalled();
     });

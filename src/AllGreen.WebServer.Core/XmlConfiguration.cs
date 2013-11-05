@@ -30,11 +30,15 @@ namespace AllGreen.WebServer.Core
                 //return new FolderFilter[0];
                 return new FolderFilter[] { 
                     new FolderFilter() { Folder = "Scripts", FilePattern = "jasmine.js", IncludeSubfolders = false },
-                    new FolderFilter() { Folder = "Client/ReporterAdapters", FilePattern = "jasmineAdapter.js", IncludeSubfolders = false },
                     new FolderFilter() { Folder = "Client", FilePattern = "testScript.js", IncludeSubfolders = false },
+                    new FolderFilter() { Folder = "Client/ReporterAdapters", FilePattern = "jasmineAdapter.js", IncludeSubfolders = false },
                 };
-
-                // "Scripts/jasmine.js", "Client/ReporterAdapters/jasmineAdapter.js", "Client/testScript.js" 
+                /*return new FolderFilter[] { 
+                    new FolderFilter() { Folder = "Scripts", FilePattern = "jasmine.js", IncludeSubfolders = false },
+                    new FolderFilter() { Folder = "Scripts", FilePattern = "*.js", IncludeSubfolders = true },
+                    new FolderFilter() { Folder = "Client", FilePattern = "*.js", IncludeSubfolders = true },
+                    new FolderFilter() { Folder = "spec", FilePattern = "*.js", IncludeSubfolders = true },
+                };*/
             }
         }
 
@@ -43,6 +47,16 @@ namespace AllGreen.WebServer.Core
             get
             {
                 return new FolderFilter[0];
+                /*return new FolderFilter[] { 
+                    new FolderFilter() { Folder = "Scripts", FilePattern = "*.min.js", IncludeSubfolders = true },
+                    new FolderFilter() { Folder = "Scripts", FilePattern = "*.intellisense.js", IncludeSubfolders = true },
+                    new FolderFilter() { Folder = "Client", FilePattern = "*.min.js", IncludeSubfolders = true },
+                    new FolderFilter() { Folder = "spec", FilePattern = "*.min.js", IncludeSubfolders = true },
+                    new FolderFilter() { Folder = "Client", FilePattern = "allgreen.js", IncludeSubfolders = false },
+                    new FolderFilter() { Folder = "Client", FilePattern = "hub.js", IncludeSubfolders = false },
+                    new FolderFilter() { Folder = "Client", FilePattern = "reporter.js", IncludeSubfolders = false },
+                    new FolderFilter() { Folder = "Client", FilePattern = "testScript.js", IncludeSubfolders = false },
+                };*/
             }
         }
 

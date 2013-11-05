@@ -101,7 +101,7 @@ var AllGreen;
         App.prototype.reload = function () {
             this.adapterFactories = [];
             this.reset();
-            $('#runner').prop('src', 'runner.html');
+            $('#runner').prop('src', 'Client/runner.html');
         };
 
         App.prototype.log = function (message) {
@@ -121,3 +121,4 @@ var AllGreen;
     })();
     AllGreen.App = App;
 })(AllGreen || (AllGreen = {}));
+//# sourceMappingURL=allgreen.js.map

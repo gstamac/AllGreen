@@ -13,6 +13,10 @@
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <TypeScriptTarget>ES3</TypeScriptTarget>
+    <TypeScriptRemoveComments>false</TypeScriptRemoveComments>
+    <TypeScriptSourceMap>true</TypeScriptSourceMap>
+    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +26,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <TypeScriptTarget>ES3</TypeScriptTarget>
+    <TypeScriptRemoveComments>true</TypeScriptRemoveComments>
+    <TypeScriptSourceMap>false</TypeScriptSourceMap>
+    <TypeScriptModuleKind>AMD</TypeScriptModuleKind>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -29,6 +37,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(VSToolsPath)\TypeScript\Microsoft.TypeScript.targets" />
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -42,7 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <CodeAnalysisDictionary Include="Client\allgreen.ts" />
+    <TypeScriptCompile Include="Client\allgreen.ts" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\..\DefinitelyTyped\jasmine-jquery\jasmine-jquery.d.ts">
@@ -114,7 +126,7 @@
     </Content>
     <TypeScriptCompile Include="Client\reporter.ts" />
     <Content Include="css\jasmine.css" />
-    <Content Include="Scripts\jasmine-html.js" />
+    <EmbeddedResource Include="Scripts\jasmine-html.js" />
     <EmbeddedResource Include="Scripts\jasmine-jquery.js" />
     <EmbeddedResource Include="Scripts\jasmine.js" />
     <Content Include="Scripts\jquery-2.0.3.intellisense.js" />
@@ -132,6 +144,9 @@
     <EmbeddedResource Include="Client\client.html" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Client\allgreen.min.js.map">
+      <DependentUpon>allgreen.js</DependentUpon>
+    </None>
     <None Include="Client\client.less" />
     <None Include="Client\hub.min.js.map">
       <DependentUpon>hub.js</DependentUpon>
@@ -144,6 +159,9 @@
       <DependentUpon>jquery-2.0.3.js</DependentUpon>
     </None>
     <None Include="Scripts\jquery-2.0.3.min.map" />
+    <None Include="spec\AllGreenAppSpecs.min.js.map">
+      <DependentUpon>AllGreenAppSpecs.js</DependentUpon>
+    </None>
     <None Include="spec\AllGreenReporterSpecs.min.js.map">
       <DependentUpon>AllGreenReporterSpecs.js</DependentUpon>
     </None>
@@ -166,7 +184,7 @@
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Scripts__UseParentNamespace="False" />
+      <UserProperties Properties__UseParentNamespace="False" Scripts__UseParentNamespace="False" spec__UseParentNamespace="False" Client__UseParentNamespace="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

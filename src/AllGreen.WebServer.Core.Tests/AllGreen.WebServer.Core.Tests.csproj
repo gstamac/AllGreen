@@ -116,21 +116,31 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ClientControllerTests.cs</DependentUpon>
     </Compile>
+    <Compile Include="CompositeWebResourcesTests.cs" />
     <Compile Include="ControllerDependencyResolverTests.cs" />
     <Compile Include="DynamicScriptListTests.cs" />
+    <Compile Include="AllGreenWebServerResources_EmbededResourcesTests.cs">
+      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
+      <Template>AddDataMsTests.tt</Template>
+      <LastGenOutput>AllGreenWebServerResources_EmbededResourcesTests.Generated.cs</LastGenOutput>
+    </Compile>
+    <Compile Include="AllGreenWebServerResources_EmbededResourcesTests.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>AllGreenWebServerResources_EmbededResourcesTests.cs</DependentUpon>
+    </Compile>
     <Compile Include="FileWatcherTests.cs" />
     <Compile Include="OwinStartupTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunnerHubTests.cs" />
     <Compile Include="RunnerResourcesTests.cs" />
-    <Compile Include="ScriptsControllerTests.cs">
+    <Compile Include="FilesControllerTests.cs">
       <Template>AddDataMsTests.tt</Template>
       <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
-      <LastGenOutput>ScriptsControllerTests.Generated.cs</LastGenOutput>
+      <LastGenOutput>FilesControllerTests.Generated.cs</LastGenOutput>
     </Compile>
-    <Compile Include="ScriptsControllerTests.Generated.cs">
+    <Compile Include="FilesControllerTests.Generated.cs">
       <AutoGen>True</AutoGen>
-      <DependentUpon>ScriptsControllerTests.cs</DependentUpon>
+      <DependentUpon>FilesControllerTests.cs</DependentUpon>
     </Compile>
     <Compile Include="SignalRDependencyResolverTests.cs" />
     <Compile Include="SpecTests.cs" />
@@ -176,6 +186,11 @@
   </Choose>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties AllGreenWebServerResources_EmbededResourcesTests_cs_UseParentNamespace="False" EmbededResourcesTests_cs_UseParentNamespace="False" FilesControllerTests_cs_UseParentNamespace="False" />
+    </VisualStudio>
+  </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

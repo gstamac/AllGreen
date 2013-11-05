@@ -126,7 +126,7 @@ describe("App", function () {
 
         _this.app.reload();
         expect(runnerReporter.reset).toHaveBeenCalled();
-        expect($('#runner')).toHaveAttr('src', 'runner.html');
+        expect($('#runner')).toHaveAttr('src', 'Client/runner.html');
         _this.app.start();
         expect(adapterFactory1.create).not.toHaveBeenCalled();
     });
@@ -144,3 +144,4 @@ describe("App", function () {
         expect(_this.app.reconnectEnabled).toBeTruthy();
     });
 });
+//# sourceMappingURL=AllGreenAppSpecs.js.map

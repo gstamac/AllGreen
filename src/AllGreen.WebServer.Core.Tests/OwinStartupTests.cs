@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.Owin.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Owin;
 using TinyIoC;
 using FluentAssertions;
 
@@ -33,9 +32,12 @@ namespace AllGreen.WebServer.Core.Tests
                 Mock<IWebResources> webResourcesMock = new Mock<IWebResources>();
                 webResourcesMock.Setup(wr => wr.GetContent(It.IsAny<string>())).Returns("");
                 ioc.Register<ClientController>(new ClientController(webResourcesMock.Object, Mock.Of<IRunnerResources>()));
+
                 TestServer testServer = TestServer.Create(appBuilder => new OwinStartup(ioc).Configuration(appBuilder));
                 HttpClient httpClient = testServer.HttpClient;
+
                 HttpResponseMessage response = await httpClient.GetAsync(@"http://localhost");
+
                 response.StatusCode.Should().Be(HttpStatusCode.OK);
             }
         }

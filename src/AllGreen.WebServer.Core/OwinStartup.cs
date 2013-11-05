@@ -29,9 +29,8 @@ namespace AllGreen.WebServer.Core
 
         public static void SetupRoutes(HttpConfiguration config)
         {
-            config.Routes.MapHttpRoute("Scripts", "Scripts/{*path}", new { controller = "Scripts", action = "Get", path = RouteParameter.Optional });
-            config.Routes.MapHttpRoute("Client Explicit", "Client/{*path}", new { controller = "Client", action = "Get", path = "client.html" });
-            config.Routes.MapHttpRoute("Client", "{*path}", new { controller = "Client", action = "Get", path = "client.html" });
+            config.Routes.MapHttpRoute("Files", "Files/{*path}", new { controller = "Files", action = "Get", path = "" });
+            config.Routes.MapHttpRoute("Client", "{*path}", new { controller = "Client", action = "Get", path = "Client/client.html" });
         }
     }
 }

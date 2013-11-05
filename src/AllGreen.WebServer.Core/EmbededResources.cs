@@ -40,18 +40,17 @@ namespace AllGreen.WebServer.Core
 
         private string GetResourcePath(string path)
         {
-            string resourcePath = String.Format("{0}.{1}", _WebSiteRoot, path.Replace('/', '.'));
+            string resourcePath = String.Format("{0}.{1}", _WebSiteRoot, path.Replace('/', '.')).Replace("..", ".");
             if (!_ManifestResourceNames.Contains(resourcePath))
             {
                 string extension = Path.GetExtension(resourcePath);
                 string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(resourcePath);
-                Regex regex = new Regex(String.Format(@"{0}(-\d+\.\d+\.\d+)?(-beta[^\.]*|-rc[^\.]*)?(.min)?{1}", fileNameWithoutExtension, extension));
+                Regex regex = new Regex(String.Format(@"^{0}(-\d+\.\d+\.\d+)?(-beta[^\.]*|-rc[^\.]*)?(.min)?{1}$", fileNameWithoutExtension, extension));
                 string resourceName = _ManifestResourceNames.Where(rn => regex.IsMatch(rn)).FirstOrDefault();
                 if (!String.IsNullOrEmpty(resourceName))
                     resourcePath = resourceName;
             }
             return resourcePath;
         }
-
     }
 }

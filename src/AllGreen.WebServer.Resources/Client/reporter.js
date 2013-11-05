@@ -182,3 +182,4 @@ else
         app.registerRunnerReporter(new AllGreen.RunnerReporter());
     }
 })();
+//# sourceMappingURL=reporter.js.map

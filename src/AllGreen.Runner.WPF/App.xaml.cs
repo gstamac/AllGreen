@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using System.Windows;
 using AllGreen.WebServer.Core;
-using Microsoft.AspNet.SignalR;
 using TinyIoC;
 
 namespace AllGreen.Runner.WPF
@@ -17,7 +16,10 @@ namespace AllGreen.Runner.WPF
 
             TinyIoCContainer resourceResolver = new TinyIoCContainer();
             resourceResolver.Register<IConfiguration>(configuration);
-            resourceResolver.Register<IWebResources>(new EmbededResources(Assembly.Load("AllGreen.WebServer.Resources")));
+            CompositeWebResources webResources = new CompositeWebResources();
+            webResources.Add(new EmbededResources(Assembly.Load("AllGreen.WebServer.Resources")));
+            webResources.Add(new FileSystemResources(configuration));
+            resourceResolver.Register<IWebResources>(webResources);
             resourceResolver.Register<IRunnerResources>(new RunnerResources(new DynamicScriptList(configuration, new SystemFileLocator())));
             resourceResolver.Register<IRunnerHub, RunnerHub>();
 

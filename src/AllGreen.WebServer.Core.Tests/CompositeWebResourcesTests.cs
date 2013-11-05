@@ -1,0 +1,32 @@
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Reflection;
+using System.Web.Http.Routing;
+using FluentAssertions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using TemplateAttributes;
+
+namespace AllGreen.WebServer.Core.Tests
+{
+    [TestClass]
+    public class CompositeWebResourcesTests
+    {
+        [TestMethod]
+        public void Test()
+        {
+            CompositeWebResources compositeWebResources = new CompositeWebResources();
+            Mock<IWebResources> webResources1Mock = new Mock<IWebResources>();
+            webResources1Mock.Setup(wr => wr.GetContent("file1.js")).Returns("file1 content");
+            Mock<IWebResources> webResources2Mock = new Mock<IWebResources>();
+            webResources1Mock.Setup(wr => wr.GetContent("file2.js")).Returns("file2 content");
+            compositeWebResources.Add(webResources1Mock.Object);
+            compositeWebResources.Add(webResources2Mock.Object);
+
+            compositeWebResources.GetContent("file1.js").Should().Be("file1 content");
+            compositeWebResources.GetContent("file2.js").Should().Be("file2 content");
+            compositeWebResources.GetContent("file3.js").Should().BeNull();
+        }
+    }
+}

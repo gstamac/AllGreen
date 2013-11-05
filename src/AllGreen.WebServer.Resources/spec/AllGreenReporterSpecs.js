@@ -172,3 +172,4 @@ describe("AllGreen.RunnerReporter", function () {
         expect($('#spec-results')).toHaveClass('failed');
     });
 });
+//# sourceMappingURL=AllGreenReporterSpecs.js.map
