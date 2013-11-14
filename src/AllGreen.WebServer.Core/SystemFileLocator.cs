@@ -3,7 +3,6 @@ using System.IO;
 
 namespace AllGreen.WebServer.Core
 {
-    //ncrunch: no coverage start
     public class SystemFileLocator : IFileLocator
     {
         public bool GetFiles(string path, string searchPattern, bool includeSubfolders, out string[] files)
@@ -28,5 +27,4 @@ namespace AllGreen.WebServer.Core
             return folders != null;
         }
     }
-    //ncrunch: no coverage end
 }

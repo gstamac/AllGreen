@@ -85,7 +85,7 @@ namespace AllGreen.WebServer.Core.Tests
             {
                 _RunnerHub.OnConnected();
 
-                _ReporterMock.Verify(r => r.Connected(_ConnectionId, "Windows 7  Firefox 23.0"));
+                _ReporterMock.Verify(r => r.Connected(_ConnectionId, "Windows 7 Other Firefox 23.0"));
             }
 
             [TestMethod]
@@ -93,7 +93,7 @@ namespace AllGreen.WebServer.Core.Tests
             {
                 _RunnerHub.OnReconnected();
 
-                _ReporterMock.Verify(r => r.Reconnected(_ConnectionId, "Windows 7  Firefox 23.0"));
+                _ReporterMock.Verify(r => r.Reconnected(_ConnectionId, "Windows 7 Other Firefox 23.0"));
             }
 
             [TestMethod]
@@ -116,7 +116,7 @@ namespace AllGreen.WebServer.Core.Tests
                 _RunnerHub.Clients = clientsMock.Object;
                 _RunnerHub.Register();
 
-                _ReporterMock.Verify(r => r.Register(_ConnectionId, "Windows 7  Firefox 23.0"));
+                _ReporterMock.Verify(r => r.Register(_ConnectionId, "Windows 7 Other Firefox 23.0"));
                 reloadCalled.Should().BeTrue();
             }
 

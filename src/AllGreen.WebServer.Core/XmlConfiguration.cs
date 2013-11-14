@@ -1,71 +1,51 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace AllGreen.WebServer.Core
 {
     public class XmlConfiguration : IConfiguration
     {
-        private string _Filename;
+        public string RootFolder { get; set; }
+        public string ServerUrl { get; set; }
+        public List<FolderFilter> ServedFolderFilters { get; set; }
+        public List<FolderFilter> ExcludeServedFolderFilters { get; set; }
+        public List<FolderFilter> WatchedFolderFilters { get; set; }
 
-        public XmlConfiguration(string filename)
+        public XmlConfiguration()
         {
-            _Filename = filename;
+            RootFolder = "";
+            ServerUrl = "";
+            ServedFolderFilters = new List<FolderFilter>();
+            ExcludeServedFolderFilters = new List<FolderFilter>();
+            WatchedFolderFilters = new List<FolderFilter>();
         }
 
-        public string RootFolder
+        public void SaveTo(Stream stream)
         {
-            get { return @"C:\Work\Projects\AllGreen\src\AllGreen.WebServer.Resources"; }
+            new XmlSerializer(typeof(XmlConfiguration)).Serialize(stream, this);
         }
 
-        public string ServerUrl
+        public static XmlConfiguration LoadFrom(Stream stream)
         {
-            get { return @"http://localhost:8080"; }
+            return new XmlSerializer(typeof(XmlConfiguration)).Deserialize(stream) as XmlConfiguration;
         }
 
-        public IEnumerable<FolderFilter> ServedFolderFilters
+        //ncrunch: no coverage start
+        public static XmlConfiguration LoadFrom(string filename)
         {
-            get
+            XmlConfiguration configuration = new XmlConfiguration();
+            if (File.Exists(filename))
             {
-                //return new FolderFilter[0];
-                return new FolderFilter[] { 
-                    new FolderFilter() { Folder = "Scripts", FilePattern = "jasmine.js", IncludeSubfolders = false },
-                    new FolderFilter() { Folder = "Client", FilePattern = "testScript.js", IncludeSubfolders = false },
-                    new FolderFilter() { Folder = "Client/ReporterAdapters", FilePattern = "jasmineAdapter.js", IncludeSubfolders = false },
-                };
-                /*return new FolderFilter[] { 
-                    new FolderFilter() { Folder = "Scripts", FilePattern = "jasmine.js", IncludeSubfolders = false },
-                    new FolderFilter() { Folder = "Scripts", FilePattern = "*.js", IncludeSubfolders = true },
-                    new FolderFilter() { Folder = "Client", FilePattern = "*.js", IncludeSubfolders = true },
-                    new FolderFilter() { Folder = "spec", FilePattern = "*.js", IncludeSubfolders = true },
-                };*/
+                using (FileStream fileStream = new FileStream(filename, FileMode.Open))
+                {
+                    configuration = XmlConfiguration.LoadFrom(fileStream);
+                }
             }
+            return configuration;
         }
-
-        public IEnumerable<FolderFilter> ExcludeServedFolderFilters
-        {
-            get
-            {
-                return new FolderFilter[0];
-                /*return new FolderFilter[] { 
-                    new FolderFilter() { Folder = "Scripts", FilePattern = "*.min.js", IncludeSubfolders = true },
-                    new FolderFilter() { Folder = "Scripts", FilePattern = "*.intellisense.js", IncludeSubfolders = true },
-                    new FolderFilter() { Folder = "Client", FilePattern = "*.min.js", IncludeSubfolders = true },
-                    new FolderFilter() { Folder = "spec", FilePattern = "*.min.js", IncludeSubfolders = true },
-                    new FolderFilter() { Folder = "Client", FilePattern = "allgreen.js", IncludeSubfolders = false },
-                    new FolderFilter() { Folder = "Client", FilePattern = "hub.js", IncludeSubfolders = false },
-                    new FolderFilter() { Folder = "Client", FilePattern = "reporter.js", IncludeSubfolders = false },
-                    new FolderFilter() { Folder = "Client", FilePattern = "testScript.js", IncludeSubfolders = false },
-                };*/
-            }
-        }
-
-        public IEnumerable<FolderFilter> WatchedFolderFilters
-        {
-            get
-            {
-                return new FolderFilter[0];
-            }
-        }
+        //ncrunch: no coverage start
     }
 }

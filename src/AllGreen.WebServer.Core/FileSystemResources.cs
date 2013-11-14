@@ -1,27 +1,26 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace AllGreen.WebServer.Core
 {
     public class FileSystemResources : IWebResources
     {
-        IConfiguration _Configuration;
+        private string _RootFolder;
+        IFileReader _FileReader;
 
-        public FileSystemResources(IConfiguration configuration)
+        public FileSystemResources(string rootFolder, IFileReader fileReader)
         {
-            _Configuration = configuration;
+            _RootFolder = rootFolder;
+            _FileReader = fileReader;
         }
 
         public string GetContent(string path)
         {
             if (path.StartsWith("Files/"))
             {
-                string fullPath = Path.Combine(_Configuration.RootFolder, path.Substring(6).Replace('/', '\\'));
-                if (File.Exists(fullPath))
-                    return File.ReadAllText(fullPath);
+                string fullPath = Path.Combine(_RootFolder, path.Substring(6).Replace('/', '\\'));
+                return _FileReader.ReadAllText(fullPath);
             }
             return null;
         }

@@ -11,11 +11,11 @@ namespace AllGreen.WebServer.Core
         private readonly IEnumerable<FolderFilter> _ExcludeFolderFilters;
         private readonly IFileLocator _FileLocator;
 
-        public DynamicScriptList(IConfiguration configuration, IFileLocator fileLocator)
+        public DynamicScriptList(string rootFolder, List<FolderFilter> servedFolderFilters, List<FolderFilter> excludeServedFolderFilters, IFileLocator fileLocator)
         {
-            _RootFolder = configuration.RootFolder;
-            _FolderFilters = configuration.ServedFolderFilters;
-            _ExcludeFolderFilters = configuration.ExcludeServedFolderFilters;
+            _RootFolder = rootFolder;
+            _FolderFilters = servedFolderFilters;
+            _ExcludeFolderFilters = excludeServedFolderFilters;
             _FileLocator = fileLocator;
         }
 

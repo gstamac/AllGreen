@@ -26,17 +26,17 @@ namespace AllGreen.WebServer.Core.Tests
         public class ConfigurationTests : OwinStartupTests
         {
             [TestMethod]
-            public async Task Test()
+            public void Test()
             {
                 TinyIoCContainer ioc = new TinyIoCContainer();
                 Mock<IWebResources> webResourcesMock = new Mock<IWebResources>();
-                webResourcesMock.Setup(wr => wr.GetContent(It.IsAny<string>())).Returns("");
-                ioc.Register<ClientController>(new ClientController(webResourcesMock.Object, Mock.Of<IRunnerResources>()));
+                webResourcesMock.Setup(wr => wr.GetContent("Client/client.html")).Returns("content");
+                ioc.Register<IWebResources>(webResourcesMock.Object);
 
                 TestServer testServer = TestServer.Create(appBuilder => new OwinStartup(ioc).Configuration(appBuilder));
                 HttpClient httpClient = testServer.HttpClient;
 
-                HttpResponseMessage response = await httpClient.GetAsync(@"http://localhost");
+                HttpResponseMessage response = httpClient.GetAsync(@"http://localhost").Result;
 
                 response.StatusCode.Should().Be(HttpStatusCode.OK);
             }

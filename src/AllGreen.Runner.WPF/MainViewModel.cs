@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Data;
+using System.Linq;
 using System.Windows.Input;
 using System.Windows.Markup;
 using AllGreen.WebServer.Core;
@@ -54,15 +54,7 @@ namespace AllGreen.Runner.WPF
             WebApp.Start(Configuration.ServerUrl, appBuilder => new OwinStartup(_ResourceResolver).Configuration(appBuilder));
             ServerStatus = "Server running at " + Configuration.ServerUrl;
 
-            _FileWatcher = new FileWatcher(_ResourceResolver.Resolve<IRunnerHub>(), CreateFolderWatchers());
-        }
-
-        private IEnumerable<IFolderWatcher> CreateFolderWatchers()
-        {
-            foreach (FolderFilter watchedFolderFilter in Configuration.WatchedFolderFilters)
-            {
-                yield return new FolderWatcher(Path.GetFullPath(watchedFolderFilter.Folder), watchedFolderFilter.FilePattern, watchedFolderFilter.IncludeSubfolders);
-            }
+            _FileWatcher = new FileWatcher(_ResourceResolver.Resolve<IRunnerHub>(), Configuration.WatchedFolderFilters.Select(ff => new FolderWatcher(Path.GetFullPath(ff.Folder), ff.FilePattern, ff.IncludeSubfolders)));
         }
         //ncrunch: no coverage end
 

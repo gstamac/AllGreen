@@ -4,7 +4,6 @@ using System.IO;
 
 namespace AllGreen.WebServer.Core
 {
-    //ncrunch: no coverage start 
     public class FolderWatcher : IFolderWatcher, IDisposable
     {
         FileSystemWatcher _FileSystemWatcher;
@@ -36,5 +35,4 @@ namespace AllGreen.WebServer.Core
             _FileSystemWatcher.Dispose();
         }
     }
-    //ncrunch: no coverage end 
 }

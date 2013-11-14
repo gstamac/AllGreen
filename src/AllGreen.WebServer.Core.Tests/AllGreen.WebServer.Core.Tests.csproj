@@ -37,7 +37,7 @@
   <ItemGroup>
     <Reference Include="FluentAssertions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\FluentAssertions.2.1.0.0\lib\net45\FluentAssertions.dll</HintPath>
+      <HintPath>..\..\..\fluentassertions\FluentAssertions.Net45\bin\Debug\FluentAssertions.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -107,43 +107,46 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AddDataMsTests.tt</DependentUpon>
     </Compile>
-    <Compile Include="ClientControllerTests.cs">
+    <Compile Include="ApiControllerTestsBase.cs" />
+    <Compile Include="AssemblyWebResourcesTests.cs" />
+    <Compile Include="RunnerControllerTests.cs">
       <Template>AddDataMsTests.tt</Template>
       <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
-      <LastGenOutput>ClientControllerTests.Generated.cs</LastGenOutput>
+      <LastGenOutput>RunnerControllerTests.Generated.cs</LastGenOutput>
     </Compile>
-    <Compile Include="ClientControllerTests.Generated.cs">
+    <Compile Include="RunnerControllerTests.Generated.cs">
       <AutoGen>True</AutoGen>
-      <DependentUpon>ClientControllerTests.cs</DependentUpon>
+      <DependentUpon>RunnerControllerTests.cs</DependentUpon>
     </Compile>
     <Compile Include="CompositeWebResourcesTests.cs" />
     <Compile Include="ControllerDependencyResolverTests.cs" />
     <Compile Include="DynamicScriptListTests.cs" />
-    <Compile Include="AllGreenWebServerResources_EmbededResourcesTests.cs">
+    <Compile Include="WebServerResourcesTests.cs">
       <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
       <Template>AddDataMsTests.tt</Template>
-      <LastGenOutput>AllGreenWebServerResources_EmbededResourcesTests.Generated.cs</LastGenOutput>
+      <LastGenOutput>WebServerResourcesTests.Generated.cs</LastGenOutput>
     </Compile>
-    <Compile Include="AllGreenWebServerResources_EmbededResourcesTests.Generated.cs">
+    <Compile Include="WebServerResourcesTests.Generated.cs">
       <AutoGen>True</AutoGen>
-      <DependentUpon>AllGreenWebServerResources_EmbededResourcesTests.cs</DependentUpon>
+      <DependentUpon>WebServerResourcesTests.cs</DependentUpon>
     </Compile>
+    <Compile Include="FileSystemResourcesTests.cs" />
     <Compile Include="FileWatcherTests.cs" />
     <Compile Include="OwinStartupTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunnerHubTests.cs" />
-    <Compile Include="RunnerResourcesTests.cs" />
-    <Compile Include="FilesControllerTests.cs">
+    <Compile Include="WebControllerTests.cs">
       <Template>AddDataMsTests.tt</Template>
       <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
-      <LastGenOutput>FilesControllerTests.Generated.cs</LastGenOutput>
+      <LastGenOutput>WebControllerTests.Generated.cs</LastGenOutput>
     </Compile>
-    <Compile Include="FilesControllerTests.Generated.cs">
+    <Compile Include="WebControllerTests.Generated.cs">
       <AutoGen>True</AutoGen>
-      <DependentUpon>FilesControllerTests.cs</DependentUpon>
+      <DependentUpon>WebControllerTests.cs</DependentUpon>
     </Compile>
     <Compile Include="SignalRDependencyResolverTests.cs" />
     <Compile Include="SpecTests.cs" />
+    <Compile Include="XmlConfigurationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AddDataMsTests.tt">
@@ -188,7 +191,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties AllGreenWebServerResources_EmbededResourcesTests_cs_UseParentNamespace="False" EmbededResourcesTests_cs_UseParentNamespace="False" FilesControllerTests_cs_UseParentNamespace="False" />
+      <UserProperties AllGreenWebServerResources_EmbededResourcesTests_cs_UseParentNamespace="False" EmbededResourcesTests_cs_UseParentNamespace="False" FilesControllerTests_cs_UseParentNamespace="False" RunnerControllerTests_cs_UseParentNamespace="False" WebControllerTests_cs_UseParentNamespace="False" AssemblyWebResourcesTests_cs_UseParentNamespace="False" WebServerResourcesTests_cs_UseParentNamespace="False" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

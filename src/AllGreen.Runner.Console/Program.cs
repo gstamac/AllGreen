@@ -1,6 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.IO;
+using System.Reflection;
 using AllGreen.WebServer.Core;
-using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Hosting;
 using TinyIoC;
 
@@ -10,15 +11,17 @@ namespace AllGreen.Runner.Console
     {
         static void Main(string[] args)
         {
-            string url = "http://localhost:8080";
+            const string url = "http://localhost:8080";
 
-            XmlConfiguration configuration = new XmlConfiguration("");
+            XmlConfiguration configuration = XmlConfiguration.LoadFrom(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\AllGreen\\AllGreen\\AllGreen.config");
 
             TinyIoCContainer resourceResolver = new TinyIoCContainer();
 
             resourceResolver.Register<IConfiguration>(configuration);
-            resourceResolver.Register<IWebResources>(new EmbededResources(Assembly.Load("AllGreen.WebServer.Resources")));
-            resourceResolver.Register<IRunnerResources>(new RunnerResources(new DynamicScriptList(configuration, new SystemFileLocator())));
+            CompositeWebResources webResources = new CompositeWebResources();
+            webResources.Add(new WebServerResources(new DynamicScriptList(configuration.RootFolder, configuration.ServedFolderFilters, configuration.ExcludeServedFolderFilters, new SystemFileLocator())));
+            webResources.Add(new FileSystemResources(configuration.RootFolder, new FileSystemReader()));
+            resourceResolver.Register<IWebResources>(webResources);
             resourceResolver.Register<IRunnerHub, RunnerHub>();
 
             resourceResolver.Register<IReporter, ConsoleReporter>();
