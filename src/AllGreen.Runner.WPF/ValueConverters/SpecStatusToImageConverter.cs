@@ -11,6 +11,7 @@ using TinyIoC;
 
 namespace AllGreen.Runner.WPF.ValueConverters
 {
+    [ValueConversion(typeof(SpecStatus), typeof(System.Windows.Media.Imaging.BitmapImage))]
     public class SpecStatusToImageConverter : MarkupExtension, IValueConverter
     {
         public SpecStatusToImageConverter()

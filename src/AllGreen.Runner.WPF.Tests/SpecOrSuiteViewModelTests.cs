@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AllGreen.WebServer.Core;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Caliburn.Micro;
+using AllGreen.Runner.WPF.ViewModels;
 
 namespace AllGreen.Runner.WPF.Tests
 {
@@ -32,8 +35,8 @@ namespace AllGreen.Runner.WPF.Tests
             string guid1 = Guid.NewGuid().ToString();
             string guid2 = Guid.NewGuid().ToString();
             TestHelper.TestCollectionChanged<BindableDictionary<string, SpecStatusViewModel>, KeyValuePair<string, SpecStatusViewModel>>(_SpecOrSuiteViewModel.Statuses)
-                .Action(c => c.Add(guid1, CreateStatusWithTime(SpecStatus.Failed, 1, 0))).Adds(CreateKeyValue(guid1, SpecStatus.Failed, 1, 0)).CountIs(1)
-                .Action(c => c.Add(guid2, CreateStatusWithTime(SpecStatus.Skipped, 2, 1))).Adds(CreateKeyValue(guid2, SpecStatus.Skipped, 2, 1)).CountIs(2)
+                .Action(c => c.Add(guid1, CreateSpecStatusViewModel(SpecStatus.Failed, 1, 0))).Adds(CreateKeyValue(guid1, SpecStatus.Failed, 1, 0)).CountIs(1)
+                .Action(c => c.Add(guid2, CreateSpecStatusViewModel(SpecStatus.Skipped, 2, 1))).Adds(CreateKeyValue(guid2, SpecStatus.Skipped, 2, 1)).CountIs(2)
                 .Action(c => c.Remove(guid2)).Removes(CreateKeyValue(guid2, SpecStatus.Skipped, 2, 1)).CountIs(1)
                 .Action(c => c.Clear()).Resets().CountIs(0);
         }
@@ -43,10 +46,19 @@ namespace AllGreen.Runner.WPF.Tests
         {
             string guid1 = Guid.NewGuid().ToString();
             string guid2 = Guid.NewGuid().ToString();
+            SpecStep[] steps = new SpecStep[] { 
+                new SpecStep() { Message = "Step 1 message", Status = SpecStatus.Passed, Trace = "Step 1 trace" },
+                new SpecStep() { Message = "Step 2 message", Status = SpecStatus.Failed, Trace = "Step 2 trace" } 
+            };
             TestHelper.TestCollectionChanged<BindableDictionary<string, SpecStatusViewModel>, KeyValuePair<string, SpecStatusViewModel>>(_SpecOrSuiteViewModel.Statuses)
-                .Action(c => _SpecOrSuiteViewModel.SetStatus(guid1, SpecStatus.Failed, 1)).Adds(CreateKeyValue(guid1, SpecStatus.Failed, 1,  0)).CountIs(1)
+                .Action(c => _SpecOrSuiteViewModel.SetStatus(guid1, SpecStatus.Failed, 1)).Adds(CreateKeyValue(guid1, SpecStatus.Failed, 1, 0)).CountIs(1)
                 .Action(c => _SpecOrSuiteViewModel.SetStatus(guid2, SpecStatus.Skipped, 2)).Adds(CreateKeyValue(guid2, SpecStatus.Skipped, 2, 0)).CountIs(2)
-                .Action(c => _SpecOrSuiteViewModel.SetStatus(guid1, SpecStatus.Skipped, 3)).Replaces(CreateKeyValue(guid1, SpecStatus.Failed, 1, 0), CreateKeyValue(guid1, SpecStatus.Skipped, 3, 2)).CountIs(2);
+                .Action(c => _SpecOrSuiteViewModel.SetStatus(guid1, SpecStatus.Skipped, 3, steps, null)).DoesNoChange();
+
+            _SpecOrSuiteViewModel.Statuses.ShouldAllBeEquivalentTo(new KeyValuePair<string, SpecStatusViewModel>[] { 
+                CreateKeyValue(guid1, SpecStatus.Skipped, 3, 2, steps),
+                CreateKeyValue(guid2, SpecStatus.Skipped, 2, 0)},
+                o => o.Excluding(si => si.PropertyPath.EndsWith("IsNotifying")));
         }
 
         [TestMethod]
@@ -61,14 +73,22 @@ namespace AllGreen.Runner.WPF.Tests
                 .Action(c => _SpecOrSuiteViewModel.ClearStatus(guid1)).Removes(CreateKeyValue(guid1, SpecStatus.Failed, 1, 0)).CountIs(1);
         }
 
-        private SpecStatusViewModel CreateStatusWithTime(SpecStatus specStatus, UInt64 time, int duration)
+        private SpecStatusViewModel CreateSpecStatusViewModel(SpecStatus specStatus, UInt64 time, int duration, SpecStep[] steps = null)
         {
-            return new SpecStatusViewModel() { Status = specStatus, Time = time, Duration = duration };
+            SpecStatusViewModel vm = new SpecStatusViewModel() { Status = specStatus, Time = time, Duration = duration };
+            if (steps != null)
+                vm.Steps = new BindableCollection<SpecStepViewModel>(steps.Select(s => new SpecStepViewModel
+                {
+                    Message = s.Message,
+                    Status = s.Status,
+                    Trace = new BindableCollection<SpecTraceStepViewModel>(new SpecTraceStepViewModel[] { SpecTraceStepViewModel.Create(s.Trace, null) })
+                }));
+            return vm;
         }
 
-        private KeyValuePair<string, SpecStatusViewModel> CreateKeyValue(string guid, SpecStatus specStatus, UInt64 time, int duration)
+        private KeyValuePair<string, SpecStatusViewModel> CreateKeyValue(string guid, SpecStatus specStatus, UInt64 time, int duration, SpecStep[] steps = null)
         {
-            return new KeyValuePair<string, SpecStatusViewModel>(guid, CreateStatusWithTime(specStatus, time, duration));
+            return new KeyValuePair<string, SpecStatusViewModel>(guid, CreateSpecStatusViewModel(specStatus, time, duration, steps));
         }
 
         [TestMethod]
@@ -82,8 +102,8 @@ namespace AllGreen.Runner.WPF.Tests
             _SpecOrSuiteViewModel.SetStatus(guid2, SpecStatus.Running, 4);
             _SpecOrSuiteViewModel.SetStatus(guid1, SpecStatus.Running, 3);
             _SpecOrSuiteViewModel.SetStatus(guid2, SpecStatus.Passed, 6);
-            _SpecOrSuiteViewModel.Statuses[guid1].ShouldBeEquivalentTo(new SpecStatusViewModel() { Status = SpecStatus.Passed, Time = 5, Duration = 4 });
-            _SpecOrSuiteViewModel.Statuses[guid2].ShouldBeEquivalentTo(new SpecStatusViewModel() { Status = SpecStatus.Passed, Time = 6, Duration = 4 });
+            _SpecOrSuiteViewModel.Statuses[guid1].ShouldBeEquivalentTo(new SpecStatusViewModel() { Status = SpecStatus.Passed, Time = 5, Duration = 4 }, o => o.Excluding(pi => pi.PropertyPath == "Steps"));
+            _SpecOrSuiteViewModel.Statuses[guid2].ShouldBeEquivalentTo(new SpecStatusViewModel() { Status = SpecStatus.Passed, Time = 6, Duration = 4 }, o => o.Excluding(pi => pi.PropertyPath == "Steps"));
         }
 
         [TestMethod]

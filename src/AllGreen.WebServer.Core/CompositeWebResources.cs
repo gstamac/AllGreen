@@ -26,5 +26,17 @@ namespace AllGreen.WebServer.Core
 
             return null;
         }
+
+
+        public string GetSystemFilePath(string path)
+        {
+            foreach (IWebResources webResources in _ResourcesList)
+            {
+                string content = webResources.GetSystemFilePath(path);
+                if (content != null) return content;
+            }
+
+            return null;
+        }
     }
 }

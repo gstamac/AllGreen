@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using Caliburn.Micro;
 
 namespace AllGreen.Runner.WPF
 {
@@ -60,7 +61,8 @@ namespace AllGreen.Runner.WPF
 
         public ICollection<TKey> Keys
         {
-            get { return Dictionary.Keys; }
+            //get { return Dictionary.Keys; }
+            get { return new BindableCollection<TKey>(Dictionary.Keys); }
         }
 
         public bool Remove(TKey key)
@@ -83,7 +85,8 @@ namespace AllGreen.Runner.WPF
 
         public ICollection<TValue> Values
         {
-            get { return Dictionary.Values; }
+            //get { return Dictionary.Values; }
+            get { return new BindableCollection<TValue>(Dictionary.Values); }
         }
 
         public TValue this[TKey key]

@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Media;
+using AllGreen.Runner.WPF.ViewModels;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -5,15 +6,19 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Http.Routing;
 using FluentAssertions;
+using Microsoft.Owin.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TemplateAttributes;
+using TinyIoC;
 
 namespace AllGreen.WebServer.Core.Tests
 {
     [TestClass]
-    public partial class WebControllerTests : ApiControllerTestsBase
+    public partial class WebControllerTests
     {
+        protected IWebResources _WebResources;
+
         [TestInitialize]
         public void Setup()
         {
@@ -28,11 +33,25 @@ namespace AllGreen.WebServer.Core.Tests
             httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.NotFound);
         }
 
+        [TestMethod]
+        public void GetDefaultResponse()
+        {
+            Mock.Get(_WebResources).Setup(wr => wr.GetContent("~internal~/Client/client.html")).Returns("content");
+
+            HttpResponseMessage httpResponseMessage = GetHttpResponseMessage("/");
+
+            httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
+            httpResponseMessage.Content.Headers.ContentType.ToString().Should().Be("text/html; charset=utf-8");
+            httpResponseMessage.Content.ReadAsStringAsync().Result.Should().Be("content");
+
+            CheckNoCache(httpResponseMessage);
+        }
+
         [DataTestMethod(@"script.js", @"text/js")]
+        [DataTestMethod(@"~internal~/content.html", @"text/html")]
+        [DataTestMethod(@"~internal~/Client/content.html", @"text/html")]
+        [DataTestMethod(@"~internal~/Client/content.css", @"text/css")]
         [DataTestMethod(@"content.html", @"text/html")]
-        [DataTestMethod(@"Client/content.html", @"text/html")]
-        [DataTestMethod(@"Client/content.css", @"text/css")]
-        [DataTestMethod(@"Files/content.html", @"text/html")]
         public void GetRespone(string path, string contentType)
         {
             Mock.Get(_WebResources).Setup(wr => wr.GetContent(path)).Returns("content");
@@ -46,18 +65,25 @@ namespace AllGreen.WebServer.Core.Tests
             CheckNoCache(httpResponseMessage);
         }
 
-        [TestMethod]
-        public void GetDefaultResponse()
+        private HttpResponseMessage GetHttpResponseMessage(string urlPath)
         {
-            Mock.Get(_WebResources).Setup(wr => wr.GetContent("Client/client.html")).Returns("content");
+            TinyIoCContainer ioc = new TinyIoCContainer();
+            ioc.Register<IWebResources>(_WebResources);
 
-            HttpResponseMessage httpResponseMessage = GetHttpResponseMessage("/");
+            TestServer testServer = TestServer.Create(appBuilder => new OwinStartup(ioc).Configuration(appBuilder));
+            HttpClient httpClient = testServer.HttpClient;
 
-            httpResponseMessage.StatusCode.Should().Be(HttpStatusCode.OK);
-            httpResponseMessage.Content.Headers.ContentType.ToString().Should().Be("text/html; charset=utf-8");
-            httpResponseMessage.Content.ReadAsStringAsync().Result.Should().Be("content");
-
-            CheckNoCache(httpResponseMessage);
+            HttpResponseMessage httpResponseMessage = httpClient.GetAsync(@"http://localhost" + urlPath).Result;
+            return httpResponseMessage;
         }
+
+        private void CheckNoCache(HttpResponseMessage httpResponseMessage)
+        {
+            httpResponseMessage.Headers.CacheControl.NoCache.Should().BeTrue();
+            httpResponseMessage.Headers.Pragma.ToString().Should().Be("no-cache");
+            httpResponseMessage.Content.Headers.Expires.Should().NotBeNull();
+            httpResponseMessage.Content.Headers.Expires.Value.Should().BeLessOrEqualTo(DateTime.Now.AddDays(-1));
+        }
+
     }
 }

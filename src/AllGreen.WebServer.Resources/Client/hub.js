@@ -115,17 +115,15 @@ var AllGreen;
         return HubReporter;
     })();
     AllGreen.HubReporter = HubReporter;
-})(AllGreen || (AllGreen = {}));
 
-(function () {
-    var app = AllGreen.App.getCurrent();
-    if (app != null) {
+    function initializeHub(app) {
         app.log('registering signalR hub');
         var reporter = new AllGreen.HubReporter();
         app.registerRunnerReporter(reporter);
         var connection = $.hubConnection();
+        connection.logging = true;
         var hub = new AllGreen.Hub(connection, app, reporter);
         hub.connect();
     }
-})();
-//# sourceMappingURL=hub.js.map
+    AllGreen.initializeHub = initializeHub;
+})(AllGreen || (AllGreen = {}));

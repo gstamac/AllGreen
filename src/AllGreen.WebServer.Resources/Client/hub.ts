@@ -118,16 +118,14 @@ module AllGreen {
             this.hubProxy.invoke('finished');
         }
     }
-}
 
-() => {
-    var app = AllGreen.App.getCurrent();
-    if (app != null) {
+    export function initializeHub(app: App) {
         app.log('registering signalR hub');
         var reporter = new AllGreen.HubReporter();
         app.registerRunnerReporter(reporter);
         var connection = $.hubConnection();
+        connection.logging = true;
         var hub = new AllGreen.Hub(connection, app, reporter);
         hub.connect();
     }
-} ();
+}

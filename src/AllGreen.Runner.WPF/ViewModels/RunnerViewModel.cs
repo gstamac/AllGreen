@@ -2,9 +2,9 @@ using System;
 using System.Windows.Media;
 using TemplateAttributes;
 
-namespace AllGreen.Runner.WPF
+namespace AllGreen.Runner.WPF.ViewModels
 {
-    public interface IRunnerViewModel
+    internal interface IRunnerViewModel
     {
         string ConnectionId { get; set; }
         string Name { get; set; }

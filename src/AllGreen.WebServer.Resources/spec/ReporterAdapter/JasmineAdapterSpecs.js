@@ -10,6 +10,11 @@ describe("AllGreen JasmineAdapterFactory", function () {
         expect(adapter).toBeDefined();
         expect(adapter.start).toBeDefined();
     });
+
+    it("Should have the correct name", function () {
+        var factory = new AllGreen.JasmineAdapterFactory();
+        expect(factory.getName()).toBe('jasmine');
+    });
 });
 
 describe("AllGreen JasmineAdapter", function () {
@@ -218,4 +223,3 @@ describe("AllGreen JasmineAdapter", function () {
         });
     });
 });
-//# sourceMappingURL=JasmineAdapterSpecs.js.map

@@ -4,22 +4,26 @@
 <head>
     <meta charset="utf-8" />
     <title>AllGreen Test runner</title>
-    <link rel="stylesheet" type="text/css" href="/Client/client.css" />
+    <link rel="stylesheet" type="text/css" href="/~internal~/Client/client.css" />
 </head>
 <body>
-    <div><div style="float: right"><input type="checkbox" onclick="AllGreen.App.getCurrent().enableReconnect(this.checked);" checked="checked"/></div><div id="server-status">Connecting...</div></div>
+    <div><div style="float: right"><input type="checkbox" onclick="if (AllGreenApp) AllGreenApp.enableReconnect(this.checked);" checked="checked"/></div><div id="server-status">Connecting...</div></div>
     <div id="runner-status">Waiting...</div>
     <div id="spec-results"></div>
 
-    <script src="/Scripts/jquery.js"></script>
-    <script src="/Scripts/jquery.signalR.js"></script>
+    <script src="/~internal~/Scripts/jquery.js"></script>
+    <script src="/~internal~/Scripts/jquery.signalR.js"></script>
 
-    <script src="/Client/allgreen.js"></script>
-    <script type="text/javascript">if (AllGreen) AllGreen.startApp();</script>
-    <script src="/Client/reporter.js"></script>
-    <script src="/Client/hub.js"></script>
-
-    <script type="text/javascript">$('#runner').prop('src', 'about:blank');</script>
-    <iframe id="runner" src="about:blank"></iframe>
+    <script src="/~internal~/Client/allgreen.js"></script>
+    <script src="/~internal~/Client/reporter.js"></script>
+    <script src="/~internal~/Client/hub.js"></script>
+    <script type="text/javascript">
+        AllGreenApp = new AllGreen.App();
+        AllGreen.initializeDefaultReporters(AllGreenApp);
+        AllGreen.initializeHub(AllGreenApp);
+    </script>
+    
+    <script type="text/javascript">$('#runner-iframe').prop('src', 'about:blank');</script>
+    <iframe id="runner-iframe" src="about:blank"></iframe>
 </body>
 </html>

@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -42,25 +43,25 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.0.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Owin, Version=2.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Owin.2.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Owin.2.0.2\lib\net45\Microsoft.Owin.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Diagnostics, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Owin.Diagnostics, Version=2.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Owin.Diagnostics.2.0.1\lib\net40\Microsoft.Owin.Diagnostics.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Owin.Diagnostics.2.0.2\lib\net40\Microsoft.Owin.Diagnostics.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Host.HttpListener, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Owin.Host.HttpListener, Version=2.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.2.0.1\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.2.0.2\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Hosting, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Owin.Hosting, Version=2.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Owin.Hosting.2.0.1\lib\net45\Microsoft.Owin.Hosting.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Owin.Hosting.2.0.2\lib\net45\Microsoft.Owin.Hosting.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Owin.Security, Version=2.0.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Owin.Security.2.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Owin.Security.2.0.2\lib\net45\Microsoft.Owin.Security.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -86,6 +87,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.0.0\lib\net45\System.Web.Http.Owin.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Caliburn.Micro.1.5.2\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -109,6 +111,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BindableDictionary.cs" />
+    <Compile Include="FileLocationMapper.cs" />
+    <Compile Include="IFileLocationMapper.cs" />
     <Compile Include="ImplementPropertyChangedCaliburn.Generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -119,43 +123,78 @@
     </Compile>
     <Compile Include="ObservableReporter.cs" />
     <Compile Include="RelayCommand.cs" />
+    <Compile Include="ValueConverters\ObjectToVisibilityConverter.cs" />
+    <Compile Include="ViewModels\ExternalFileViewer.cs" />
+    <Compile Include="ViewModels\SpecStatusViewModel.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SpecStatusViewModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\SpecStepViewModel.cs">
+      <Template>..\ImplementPropertyChangedCaliburn.tt</Template>
+      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
+      <LastGenOutput>SpecStepViewModel.Generated.cs</LastGenOutput>
+      <LastOutputs>.\SpecStepViewModel.Generated.cs</LastOutputs>
+    </Compile>
+    <Compile Include="ViewModels\SpecStepViewModel.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SpecStepViewModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="ValueConverters\NotConverter.cs" />
     <Compile Include="ValueConverters\RunnersToStatusesConverter.cs" />
-    <Compile Include="RunnerViewModel.cs">
-      <Template>ImplementPropertyChangedCaliburn.tt</Template>
+    <Compile Include="ViewModels\RunnerViewModel.cs">
+      <Template>..\ImplementPropertyChangedCaliburn.tt</Template>
       <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
       <LastGenOutput>RunnerViewModel.Generated.cs</LastGenOutput>
+      <LastOutputs>.\RunnerViewModel.Generated.cs</LastOutputs>
     </Compile>
-    <Compile Include="RunnerViewModel.Generated.cs">
+    <Compile Include="ViewModels\RunnerViewModel.Generated.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>RunnerViewModel.cs</DependentUpon>
     </Compile>
-    <Compile Include="SpecOrSuiteViewModel.cs">
-      <Template>ImplementPropertyChangedCaliburn.tt</Template>
+    <Compile Include="ViewModels\SpecOrSuiteViewModel.cs">
+      <Template>..\ImplementPropertyChangedCaliburn.tt</Template>
       <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
       <LastGenOutput>SpecOrSuiteViewModel.Generated.cs</LastGenOutput>
+      <LastOutputs>.\SpecOrSuiteViewModel.Generated.cs</LastOutputs>
     </Compile>
-    <Compile Include="SpecOrSuiteViewModel.Generated.cs">
+    <Compile Include="ViewModels\SpecOrSuiteViewModel.Generated.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>SpecOrSuiteViewModel.cs</DependentUpon>
     </Compile>
     <Compile Include="ValueConverters\SpecStatusToImageConverter.cs" />
-    <Compile Include="SpecStatusViewModel.cs" />
-    <Compile Include="SpecViewModel.cs">
-      <Template>ImplementPropertyChangedCaliburn.tt</Template>
+    <Compile Include="ViewModels\SpecStatusViewModel.cs">
+      <Template>..\ImplementPropertyChangedCaliburn.tt</Template>
+      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
+      <LastGenOutput>SpecStatusViewModel.Generated.cs</LastGenOutput>
+      <LastOutputs>.\SpecStatusViewModel.Generated.cs</LastOutputs>
+    </Compile>
+    <Compile Include="ViewModels\SpecTraceStepViewModel.cs">
+      <Template>..\ImplementPropertyChangedCaliburn.tt</Template>
+      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
+      <LastGenOutput>SpecTraceStepViewModel.Generated.cs</LastGenOutput>
+      <LastOutputs>.\SpecTraceStepViewModel.Generated.cs</LastOutputs>
+    </Compile>
+    <Compile Include="ViewModels\SpecTraceStepViewModel.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SpecTraceStepViewModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\SpecViewModel.cs">
+      <Template>..\ImplementPropertyChangedCaliburn.tt</Template>
       <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
       <LastGenOutput>SpecViewModel.Generated.cs</LastGenOutput>
+      <LastOutputs>.\SpecViewModel.Generated.cs</LastOutputs>
     </Compile>
-    <Compile Include="SpecViewModel.Generated.cs">
+    <Compile Include="ViewModels\SpecViewModel.Generated.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>SpecViewModel.cs</DependentUpon>
     </Compile>
-    <Compile Include="SuiteViewModel.cs">
-      <Template>ImplementPropertyChangedCaliburn.tt</Template>
+    <Compile Include="ViewModels\SuiteViewModel.cs">
+      <Template>..\ImplementPropertyChangedCaliburn.tt</Template>
       <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
       <LastGenOutput>SuiteViewModel.Generated.cs</LastGenOutput>
+      <LastOutputs>.\SuiteViewModel.Generated.cs</LastOutputs>
     </Compile>
-    <Compile Include="SuiteViewModel.Generated.cs">
+    <Compile Include="ViewModels\SuiteViewModel.Generated.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>SuiteViewModel.cs</DependentUpon>
     </Compile>
@@ -171,12 +210,13 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainViewModel.cs">
-      <Template>ImplementPropertyChangedCaliburn.tt</Template>
+    <Compile Include="ViewModels\MainViewModel.cs">
+      <Template>..\ImplementPropertyChangedCaliburn.tt</Template>
       <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
       <LastGenOutput>MainViewModel.Generated.cs</LastGenOutput>
+      <LastOutputs>.\MainViewModel.Generated.cs</LastOutputs>
     </Compile>
-    <Compile Include="MainViewModel.Generated.cs">
+    <Compile Include="ViewModels\MainViewModel.Generated.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>MainViewModel.cs</DependentUpon>
     </Compile>
@@ -247,7 +287,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties MainView_xaml_UseParentNamespace="False" MainWindow_xaml_UseParentNamespace="False" Properties__UseParentNamespace="False" NewFolder1__UseParentNamespace="False" ValueConverters__UseParentNamespace="False" />
+      <UserProperties ViewModels_SpecTraceStepViewModel_cs_UseParentNamespace="False" ViewModels__UseParentNamespace="False" SpecStatusViewModel_cs_UseParentNamespace="False" SpecStepViewModel_cs_UseParentNamespace="False" StepViewModel_cs_UseParentNamespace="False" ValueConverters__UseParentNamespace="False" NewFolder1__UseParentNamespace="False" Properties__UseParentNamespace="False" MainWindow_xaml_UseParentNamespace="False" MainView_xaml_UseParentNamespace="False" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

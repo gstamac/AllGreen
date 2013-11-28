@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Caliburn.Micro;
 
-namespace AllGreen.Runner.WPF
+namespace AllGreen.Runner.WPF.ViewModels
 {
 	partial class RunnerViewModel: PropertyChangedBase
 	{
@@ -56,7 +56,7 @@ namespace AllGreen.Runner.WPF
 			if (changedCallback != null) changedCallback(oldValue, newValue);
 		}
 
-		public string GetPropertyName<TProperty>(Expression<Func<AllGreen.Runner.WPF.RunnerViewModel, TProperty>> propertySelector)
+		public string GetPropertyName<TProperty>(Expression<Func<AllGreen.Runner.WPF.ViewModels.RunnerViewModel, TProperty>> propertySelector)
 		{
 			return propertySelector.GetMemberInfo().Name;
 		}

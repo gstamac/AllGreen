@@ -419,7 +419,7 @@ jasmine.JQuery.matchersClass = {}
       return this.actual.length === length
     },
 
-    toHaveAttr: function(attributeName, expectedAttributeValue) {
+    toHaveAttr: function (attributeName, expectedAttributeValue) {
       return hasProperty(this.actual.attr(attributeName), expectedAttributeValue)
     },
 

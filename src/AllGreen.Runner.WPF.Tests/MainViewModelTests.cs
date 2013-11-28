@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TinyIoC;
 using FluentAssertions;
+using AllGreen.Runner.WPF.ViewModels;
 
 namespace AllGreen.Runner.WPF.Tests
 {
@@ -13,6 +14,7 @@ namespace AllGreen.Runner.WPF.Tests
         protected TinyIoCContainer _ResourceResolver;
         protected MainViewModel _MainViewModel;
         private IConfiguration _Configuration;
+        private IFileViewer _FileViewer;
 
         [TestInitialize]
         public void Setup()
@@ -20,6 +22,9 @@ namespace AllGreen.Runner.WPF.Tests
             _ResourceResolver = new TinyIoCContainer();
             _Configuration = Mock.Of<IConfiguration>();
             _ResourceResolver.Register<IConfiguration>(_Configuration);
+            _FileViewer = Mock.Of<IFileViewer>();
+            _ResourceResolver.Register<IFileViewer>(_FileViewer);
+            _ResourceResolver.Register<IFileLocationMapper>(Mock.Of<IFileLocationMapper>());
             _MainViewModel = new MainViewModel(_ResourceResolver);
         }
 
@@ -42,6 +47,7 @@ namespace AllGreen.Runner.WPF.Tests
             _MainViewModel.StartServerCommand.Should().NotBeNull();
             _MainViewModel.RunAllTestsCommand.Should().NotBeNull();
             _MainViewModel.ConfigurationCommand.Should().NotBeNull();
+            _MainViewModel.OpenFileCommand.Should().NotBeNull();
         }
 
         [TestMethod]
@@ -59,11 +65,11 @@ namespace AllGreen.Runner.WPF.Tests
         [TestMethod]
         public void RunAllTestsCommandShouldFireReloadOnAllClients()
         {
-            Mock<IRunnerHub> mockOfRunnerHub = new Mock<IRunnerHub>();
-            _ResourceResolver.Register<IRunnerHub>(mockOfRunnerHub.Object);
+            Mock<IRunnerClients> mockOfRunnerClients = new Mock<IRunnerClients>();
+            _ResourceResolver.Register<IRunnerClients>(mockOfRunnerClients.Object);
             _MainViewModel.RunAllTestsCommand.Execute(null);
 
-            mockOfRunnerHub.Verify(rh => rh.ReloadAll());
+            mockOfRunnerClients.Verify(rh => rh.ReloadAll());
         }
 
         [TestMethod]
@@ -72,6 +78,16 @@ namespace AllGreen.Runner.WPF.Tests
             _MainViewModel.ConfigurationVisible.Should().BeFalse();
             _MainViewModel.ConfigurationCommand.Execute(null);
             _MainViewModel.ConfigurationVisible.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void OpenFileCommandShouldOpenFileViewer()
+        {
+            FileLocation fileLocation = new FileLocation("file", "fullPath", 10);
+
+            _MainViewModel.OpenFileCommand.Execute(fileLocation);
+
+            Mock.Get(_FileViewer).Verify(fv => fv.Open(fileLocation));
         }
     }
 }

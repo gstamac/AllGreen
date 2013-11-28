@@ -4,6 +4,6 @@ namespace AllGreen.WebServer.Core
 {
     public interface IScriptList
     {
-        IEnumerable<string> Files { get; }
+        IEnumerable<string> Scripts { get; }
     }
 }

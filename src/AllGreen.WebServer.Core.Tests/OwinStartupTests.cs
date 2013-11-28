@@ -30,7 +30,7 @@ namespace AllGreen.WebServer.Core.Tests
             {
                 TinyIoCContainer ioc = new TinyIoCContainer();
                 Mock<IWebResources> webResourcesMock = new Mock<IWebResources>();
-                webResourcesMock.Setup(wr => wr.GetContent("Client/client.html")).Returns("content");
+                webResourcesMock.Setup(wr => wr.GetContent("~internal~/Client/client.html")).Returns("content");
                 ioc.Register<IWebResources>(webResourcesMock.Object);
 
                 TestServer testServer = TestServer.Create(appBuilder => new OwinStartup(ioc).Configuration(appBuilder));

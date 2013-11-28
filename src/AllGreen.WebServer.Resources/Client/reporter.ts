@@ -188,13 +188,9 @@ module AllGreen {
         }
     }
 
-}
-
-() => {
-    var app = AllGreen.App.getCurrent();
-    if (app != null) {
+    export function initializeDefaultReporters(app: App) {
         app.log('registering reporter factory');
         app.setServerReporter(new AllGreen.ServerReporter());
         app.registerRunnerReporter(new AllGreen.RunnerReporter());
     }
-} ();
+}

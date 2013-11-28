@@ -11,11 +11,11 @@ describe("AllGreen SignalR Hub", () => {
         this.proxyCallback = null;
         this.hubProxy['on'].andCallFake((eventName: string, callback: (...msg) => void) => { this.proxyCallback = callback; });
 
+        this.connectionCallbacks = [];
         var callbacks = ['stateChanged', 'error', 'reconnecting', 'reconnected', 'disconnected'];
         this.connection = jasmine.createSpyObj('connection', callbacks.concat(['createHubProxy', 'start', 'received']));
         this.connection['createHubProxy'].andReturn(this.hubProxy);
         this.connection['start'].andReturn({ done: (callback) => { this.connectionCallbacks['done'] = callback; } });
-        this.connectionCallbacks = [];
         callbacks.forEach((callbackName) => {
             this.connection[callbackName].andCallFake((callback) => { this.connectionCallbacks[callbackName] = callback; });
         });

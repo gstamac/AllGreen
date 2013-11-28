@@ -25,8 +25,8 @@ namespace AllGreen.WebServer.Core.Tests
         {
             _XmlConfiguration = new XmlConfiguration()
             {
-                RootFolder = @"C:\root",
                 ServerUrl = @"http://localhost:8080",
+                RootFolder = @"C:\root",
                 ServedFolderFilters = new List<FolderFilter>(new FolderFilter[] { 
                     new FolderFilter { Folder = @"C:\", FilePattern = "*.js", IncludeSubfolders = true },
                     new FolderFilter { Folder = @"D:\", FilePattern = "*.html", IncludeSubfolders = false } 
@@ -45,8 +45,8 @@ namespace AllGreen.WebServer.Core.Tests
                 new XElement("XmlConfiguration",
                     new XAttribute(XNamespace.Xmlns + "xsi", XNamespace.Get("http://www.w3.org/2001/XMLSchema-instance")),
                     new XAttribute(XNamespace.Xmlns + "xsd", XNamespace.Get("http://www.w3.org/2001/XMLSchema")),
-                    new XElement("RootFolder", @"C:\root"),
                     new XElement("ServerUrl", @"http://localhost:8080"),
+                    new XElement("RootFolder", @"C:\root"),
                     new XElement("ServedFolderFilters",
                         new XElement("FolderFilter",
                             new XElement("Folder", @"C:\"), new XElement("FilePattern", "*.js"), new XElement("IncludeSubfolders", @"true")

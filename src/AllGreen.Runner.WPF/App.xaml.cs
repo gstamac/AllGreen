@@ -4,7 +4,10 @@ using System.IO;
 using System.Reflection;
 using System.Windows;
 using AllGreen.WebServer.Core;
+using Microsoft.AspNet.SignalR;
 using TinyIoC;
+using Microsoft.AspNet.SignalR.Hubs;
+using AllGreen.Runner.WPF.ViewModels;
 
 namespace AllGreen.Runner.WPF
 {
@@ -21,10 +24,14 @@ namespace AllGreen.Runner.WPF
             TinyIoCContainer resourceResolver = new TinyIoCContainer();
             resourceResolver.Register<IConfiguration>(configuration);
             CompositeWebResources webResources = new CompositeWebResources();
-            webResources.Add(new WebServerResources(new DynamicScriptList(configuration.RootFolder, configuration.ServedFolderFilters, configuration.ExcludeServedFolderFilters, new SystemFileLocator())));
-            webResources.Add(new FileSystemResources(configuration.RootFolder, new FileSystemReader()));
+            DynamicScriptList scriptList = new DynamicScriptList(configuration.RootFolder, configuration.ServedFolderFilters, configuration.ExcludeServedFolderFilters, new FileSystem());
+            webResources.Add(new WebServerResources(scriptList));
+            webResources.Add(new FileSystemResources(configuration.RootFolder, scriptList, new FileSystem()));
             resourceResolver.Register<IWebResources>(webResources);
             resourceResolver.Register<IRunnerHub, RunnerHub>();
+            resourceResolver.Register<IRunnerClients>((ioc, npo) => new RunnerClients(GlobalHost.ConnectionManager.GetHubContext<RunnerHub>().Clients));
+            resourceResolver.Register<IFileViewer, ExternalFileViewer>();
+            resourceResolver.Register<IFileLocationMapper>(new UrlToPathMapper(configuration.ServerUrl, webResources));
 
             MainWindow mainWindow = new MainWindow() { DataContext = new MainViewModel(resourceResolver) };
             mainWindow.Show();
@@ -34,18 +41,19 @@ namespace AllGreen.Runner.WPF
         {
             return new XmlConfiguration()
             {
-                RootFolder = @"C:\Work\Projects\AllGreen\src\AllGreen.WebServer.Resources",
                 ServerUrl = @"http://localhost:8080",
+                RootFolder = @"C:\Work\Projects\AllGreen\src\AllGreen.WebServer.Resources",
                 ServedFolderFilters = new List<FolderFilter>(
                     new FolderFilter[] { 
-                        //new FolderFilter() { Folder = "Scripts", FilePattern = "jasmine.js", IncludeSubfolders = false },
-                        //new FolderFilter() { Folder = "Client", FilePattern = "testScript.js", IncludeSubfolders = false },
-                        //new FolderFilter() { Folder = "Client/ReporterAdapters", FilePattern = "jasmineAdapter.js", IncludeSubfolders = false },
+                        new FolderFilter() { Folder = "Scripts", FilePattern = "jasmine.js", IncludeSubfolders = false },
+                        new FolderFilter() { Folder = "Client/ReporterAdapters", FilePattern = "jasmineAdapter.js", IncludeSubfolders = false },
+                        new FolderFilter() { Folder = "Client", FilePattern = "testScript.js", IncludeSubfolders = false },
 
                         //new FolderFilter() { Folder = "Scripts", FilePattern = "jasmine.js", IncludeSubfolders = false },
-                        new FolderFilter() { Folder = "Scripts", FilePattern = "*.js", IncludeSubfolders = true },
-                        new FolderFilter() { Folder = "Client", FilePattern = "*.js", IncludeSubfolders = true },
-                        new FolderFilter() { Folder = "spec", FilePattern = "*.js", IncludeSubfolders = true },
+                        //new FolderFilter() { Folder = "Scripts", FilePattern = "*.js", IncludeSubfolders = true },
+                        //new FolderFilter() { Folder = "Client", FilePattern = "*.js", IncludeSubfolders = false },
+                        //new FolderFilter() { Folder = "Client", FilePattern = "*.js", IncludeSubfolders = true },
+                        //new FolderFilter() { Folder = "spec", FilePattern = "*.js", IncludeSubfolders = true },
                     }),
                 ExcludeServedFolderFilters = new List<FolderFilter>(
                     new FolderFilter[] { 
@@ -53,10 +61,10 @@ namespace AllGreen.Runner.WPF
                         new FolderFilter() { Folder = "Scripts", FilePattern = "*.intellisense.js", IncludeSubfolders = true },
                         new FolderFilter() { Folder = "Client", FilePattern = "*.min.js", IncludeSubfolders = true },
                         new FolderFilter() { Folder = "spec", FilePattern = "*.min.js", IncludeSubfolders = true },
-                        new FolderFilter() { Folder = "Client", FilePattern = "allgreen.js", IncludeSubfolders = false },
-                        new FolderFilter() { Folder = "Client", FilePattern = "hub.js", IncludeSubfolders = false },
-                        new FolderFilter() { Folder = "Client", FilePattern = "reporter.js", IncludeSubfolders = false },
-                        new FolderFilter() { Folder = "Client", FilePattern = "testScript.js", IncludeSubfolders = false },
+                        //new FolderFilter() { Folder = "Client", FilePattern = "allgreen.js", IncludeSubfolders = false },
+                        //new FolderFilter() { Folder = "Client", FilePattern = "hub.js", IncludeSubfolders = false },
+                        //new FolderFilter() { Folder = "Client", FilePattern = "reporter.js", IncludeSubfolders = false },
+                        //new FolderFilter() { Folder = "Client", FilePattern = "testScript.js", IncludeSubfolders = false },
                     }),
                 WatchedFolderFilters = new List<FolderFilter>()
             };

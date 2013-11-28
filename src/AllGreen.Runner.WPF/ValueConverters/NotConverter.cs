@@ -11,6 +11,7 @@ using TinyIoC;
 
 namespace AllGreen.Runner.WPF.ValueConverters
 {
+    [ValueConversion(typeof(bool), typeof(bool))]
     public class NotConverter : MarkupExtension, IValueConverter
     {
         public NotConverter()

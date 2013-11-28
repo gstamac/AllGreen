@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using AllGreen.Runner.WPF.ValueConverters;
+using AllGreen.Runner.WPF.ViewModels;
 using AllGreen.WebServer.Core;
 using Caliburn.Micro;
 using FluentAssertions;
@@ -33,6 +35,19 @@ namespace AllGreen.Runner.WPF.Tests
         }
 
         [TestMethod]
+        public void ObjectToVisibilityConverterTest()
+        {
+            ObjectToVisibilityConverter objectToVisibilityConverter = new ObjectToVisibilityConverter();
+
+            objectToVisibilityConverter.ProvideValue(null).Should().Be(objectToVisibilityConverter);
+
+            objectToVisibilityConverter.Convert(null, typeof(Visibility), null, null).Should().Be(Visibility.Collapsed);
+            objectToVisibilityConverter.Convert("something", typeof(Visibility), null, null).Should().Be(Visibility.Visible);
+
+            objectToVisibilityConverter.ConvertBack(null, typeof(object), null, null).Should().BeNull();
+        }
+
+        [TestMethod]
         public void RunnersToStatusesConverterTest()
         {
             RunnersToStatusesConverter runnersToStatusesConverter = new RunnersToStatusesConverter();
@@ -54,7 +69,8 @@ namespace AllGreen.Runner.WPF.Tests
             result.Should().BeAssignableTo<IEnumerable<SpecStatusViewModel>>();
             (result as IEnumerable<SpecStatusViewModel>).ShouldAllBeEquivalentTo(new object[] { 
                 new { Status = SpecStatus.Passed, Time = 1, Duration = 1, Runner = runner1 }, 
-                new { Status = SpecStatus.Failed, Time = 2, Duration = 2, Runner = runner2 } });
+                new { Status = SpecStatus.Failed, Time = 2, Duration = 2, Runner = runner2 } },
+                o => o.Excluding(si => si.PropertyPath.EndsWith("IsNotifying") || si.PropertyPath.EndsWith("Steps") || si.PropertyPath.EndsWith("Description") || si.PropertyPath.EndsWith("DurationText")));
 
             runners.Add(new RunnerViewModel { ConnectionId = "conn3", Name = "Runner 3" });
 
@@ -63,7 +79,8 @@ namespace AllGreen.Runner.WPF.Tests
             (result as IEnumerable<SpecStatusViewModel>).ShouldAllBeEquivalentTo(new object[] { 
                 new { Status = SpecStatus.Passed, Time = 1, Duration = 1, Runner = runner1 }, 
                 new { Status = SpecStatus.Failed, Time = 2, Duration = 2, Runner = runner2 },
-                null });
+                null },
+                o => o.Excluding(si => si.PropertyPath.EndsWith("IsNotifying") || si.PropertyPath.EndsWith("Steps") || si.PropertyPath.EndsWith("Description") || si.PropertyPath.EndsWith("DurationText")));
 
             runnersToStatusesConverter.ConvertBack(null, null, null, null).Should().BeNull();
         }

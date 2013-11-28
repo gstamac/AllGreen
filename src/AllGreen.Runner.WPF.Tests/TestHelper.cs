@@ -139,6 +139,15 @@ namespace AllGreen.Runner.WPF.Tests
                 _ReplacedObjectsNew.ShouldAllBeEquivalentTo(new TItem[] { newItem }, "it should replace");
                 return this;
             }
+            public CollectionChangedTester<T, TItem> DoesNoChange()
+            {
+                _AddedObjects.Should().BeEmpty();
+                _RemovedObjects.Should().BeEmpty();
+                _ReplacedObjectsOld.Should().BeEmpty();
+                _ReplacedObjectsNew.Should().BeEmpty();
+                _Reset.Should().BeFalse();
+                return this;
+            }
             public CollectionChangedTester<T, TItem> Resets()
             {
                 _Reset.Should().BeTrue("Collection wasn't reset");

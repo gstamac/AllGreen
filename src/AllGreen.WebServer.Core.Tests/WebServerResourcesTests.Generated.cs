@@ -21,66 +21,80 @@ namespace AllGreen.WebServer.Core.Tests
 		}
 		// DataRow(@"Client/allgreen.js")
 		[TestMethod]
-		[Description("FileExists(@\"Client/allgreen.js\")")]
-		public void FileExists___Client_allgreen_js_()
+		[Description("FileDoesntExist(@\"Client/allgreen.js\")")]
+		public void FileDoesntExist___Client_allgreen_js_()
 		{
-			FileExists(@"Client/allgreen.js");
+			FileDoesntExist(@"Client/allgreen.js");
 		}
-		// DataRow(@"Client/client.html")
+		// DataRow(@"/Client/allgreen.js")
 		[TestMethod]
-		[Description("FileExists(@\"Client/client.html\")")]
-		public void FileExists___Client_client_html_()
+		[Description("FileDoesntExist(@\"/Client/allgreen.js\")")]
+		public void FileDoesntExist____Client_allgreen_js_()
 		{
-			FileExists(@"Client/client.html");
+			FileDoesntExist(@"/Client/allgreen.js");
 		}
-		// DataRow(@"Client/client.css")
+		// DataRow(@"~internal~/Client/allgreen.js")
 		[TestMethod]
-		[Description("FileExists(@\"Client/client.css\")")]
-		public void FileExists___Client_client_css_()
+		[Description("FileExists(@\"~internal~/Client/allgreen.js\")")]
+		public void FileExists____internal__Client_allgreen_js_()
 		{
-			FileExists(@"Client/client.css");
+			FileExists(@"~internal~/Client/allgreen.js");
 		}
-		// DataRow(@"Client/runner.html")
+		// DataRow(@"~internal~/Client/client.html")
 		[TestMethod]
-		[Description("FileExists(@\"Client/runner.html\")")]
-		public void FileExists___Client_runner_html_()
+		[Description("FileExists(@\"~internal~/Client/client.html\")")]
+		public void FileExists____internal__Client_client_html_()
 		{
-			FileExists(@"Client/runner.html");
+			FileExists(@"~internal~/Client/client.html");
 		}
-		// DataRow(@"Client/reporter.js")
+		// DataRow(@"~internal~/Client/client.css")
 		[TestMethod]
-		[Description("FileExists(@\"Client/reporter.js\")")]
-		public void FileExists___Client_reporter_js_()
+		[Description("FileExists(@\"~internal~/Client/client.css\")")]
+		public void FileExists____internal__Client_client_css_()
 		{
-			FileExists(@"Client/reporter.js");
+			FileExists(@"~internal~/Client/client.css");
 		}
-		// DataRow(@"Client/ReporterAdapters/jasmineAdapter.js")
+		// DataRow(@"~internal~/Client/runner.html")
 		[TestMethod]
-		[Description("FileExists(@\"Client/ReporterAdapters/jasmineAdapter.js\")")]
-		public void FileExists___Client_ReporterAdapters_jasmineAdapter_js_()
+		[Description("FileExists(@\"~internal~/Client/runner.html\")")]
+		public void FileExists____internal__Client_runner_html_()
 		{
-			FileExists(@"Client/ReporterAdapters/jasmineAdapter.js");
+			FileExists(@"~internal~/Client/runner.html");
 		}
-		// DataRow(@"Scripts/jquery.js")
+		// DataRow(@"~internal~/Client/reporter.js")
 		[TestMethod]
-		[Description("FileExists(@\"Scripts/jquery.js\")")]
-		public void FileExists___Scripts_jquery_js_()
+		[Description("FileExists(@\"~internal~/Client/reporter.js\")")]
+		public void FileExists____internal__Client_reporter_js_()
 		{
-			FileExists(@"Scripts/jquery.js");
+			FileExists(@"~internal~/Client/reporter.js");
 		}
-		// DataRow(@"Scripts/jquery.signalR.js")
+		// DataRow(@"~internal~/Client/ReporterAdapters/jasmineAdapter.js")
 		[TestMethod]
-		[Description("FileExists(@\"Scripts/jquery.signalR.js\")")]
-		public void FileExists___Scripts_jquery_signalR_js_()
+		[Description("FileExists(@\"~internal~/Client/ReporterAdapters/jasmineAdapter.js\")")]
+		public void FileExists____internal__Client_ReporterAdapters_jasmineAdapter_js_()
 		{
-			FileExists(@"Scripts/jquery.signalR.js");
+			FileExists(@"~internal~/Client/ReporterAdapters/jasmineAdapter.js");
 		}
-		// DataRow(@"/Scripts/jquery.signalR.js")
+		// DataRow(@"~internal~/Scripts/jquery.js")
 		[TestMethod]
-		[Description("FileExists(@\"/Scripts/jquery.signalR.js\")")]
-		public void FileExists____Scripts_jquery_signalR_js_()
+		[Description("FileExists(@\"~internal~/Scripts/jquery.js\")")]
+		public void FileExists____internal__Scripts_jquery_js_()
 		{
-			FileExists(@"/Scripts/jquery.signalR.js");
+			FileExists(@"~internal~/Scripts/jquery.js");
+		}
+		// DataRow(@"~internal~/Scripts/jquery.signalR.js")
+		[TestMethod]
+		[Description("FileExists(@\"~internal~/Scripts/jquery.signalR.js\")")]
+		public void FileExists____internal__Scripts_jquery_signalR_js_()
+		{
+			FileExists(@"~internal~/Scripts/jquery.signalR.js");
+		}
+		// DataRow(@"/~internal~/Scripts/jquery.signalR.js")
+		[TestMethod]
+		[Description("FileExists(@\"/~internal~/Scripts/jquery.signalR.js\")")]
+		public void FileExists_____internal__Scripts_jquery_signalR_js_()
+		{
+			FileExists(@"/~internal~/Scripts/jquery.signalR.js");
 		}
 	}
 }

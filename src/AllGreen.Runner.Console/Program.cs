@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using AllGreen.WebServer.Core;
+using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Hosting;
 using TinyIoC;
 
@@ -19,11 +20,12 @@ namespace AllGreen.Runner.Console
 
             resourceResolver.Register<IConfiguration>(configuration);
             CompositeWebResources webResources = new CompositeWebResources();
-            webResources.Add(new WebServerResources(new DynamicScriptList(configuration.RootFolder, configuration.ServedFolderFilters, configuration.ExcludeServedFolderFilters, new SystemFileLocator())));
-            webResources.Add(new FileSystemResources(configuration.RootFolder, new FileSystemReader()));
+            DynamicScriptList scriptList = new DynamicScriptList(configuration.RootFolder, configuration.ServedFolderFilters, configuration.ExcludeServedFolderFilters, new FileSystem());
+            webResources.Add(new WebServerResources(scriptList));
+            webResources.Add(new FileSystemResources(configuration.RootFolder, scriptList, new FileSystem()));
             resourceResolver.Register<IWebResources>(webResources);
             resourceResolver.Register<IRunnerHub, RunnerHub>();
-
+            resourceResolver.Register<IRunnerClients>((ioc, npo) => new RunnerClients(GlobalHost.ConnectionManager.GetHubContext<RunnerHub>().Clients));
             resourceResolver.Register<IReporter, ConsoleReporter>();
 
             using (WebApp.Start(url, appBuilder => new OwinStartup(resourceResolver).Configuration(appBuilder)))
@@ -34,7 +36,7 @@ namespace AllGreen.Runner.Console
                 while (command != "x")
                 {
                     command = System.Console.ReadLine();
-                    runnerHub.ReloadAll();
+                    GlobalHost.ConnectionManager.GetHubContext<RunnerHub>().Clients.All.reload();
                 }
             }
         }

@@ -8,8 +8,8 @@ namespace AllGreen.WebServer.Core
 {
     public class XmlConfiguration : IConfiguration
     {
-        public string RootFolder { get; set; }
         public string ServerUrl { get; set; }
+        public string RootFolder { get; set; }
         public List<FolderFilter> ServedFolderFilters { get; set; }
         public List<FolderFilter> ExcludeServedFolderFilters { get; set; }
         public List<FolderFilter> WatchedFolderFilters { get; set; }

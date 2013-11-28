@@ -6,8 +6,10 @@ describe("App", () => {
     beforeEach(() => {
         jasmine.getFixtures().fixturesPath = '';
         var clientHtml = readFixtures('Client/client.html');
+        expect(clientHtml).not.toBe('');
+        clientHtml = clientHtml.replace(/~internal~\//g, '');
         clientHtml = clientHtml.replace(/<script[^>]*><\/script>/g, '');
-        clientHtml = clientHtml.replace(/<script[^>]*>[^<]*AllGreen\.startApp()[^<]*<\/script>/g, '');
+        clientHtml = clientHtml.replace(/<script[^>]*>[^<]*new AllGreen\.App()[^<]*<\/script>/g, '');
         setFixtures(clientHtml);
 
         this.app = new AllGreen.App();
@@ -53,28 +55,39 @@ describe("App", () => {
         })
     });
 
-    it("Creates adapters on start", () => {
-        var adapterFactory1 = jasmine.createSpyObj('adapterFactory1', ['create']);
-        adapterFactory1['create'].andReturn({ start: function () { } });
-        var adapterFactory2 = jasmine.createSpyObj('adapterFactory2', ['create']);
-        adapterFactory2['create'].andReturn({ start: function () { } });
+    var registerAdapterFactory = function (name) {
+        var adapterFactory = jasmine.createSpyObj('adapterFactory', ['create', 'getName']);
+        adapterFactory['create'].andReturn({ start: function () { } });
+        adapterFactory['getName'].andReturn(name);
+        this.app.registerAdapterFactory(adapterFactory);
+        return adapterFactory;
+    }
 
-        this.app.registerAdapterFactory(adapterFactory1);
-        this.app.registerAdapterFactory(adapterFactory2);
-        this.app.start();
+    var registerAdapter = function (name: string) {
+        var adapter = jasmine.createSpyObj('adapter', ['start']);
+        var adapterFactory = jasmine.createSpyObj('adapterFactory', ['create', 'getName']);
+        adapterFactory['create'].andReturn(adapter);
+        adapterFactory['getName'].andReturn(name);
+        this.app.registerAdapterFactory(adapterFactory);
+        return adapter;
+    }
+
+    it("Creates adapters on run tests", () => {
+        var adapterFactory1 = registerAdapterFactory('adapter1');
+        var adapterFactory2 = registerAdapterFactory('adapter2');
+
+        this.app.runTests();
         expect(adapterFactory1.create).toHaveBeenCalledWith(this.app);
         expect(adapterFactory2.create).toHaveBeenCalledWith(this.app);
     });
 
-    it("Should start after all reporters are ready", () => {
-        var adapterFactory = jasmine.createSpyObj('adapterFactory', ['create']);
+    it("Should run tests after all reporters are ready", () => {
+        var adapterFactory = registerAdapterFactory('adapter');
         var runnerReporter = { isReady: () => false };
         runs(() => {
-            adapterFactory['create'].andReturn({ start: function () { } });
-            this.app.registerAdapterFactory(adapterFactory);
             this.app.registerRunnerReporter(runnerReporter);
 
-            this.app.start();
+            this.app.runTests();
             expect(adapterFactory.create.callCount).toBe(0);
             runnerReporter.isReady = () => true;
         });
@@ -85,16 +98,10 @@ describe("App", () => {
     });
 
     it("Adapters start is called", () => {
-        var adapter1 = jasmine.createSpyObj('adapter1', ['start']);
-        var adapterFactory1 = jasmine.createSpyObj('adapterFactory1', ['create']);
-        adapterFactory1['create'].andReturn(adapter1);
-        var adapter2 = jasmine.createSpyObj('adapter2', ['start']);
-        var adapterFactory2 = jasmine.createSpyObj('adapterFactory2', ['create']);
-        adapterFactory2['create'].andReturn(adapter2);
+        var adapter1 = registerAdapter('adapter1');
+        var adapter2 = registerAdapter('adapter2');
 
-        this.app.registerAdapterFactory(adapterFactory1);
-        this.app.registerAdapterFactory(adapterFactory2);
-        this.app.start();
+        this.app.runTests();
         expect(adapter1.start).toHaveBeenCalled();
         expect(adapter2.start).toHaveBeenCalled();
     });
@@ -104,15 +111,27 @@ describe("App", () => {
         runnerReporter['isReady'].andCallFake(() => true);
         this.app.registerRunnerReporter(runnerReporter);
 
-        var adapterFactory1 = jasmine.createSpyObj('adapterFactory1', ['create']);
-        adapterFactory1['create'].andReturn({ start: function () { } });
-        this.app.registerAdapterFactory(adapterFactory1);
+        var adapterFactory1 = registerAdapterFactory('adapter1');
 
         this.app.reload();
         expect(runnerReporter.reset).toHaveBeenCalled();
-        expect($('#runner')).toHaveAttr('src', 'Client/runner.html');
-        this.app.start();
+        expect($('#runner-iframe')).toHaveAttr('src', '/~internal~/Client/runner.html');
+        this.app.runTests();
         expect(adapterFactory1.create).not.toHaveBeenCalled();
+    });
+
+    it("Registeres only first adapter factory with same name", () => {
+        var adapterFactory1 = registerAdapterFactory('adapter1');
+        var adapterFactory2 = registerAdapterFactory('adapter2');
+        var adapterFactory3 = registerAdapterFactory('adapter1');
+
+        this.app.registerAdapterFactory(adapterFactory1);
+        this.app.registerAdapterFactory(adapterFactory2);
+        this.app.registerAdapterFactory(adapterFactory3);
+        this.app.runTests();
+        expect(adapterFactory1.create).toHaveBeenCalledWith(this.app);
+        expect(adapterFactory2.create).toHaveBeenCalledWith(this.app);
+        expect(adapterFactory3.create).not.toHaveBeenCalled();
     });
 
     it("Enables reconnect by default", () => {

@@ -4,7 +4,7 @@
         x:Class="AllGreen.Runner.WPF.MainWindow"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:my="clr-namespace:AllGreen.Runner.WPF"
-        Title="MainWindow" Height="350" Width="800">
+        Title="MainWindow" Height="500" Width="1300">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:InvokeCommandAction Command="{Binding StartServerCommand}"/>

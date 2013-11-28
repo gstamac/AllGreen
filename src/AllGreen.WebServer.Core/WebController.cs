@@ -7,7 +7,7 @@ namespace AllGreen.WebServer.Core
 {
     public class WebController : ApiController
     {
-        private const string DEFAULT_URL = "Client/client.html";
+        private const string DEFAULT_URL = "~internal~/Client/client.html";
         private IWebResources _WebResources;
 
         public WebController(IWebResources webResources)

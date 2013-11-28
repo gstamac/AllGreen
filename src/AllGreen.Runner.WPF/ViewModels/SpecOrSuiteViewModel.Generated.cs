@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Caliburn.Micro;
 
-namespace AllGreen.Runner.WPF
+namespace AllGreen.Runner.WPF.ViewModels
 {
 	partial class SpecOrSuiteViewModel: PropertyChangedBase
 	{
@@ -22,11 +22,11 @@ namespace AllGreen.Runner.WPF
 			set { ChangeProperty<System.String>("Name", ref _Name, value); }
 		}
 
-		private AllGreen.Runner.WPF.BindableDictionary<System.String,AllGreen.Runner.WPF.SpecStatusViewModel> _Statuses;
-		public AllGreen.Runner.WPF.BindableDictionary<System.String,AllGreen.Runner.WPF.SpecStatusViewModel> Statuses
+		private AllGreen.Runner.WPF.BindableDictionary<System.String,AllGreen.Runner.WPF.ViewModels.SpecStatusViewModel> _Statuses;
+		public AllGreen.Runner.WPF.BindableDictionary<System.String,AllGreen.Runner.WPF.ViewModels.SpecStatusViewModel> Statuses
 		{
 			get { return _Statuses; }
-			private set { ChangeProperty<AllGreen.Runner.WPF.BindableDictionary<System.String,AllGreen.Runner.WPF.SpecStatusViewModel>>("Statuses", ref _Statuses, value); }
+			private set { ChangeProperty<AllGreen.Runner.WPF.BindableDictionary<System.String,AllGreen.Runner.WPF.ViewModels.SpecStatusViewModel>>("Statuses", ref _Statuses, value); }
 		}
 
 		private System.String _Duration;
@@ -49,7 +49,7 @@ namespace AllGreen.Runner.WPF
 			if (changedCallback != null) changedCallback(oldValue, newValue);
 		}
 
-		public string GetPropertyName<TProperty>(Expression<Func<AllGreen.Runner.WPF.SpecOrSuiteViewModel, TProperty>> propertySelector)
+		public string GetPropertyName<TProperty>(Expression<Func<AllGreen.Runner.WPF.ViewModels.SpecOrSuiteViewModel, TProperty>> propertySelector)
 		{
 			return propertySelector.GetMemberInfo().Name;
 		}

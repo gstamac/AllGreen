@@ -18,14 +18,14 @@ namespace AllGreen.WebServer.Core.Tests
         [TestMethod]
         public void Test()
         {
-            IRunnerHub runnerHub = Mock.Of<IRunnerHub>();
+            IRunnerClients runnerClients = Mock.Of<IRunnerClients>();
             Mock<IFolderWatcher> folderWatcher1Mock = new Mock<IFolderWatcher>();
             Mock<IFolderWatcher> folderWatcher2Mock = new Mock<IFolderWatcher>();
-            using (FileWatcher fileWatcher = new FileWatcher(runnerHub, new IFolderWatcher[] { folderWatcher1Mock.Object, folderWatcher2Mock.Object }))
+            using (FileWatcher fileWatcher = new FileWatcher(runnerClients, new IFolderWatcher[] { folderWatcher1Mock.Object, folderWatcher2Mock.Object }))
             {
                 folderWatcher1Mock.Raise(fw => fw.Changed += null, new FileSystemEventArgs(WatcherChangeTypes.Changed, "", ""));
                 folderWatcher2Mock.Raise(fw => fw.Changed += null, new FileSystemEventArgs(WatcherChangeTypes.Changed, "", ""));
-                Mock.Get<IRunnerHub>(runnerHub).Verify(rh => rh.ReloadAll(), Times.Exactly(2));
+                Mock.Get<IRunnerClients>(runnerClients).Verify(rh => rh.ReloadAll(), Times.Exactly(2));
             }
         }
     }

@@ -11,19 +11,19 @@ namespace AllGreen.WebServer.Core.Tests
     [TestClass]
     public class DynamicScriptListTests
     {
-        private Mock<IFileLocator> _FileLocatorMock;
+        private Mock<IFileSystem> _FileLocatorMock;
 
         [TestInitialize]
         public void Setup()
         {
-            _FileLocatorMock = new Mock<IFileLocator>();
+            _FileLocatorMock = new Mock<IFileSystem>();
         }
 
         [TestMethod]
         public void EmptyListTest()
         {
             DynamicScriptList dynamicFileList = new DynamicScriptList(@"C:\www", new List<FolderFilter>(), new List<FolderFilter>(), _FileLocatorMock.Object);
-            dynamicFileList.Files.ShouldAllBeEquivalentTo(new string[0]);
+            dynamicFileList.Scripts.ShouldAllBeEquivalentTo(new string[0]);
         }
 
         [TestMethod]
@@ -34,7 +34,7 @@ namespace AllGreen.WebServer.Core.Tests
             FolderFilter[] folderFilterList = new FolderFilter[] { new FolderFilter { Folder = @"Scripts", FilePattern = "*.js", IncludeSubfolders = false } };
             DynamicScriptList dynamicFileList = new DynamicScriptList(@"C:\www", folderFilterList.ToList(), new List<FolderFilter>(), _FileLocatorMock.Object);
 
-            dynamicFileList.Files.ShouldAllBeEquivalentTo(new string[] { @"Scripts/file1.js", @"Scripts/file2.js" });
+            dynamicFileList.Scripts.ShouldAllBeEquivalentTo(new string[] { @"Scripts/file1.js", @"Scripts/file2.js" });
         }
 
         [TestMethod]
@@ -45,7 +45,7 @@ namespace AllGreen.WebServer.Core.Tests
             FolderFilter[] folderFilterList = new FolderFilter[] { new FolderFilter { Folder = @"", FilePattern = "*.js", IncludeSubfolders = false } };
             DynamicScriptList dynamicFileList = new DynamicScriptList(@"C:\www", folderFilterList.ToList(), new List<FolderFilter>(), _FileLocatorMock.Object);
 
-            dynamicFileList.Files.ShouldAllBeEquivalentTo(new string[] { @"file1.js", @"file2.js" });
+            dynamicFileList.Scripts.ShouldAllBeEquivalentTo(new string[] { @"file1.js", @"file2.js" });
         }
 
         [TestMethod]
@@ -58,7 +58,7 @@ namespace AllGreen.WebServer.Core.Tests
             FolderFilter[] folderFilterList = new FolderFilter[] { new FolderFilter { Folder = @"Scripts", FilePattern = "*.js", IncludeSubfolders = true } };
             DynamicScriptList dynamicFileList = new DynamicScriptList(@"C:\www", folderFilterList.ToList(), new List<FolderFilter>(), _FileLocatorMock.Object);
 
-            dynamicFileList.Files.ShouldAllBeEquivalentTo(new string[] { @"Scripts/file1.js", @"Scripts/file2.js", @"Scripts/Sub/file3.js" });
+            dynamicFileList.Scripts.ShouldAllBeEquivalentTo(new string[] { @"Scripts/file1.js", @"Scripts/file2.js", @"Scripts/Sub/file3.js" });
         }
 
         [TestMethod]
@@ -69,7 +69,7 @@ namespace AllGreen.WebServer.Core.Tests
             FolderFilter[] folderFilterList = new FolderFilter[] { new FolderFilter { Folder = @"Scripts", FilePattern = "*.js", IncludeSubfolders = true } };
             DynamicScriptList dynamicFileList = new DynamicScriptList(@"C:\www", folderFilterList.ToList(), new List<FolderFilter>(), _FileLocatorMock.Object);
 
-            dynamicFileList.Files.ShouldAllBeEquivalentTo(new string[] { @"Scripts/file1.js", @"Scripts/file2.js", @"Scripts/Sub/file3.js" });
+            dynamicFileList.Scripts.ShouldAllBeEquivalentTo(new string[] { @"Scripts/file1.js", @"Scripts/file2.js", @"Scripts/Sub/file3.js" });
         }
 
         [TestMethod]
@@ -81,7 +81,7 @@ namespace AllGreen.WebServer.Core.Tests
             FolderFilter[] folderFilterList = new FolderFilter[] { new FolderFilter { Folder = @"Scripts", FilePattern = "*.js", IncludeSubfolders = false }, new FolderFilter { Folder = @"Scripts\Sub", FilePattern = "*.js", IncludeSubfolders = false } };
             DynamicScriptList dynamicFileList = new DynamicScriptList(@"C:\www", folderFilterList.ToList(), new List<FolderFilter>(), _FileLocatorMock.Object);
 
-            dynamicFileList.Files.ShouldAllBeEquivalentTo(new string[] { @"Scripts/file1.js", @"Scripts/file2.js", @"Scripts/Sub/file3.js" });
+            dynamicFileList.Scripts.ShouldAllBeEquivalentTo(new string[] { @"Scripts/file1.js", @"Scripts/file2.js", @"Scripts/Sub/file3.js" });
         }
 
         [TestMethod]
@@ -94,7 +94,7 @@ namespace AllGreen.WebServer.Core.Tests
             FolderFilter[] excludeFolderFilterList = new FolderFilter[] { new FolderFilter { Folder = @"Scripts", FilePattern = "*.min.js", IncludeSubfolders = true } };
             DynamicScriptList dynamicFileList = new DynamicScriptList(@"C:\www", folderFilterList.ToList(), excludeFolderFilterList.ToList(), _FileLocatorMock.Object);
 
-            dynamicFileList.Files.ShouldAllBeEquivalentTo(new string[] { @"Scripts/file1.js", @"Scripts/file2.js", @"Scripts/Sub/file3.js" });
+            dynamicFileList.Scripts.ShouldAllBeEquivalentTo(new string[] { @"Scripts/file1.js", @"Scripts/file2.js", @"Scripts/Sub/file3.js" });
         }
 
         [TestMethod]
@@ -108,7 +108,20 @@ namespace AllGreen.WebServer.Core.Tests
             FolderFilter[] excludeFolderFilterList = new FolderFilter[] { new FolderFilter { Folder = @"Scripts", FilePattern = "*.min.js", IncludeSubfolders = true } };
             DynamicScriptList dynamicFileList = new DynamicScriptList(@"C:\www", folderFilterList.ToList(), excludeFolderFilterList.ToList(), _FileLocatorMock.Object);
 
-            dynamicFileList.Files.ShouldAllBeEquivalentTo(new string[] { @"Scripts/file1.js", @"Scripts/file2.js", @"Scripts/Sub/file3.js" });
+            dynamicFileList.Scripts.ShouldAllBeEquivalentTo(new string[] { @"Scripts/file1.js", @"Scripts/file2.js", @"Scripts/Sub/file3.js" });
+        }
+
+        [TestMethod]
+        public void ExcludeDuplicates()
+        {
+            SetupGetFiles("Scripts", @"file2.js", false, new string[] { @"file2.js" });
+            SetupGetFiles("Scripts", @"*.js", false, new string[] { @"file1.js", @"file2.js" });
+
+            FolderFilter[] folderFilterList = new FolderFilter[] { new FolderFilter { Folder = @"Scripts", FilePattern = "file2.js", IncludeSubfolders = false }, new FolderFilter { Folder = @"Scripts", FilePattern = "*.js", IncludeSubfolders = false } };
+            DynamicScriptList dynamicFileList = new DynamicScriptList(@"C:\www", folderFilterList.ToList(), new List<FolderFilter>(), _FileLocatorMock.Object);
+
+            dynamicFileList.Scripts.Should().HaveCount(2);
+            dynamicFileList.Scripts.ShouldAllBeEquivalentTo(new string[] { @"Scripts/file1.js", @"Scripts/file2.js" });
         }
 
         private void SetupGetFiles(string searchFolder, string fileFilter, bool includeSubfolders, string[] files)

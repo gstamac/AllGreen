@@ -6,13 +6,15 @@ using System.Windows.Input;
 using System.Windows.Markup;
 using AllGreen.WebServer.Core;
 using Caliburn.Micro;
+using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Hosting;
 using TemplateAttributes;
 using TinyIoC;
+using System.Windows;
 
-namespace AllGreen.Runner.WPF
+namespace AllGreen.Runner.WPF.ViewModels
 {
-    public interface IMainViewModelProperties
+    internal interface IMainViewModelProperties
     {
         string ServerStatus { get; set; }
 
@@ -22,6 +24,7 @@ namespace AllGreen.Runner.WPF
         ICommand StartServerCommand { get; }
         ICommand RunAllTestsCommand { get; }
         ICommand ConfigurationCommand { get; }
+        ICommand OpenFileCommand { get; }
     }
 
     [ImplementPropertyChangedCaliburn(typeof(IMainViewModelProperties))]
@@ -32,20 +35,25 @@ namespace AllGreen.Runner.WPF
 
         private TinyIoCContainer _ResourceResolver;
         private ObservableReporter _Reporter;
+        private IFileViewer _FileViewer;
 
         private FileWatcher _FileWatcher;
 
         public MainViewModel(TinyIoCContainer resourceResolver)
         {
-            _Reporter = new ObservableReporter();
+            _ResourceResolver = resourceResolver;
+
+            Configuration = _ResourceResolver.Resolve<IConfiguration>();
+            _FileViewer = _ResourceResolver.Resolve<IFileViewer>();
+
+            _Reporter = new ObservableReporter(_ResourceResolver.Resolve<IFileLocationMapper>());
+
+            _ResourceResolver.Register<IReporter>(_Reporter);
+
             StartServerCommand = new RelayCommand(StartServer);
             RunAllTestsCommand = new RelayCommand(RunAllTests);
             ConfigurationCommand = new RelayCommand(() => ConfigurationVisible = true);
-
-            _ResourceResolver = resourceResolver;
-            _ResourceResolver.Register<IReporter>(_Reporter);
-
-            Configuration = _ResourceResolver.Resolve<IConfiguration>();
+            OpenFileCommand = new RelayCommand<FileLocation>(fl => _FileViewer.Open(fl));
         }
 
         //ncrunch: no coverage start
@@ -54,14 +62,14 @@ namespace AllGreen.Runner.WPF
             WebApp.Start(Configuration.ServerUrl, appBuilder => new OwinStartup(_ResourceResolver).Configuration(appBuilder));
             ServerStatus = "Server running at " + Configuration.ServerUrl;
 
-            _FileWatcher = new FileWatcher(_ResourceResolver.Resolve<IRunnerHub>(), Configuration.WatchedFolderFilters.Select(ff => new FolderWatcher(Path.GetFullPath(ff.Folder), ff.FilePattern, ff.IncludeSubfolders)));
+            _FileWatcher = new FileWatcher(_ResourceResolver.Resolve<IRunnerClients>(), Configuration.WatchedFolderFilters.Select(ff => new FolderWatcher(Path.GetFullPath(ff.Folder), ff.FilePattern, ff.IncludeSubfolders)));
         }
         //ncrunch: no coverage end
 
         private void RunAllTests()
         {
-            IRunnerHub runnerHub = _ResourceResolver.Resolve<IRunnerHub>();
-            runnerHub.ReloadAll();
+            IRunnerClients runnerClients = _ResourceResolver.Resolve<IRunnerClients>();
+            runnerClients.ReloadAll();
         }
 
         public void Dispose()
@@ -69,5 +77,4 @@ namespace AllGreen.Runner.WPF
             _ResourceResolver.Dispose();
         }
     }
-
 }

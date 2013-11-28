@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using AllGreen.Runner.WPF.ViewModels;
 using AllGreen.WebServer.Core;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,7 +15,7 @@ namespace AllGreen.Runner.WPF.Tests
         [TestInitialize]
         public void Setup()
         {
-            _Reporter = new ObservableReporter();
+            _Reporter = new ObservableReporter(null);
         }
 
         [TestClass]
@@ -67,7 +68,7 @@ namespace AllGreen.Runner.WPF.Tests
                 _Reporter.Register(guid, @"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:23.0) Gecko/20100101 Firefox/23.0");
                 _Reporter.Runners.Should().Contain(r => r.ConnectionId == guid && r.Name == "Mozilla/5.0" && r.Status == "Registered");
 
-                _Reporter.Runners.Count.Should().Be(2);
+                _Reporter.Runners.Should().HaveCount(2);
             }
 
             [TestMethod]
@@ -99,9 +100,9 @@ namespace AllGreen.Runner.WPF.Tests
         public class SpecUpdatedTests : ObservableReporterTests
         {
             private string _ConnectionId = Guid.NewGuid().ToString();
-            private static Guid _ParentSuiteId = Guid.NewGuid();
-            private static Guid _SuiteId = Guid.NewGuid();
-            private static Guid _SpecId = Guid.NewGuid();
+            private Guid _ParentSuiteId = Guid.NewGuid();
+            private Guid _SuiteId = Guid.NewGuid();
+            private Guid _SpecId = Guid.NewGuid();
 
             [TestMethod]
             public void SuitesCollectionChangedTests()
@@ -113,6 +114,7 @@ namespace AllGreen.Runner.WPF.Tests
             public void NewSpec()
             {
                 Spec spec = CreateSpec();
+                spec.Steps = new SpecStep[] { new SpecStep { Message = "Massage 1", Status = SpecStatus.Passed, Trace = "Trace 1" } };
 
                 _Reporter.SpecUpdated(Guid.NewGuid().ToString(), spec);
 
@@ -126,6 +128,7 @@ namespace AllGreen.Runner.WPF.Tests
                 _Reporter.SpecUpdated(_ConnectionId, spec);
                 spec = CreateSpec(SpecStatus.Passed);
                 spec.Time = 200;
+                spec.Steps = new SpecStep[] { new SpecStep { Message = "Massage 1", Status = SpecStatus.Passed, Trace = "Trace 1" } };
 
                 _Reporter.SpecUpdated(_ConnectionId, spec);
 
@@ -176,16 +179,35 @@ namespace AllGreen.Runner.WPF.Tests
             {
                 _Reporter.Suites.ShouldAllBeEquivalentTo(new Suite[] { spec.Suite.ParentSuite }, o => o.ExcludingMissingProperties());
                 _Reporter.Suites.First().Suites.ShouldAllBeEquivalentTo(new Suite[] { spec.Suite }, o => o.ExcludingMissingProperties());
-                _Reporter.Suites.First().Suites.First().Specs.ShouldAllBeEquivalentTo(new Spec[] { spec }, o => o.ExcludingMissingProperties());
-                _Reporter.Suites.First().Suites.First().Specs.First().Statuses.Values
-                    .ShouldAllBeEquivalentTo(new SpecStatus[] { spec.Status }, o => o.ExcludingMissingProperties());
+                _Reporter.Suites.First().Suites.First().Specs.Should().HaveCount(1);
+
+                SpecViewModel reportersSpec = _Reporter.Suites.First().Suites.First().Specs.First();
+                reportersSpec.ShouldBeEquivalentTo(spec, o => o.Excluding(si => si.PropertyPath == "Statuses" || si.PropertyPath == "Duration" || si.PropertyPath.EndsWith("IsNotifying")));
+                reportersSpec.Statuses.Should().HaveCount(1);
+                SpecStatusViewModel status = reportersSpec.Statuses.First().Value;
+                status.Status.Should().Be(spec.Status);
+                status.Description.Should().Contain(spec.Status.ToString());
+                if (spec.Steps != null)
+                    foreach (SpecStep step in spec.Steps)
+                    {
+                        status.Description.Should().Contain(step.Message);
+                        status.Description.Should().Contain(step.Status.ToString());
+                        status.Description.Should().Contain(step.Trace);
+                    }
             }
 
-            private static Spec CreateSpec(SpecStatus specStatus = SpecStatus.Running)
+            private Spec CreateSpec(SpecStatus specStatus = SpecStatus.Running)
             {
                 Suite parentSuite = new Suite() { Id = _ParentSuiteId, Name = "Suite 1", ParentSuite = null, Status = specStatus };
                 Suite suite = new Suite() { Id = _SuiteId, Name = "Suite 1", ParentSuite = parentSuite, Status = specStatus };
-                return new Spec() { Id = _SpecId, Name = "Spec 1", Status = specStatus, Suite = suite, Time = 100 };
+                return new Spec()
+                {
+                    Id = _SpecId,
+                    Name = "Spec 1",
+                    Status = specStatus,
+                    Suite = suite,
+                    Time = 100
+                };
             }
         }
     }

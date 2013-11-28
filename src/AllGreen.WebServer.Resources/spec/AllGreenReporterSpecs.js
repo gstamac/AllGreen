@@ -53,8 +53,10 @@ describe("AllGreen.RunnerReporter", function () {
 
         jasmine.getFixtures().fixturesPath = '';
         var clientHtml = readFixtures('Client/client.html');
+        expect(clientHtml).not.toBe('');
+        clientHtml = clientHtml.replace(/~internal~\//g, '');
         clientHtml = clientHtml.replace(/<script[^>]*><\/script>/g, '');
-        clientHtml = clientHtml.replace(/<script[^>]*>[^<]*AllGreen\.startApp()[^<]*<\/script>/g, '');
+        clientHtml = clientHtml.replace(/<script[^>]*>[^<]*new AllGreen\.App()[^<]*<\/script>/g, '');
         setFixtures(clientHtml);
 
         _this.serverReporter = new AllGreen.ServerReporter();
@@ -172,4 +174,3 @@ describe("AllGreen.RunnerReporter", function () {
         expect($('#spec-results')).toHaveClass('failed');
     });
 });
-//# sourceMappingURL=AllGreenReporterSpecs.js.map

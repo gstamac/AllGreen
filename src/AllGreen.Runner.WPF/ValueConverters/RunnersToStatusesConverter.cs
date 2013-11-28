@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Markup;
+using AllGreen.Runner.WPF.ViewModels;
 using AllGreen.WebServer.Core;
 using Caliburn.Micro;
 using Microsoft.Owin.Hosting;

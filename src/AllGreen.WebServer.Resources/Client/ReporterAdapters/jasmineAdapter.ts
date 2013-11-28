@@ -6,6 +6,10 @@ module AllGreen {
         public create(reporter: IRunnerReporter): IAdapter {
             return new JasmineAdapter(reporter);
         }
+
+        getName(): string {
+            return 'jasmine';
+        }
     }
 
     export class JasmineAdapter implements IAdapter, jasmine.Reporter {
@@ -101,14 +105,32 @@ module AllGreen {
                     var result = resultItems[i];
 
                     if (result.type === 'log') {
-                        this.steps.push({ message: result.toString(), status: AllGreen.SpecStatus.Undefined, trace: '' });
+                        this.steps.push({
+                            message: result.toString(),
+                            status: AllGreen.SpecStatus.Undefined,
+                            filename: null,
+                            lineNumber: -1,
+                            trace: ''
+                        });
                     } else if (result.type === 'expect') {
                         var expectationResult = <jasmine.ExpectationResult>result;
                         if (!expectationResult.passed()) {
                             if (expectationResult.trace.stack) {
-                                this.steps.push({ message: expectationResult.message, status: AllGreen.SpecStatus.Failed, trace: this.formatTraceStack(expectationResult.trace.stack) });
+                                this.steps.push({
+                                    message: expectationResult.message,
+                                    status: AllGreen.SpecStatus.Failed,
+                                    filename: null,
+                                    lineNumber: -1,
+                                    trace: this.formatTraceStack(expectationResult.trace.stack)
+                                });
                             } else {
-                                this.steps.push({ message: expectationResult.message, status: AllGreen.SpecStatus.Failed, trace: '' });
+                                this.steps.push({
+                                    message: expectationResult.message,
+                                    status: AllGreen.SpecStatus.Failed,
+                                    filename: null,
+                                    lineNumber: -1,
+                                    trace: ''
+                                });
                             }
                         }
                     }
@@ -117,7 +139,9 @@ module AllGreen {
         }
 
         formatTraceStack(stack) {
-            return stack.replace(/[^\n]+jasmine\.js\:\d+(\n|$)/g, '').replace(/[\n]+$/, '');
+            return stack
+                .replace(/[^\n]+\/jasmine\.js\:\d+(\n|$)/g, '')
+                .replace(/[\n]+$/, '');
         }
     }
 
@@ -139,9 +163,8 @@ module AllGreen {
 }
 
 () => {
-    var app = AllGreen.App.getCurrent();
-    if (app != null) {
-        app.log('registering Jasmine adapter factory');
-        app.registerAdapterFactory(new AllGreen.JasmineAdapterFactory());
-    };
+    if (AllGreenApp != null) {
+        AllGreenApp.log('registering Jasmine adapter factory');
+        AllGreenApp.registerAdapterFactory(new AllGreen.JasmineAdapterFactory());
+    }
 } ();

@@ -1,11 +1,8 @@
 /// <reference path="reporter.ts" />
+var AllGreenApp = null;
+
 var AllGreen;
 (function (AllGreen) {
-    function startApp() {
-        App.startApp();
-    }
-    AllGreen.startApp = startApp;
-
     (function (SpecStatus) {
         SpecStatus[SpecStatus["Undefined"] = 0] = "Undefined";
         SpecStatus[SpecStatus["Running"] = 1] = "Running";
@@ -20,20 +17,11 @@ var AllGreen;
             this.serverReporter = null;
             this.runnerReporters = [];
             this.adapterFactories = [];
-            this.start = function () {
+            this.runTests = function () {
                 this.delayStartIfNeeded(this, this.adapterFactories);
             };
             this.reconnectEnabled = true;
         }
-        App.startApp = function () {
-            if (this.currentApp == null)
-                this.currentApp = new App();
-        };
-
-        App.getCurrent = function () {
-            return this.currentApp;
-        };
-
         App.prototype.setServerReporter = function (serverReporter) {
             if (serverReporter != null)
                 this.serverReporter = serverReporter;
@@ -45,18 +33,25 @@ var AllGreen;
         };
 
         App.prototype.registerAdapterFactory = function (adapterFactory) {
-            this.adapterFactories.push(adapterFactory);
+            var newName = adapterFactory.getName();
+            var found = false;
+            this.adapterFactories.forEach(function (adapterFactory) {
+                found = found || adapterFactory.getName() == newName;
+            });
+            if (!found)
+                this.adapterFactories.push(adapterFactory);
         };
 
-        App.prototype.delayStartIfNeeded = function (reporter, adapterFactories) {
+        App.prototype.delayStartIfNeeded = function (app, adapterFactories) {
             var _this = this;
-            if (!reporter.isReady()) {
+            if (!app.isReady()) {
+                console.log('delaying test run');
                 setTimeout(function () {
-                    return _this.delayStartIfNeeded(reporter, adapterFactories);
+                    return _this.delayStartIfNeeded(app, adapterFactories);
                 }, 10);
             } else {
                 adapterFactories.forEach(function (adapterFactory) {
-                    adapterFactory.create(reporter).start();
+                    adapterFactory.create(app).start();
                 });
             }
         };
@@ -101,7 +96,7 @@ var AllGreen;
         App.prototype.reload = function () {
             this.adapterFactories = [];
             this.reset();
-            $('#runner').prop('src', 'Client/runner.html');
+            $('#runner-iframe').prop('src', '/~internal~/Client/runner.html');
         };
 
         App.prototype.log = function (message) {
@@ -116,9 +111,7 @@ var AllGreen;
             this.log('Reconnect ' + (enabled ? 'enabled' : 'disabled'));
             this.reconnectEnabled = enabled;
         };
-        App.currentApp = null;
         return App;
     })();
     AllGreen.App = App;
 })(AllGreen || (AllGreen = {}));
-//# sourceMappingURL=allgreen.js.map

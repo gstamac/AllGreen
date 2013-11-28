@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Windows.Threading;
+using AllGreen.Runner.WPF.ViewModels;
 using AllGreen.WebServer.Core;
 using Caliburn.Micro;
 
@@ -9,12 +10,15 @@ namespace AllGreen.Runner.WPF
     public class ObservableReporter : IReporter
     {
         private Dispatcher _Dispatcher;
+        IFileLocationMapper _FileLocationMapper;
+
         public BindableCollection<RunnerViewModel> Runners { get; private set; }
         public BindableCollection<SuiteViewModel> Suites { get; private set; }
 
-        public ObservableReporter()
+        public ObservableReporter(IFileLocationMapper fileLocationMapper)
         {
             _Dispatcher = Dispatcher.CurrentDispatcher;
+            _FileLocationMapper = fileLocationMapper;
             Runners = new BindableCollection<RunnerViewModel>();
             Suites = new BindableCollection<SuiteViewModel>();
         }
@@ -143,11 +147,7 @@ namespace AllGreen.Runner.WPF
             suiteViewModel = suites.FirstOrDefault(s => s.IsSuite(suite));
             if (suiteViewModel == null)
             {
-                suiteViewModel = new SuiteViewModel()
-                {
-                    Id = suite.Id,
-                    Name = suite.Name
-                };
+                suiteViewModel = SuiteViewModel.Create(suite);
                 suites.Add(suiteViewModel);
             }
             suiteViewModel.SetStatus(runnerId, suite.Status, time);
@@ -164,19 +164,14 @@ namespace AllGreen.Runner.WPF
             SpecViewModel specViewModel = suiteViewModel.Specs.FirstOrDefault(s => s.IsSpec(spec));
             if (specViewModel == null)
             {
-                specViewModel = new SpecViewModel()
-                {
-                    Id = spec.Id,
-                    Name = spec.Name,
-                    Time = spec.Time
-                };
+                specViewModel = SpecViewModel.Create(spec);
                 suiteViewModel.Specs.Add(specViewModel);
             }
             else
             {
                 specViewModel.Time = spec.Time;
             }
-            specViewModel.SetStatus(runnerId, spec.Status, spec.Time);
+            specViewModel.SetStatus(runnerId, spec.Status, spec.Time, spec.Steps, _FileLocationMapper);
             return specViewModel;
         }
     }

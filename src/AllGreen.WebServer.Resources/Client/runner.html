@@ -8,16 +8,18 @@
 <body>
     <script type="text/javascript">
         var AllGreen = parent.AllGreen;
+        var AllGreenApp = parent.AllGreenApp;
     </script>
 
     <!--%SCRIPTS%-->
 
     <script type="text/javascript">
-        var app = AllGreen.App.getCurrent();
-        if (app) {
-            console.log('starting app');
-            app.start();
-        };
+        parent.$(window).load(function () {
+            if (AllGreenApp != null) {
+                console.log('start running tests');
+                AllGreenApp.runTests();
+            };
+        });
     </script>
 
 </body>

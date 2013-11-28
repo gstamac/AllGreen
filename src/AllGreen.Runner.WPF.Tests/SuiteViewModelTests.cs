@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Windows.Data;
+using AllGreen.Runner.WPF.ViewModels;
 using AllGreen.WebServer.Core;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -64,5 +65,25 @@ namespace AllGreen.Runner.WPF.Tests
             _SuiteViewModel.IsSuite(suite).Should().BeTrue();
         }
 
+        [TestMethod]
+        public void CreateTest()
+        {
+            Suite suite = new Suite
+            {
+                Id = Guid.NewGuid(),
+                Name = "Suite name",
+                ParentSuite = null,
+                Status = SpecStatus.Failed
+            };
+
+            SuiteViewModel.Create(suite).ShouldBeEquivalentTo(suite, o => o
+                .Excluding(si => si.PropertyPath.EndsWith("IsNotifying"))
+                .Excluding(si => si.PropertyPath == "IsExpanded")
+                .Excluding(si => si.PropertyPath == "Specs")
+                .Excluding(si => si.PropertyPath == "Suites")
+                .Excluding(si => si.PropertyPath == "Children")
+                .Excluding(si => si.PropertyPath == "Statuses")
+                .Excluding(si => si.PropertyPath == "Duration"));
+        }
     }
 }

@@ -10,6 +10,12 @@ describe("AllGreen JasmineAdapterFactory", () => {
         expect(adapter).toBeDefined();
         expect(adapter.start).toBeDefined();
     });
+
+    it("Should have the correct name", () => {
+        var factory = new AllGreen.JasmineAdapterFactory();
+        expect(factory.getName()).toBe('jasmine');
+    });
+
 });
 
 declare module jasmine {

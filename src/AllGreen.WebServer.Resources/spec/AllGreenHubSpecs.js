@@ -13,13 +13,13 @@ describe("AllGreen SignalR Hub", function () {
             _this.proxyCallback = callback;
         });
 
+        _this.connectionCallbacks = [];
         var callbacks = ['stateChanged', 'error', 'reconnecting', 'reconnected', 'disconnected'];
         _this.connection = jasmine.createSpyObj('connection', callbacks.concat(['createHubProxy', 'start', 'received']));
         _this.connection['createHubProxy'].andReturn(_this.hubProxy);
         _this.connection['start'].andReturn({ done: function (callback) {
                 _this.connectionCallbacks['done'] = callback;
             } });
-        _this.connectionCallbacks = [];
         callbacks.forEach(function (callbackName) {
             _this.connection[callbackName].andCallFake(function (callback) {
                 _this.connectionCallbacks[callbackName] = callback;
@@ -147,4 +147,3 @@ describe("AllGreen SignalR HubReporter", function () {
         expect(_this.hubProxy.invoke).toHaveBeenCalledWith('specUpdated', spec);
     });
 });
-//# sourceMappingURL=AllGreenHubSpecs.js.map

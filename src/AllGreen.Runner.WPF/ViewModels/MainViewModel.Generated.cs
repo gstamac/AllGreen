@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Caliburn.Micro;
 
-namespace AllGreen.Runner.WPF
+namespace AllGreen.Runner.WPF.ViewModels
 {
 	partial class MainViewModel: PropertyChangedBase
 	{
@@ -50,6 +50,13 @@ namespace AllGreen.Runner.WPF
 			private set { ChangeProperty<System.Windows.Input.ICommand>("ConfigurationCommand", ref _ConfigurationCommand, value); }
 		}
 
+		private System.Windows.Input.ICommand _OpenFileCommand;
+		public System.Windows.Input.ICommand OpenFileCommand
+		{
+			get { return _OpenFileCommand; }
+			private set { ChangeProperty<System.Windows.Input.ICommand>("OpenFileCommand", ref _OpenFileCommand, value); }
+		}
+
 
 		#region INotifyPropertyChanged implementation
 		//ncrunch: no coverage start
@@ -63,7 +70,7 @@ namespace AllGreen.Runner.WPF
 			if (changedCallback != null) changedCallback(oldValue, newValue);
 		}
 
-		public string GetPropertyName<TProperty>(Expression<Func<AllGreen.Runner.WPF.MainViewModel, TProperty>> propertySelector)
+		public string GetPropertyName<TProperty>(Expression<Func<AllGreen.Runner.WPF.ViewModels.MainViewModel, TProperty>> propertySelector)
 		{
 			return propertySelector.GetMemberInfo().Name;
 		}

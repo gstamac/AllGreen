@@ -2,9 +2,9 @@ using AllGreen.WebServer.Core;
 using Caliburn.Micro;
 using TemplateAttributes;
 
-namespace AllGreen.Runner.WPF
+namespace AllGreen.Runner.WPF.ViewModels
 {
-    public interface ISuiteViewModel : ISpecOrSuiteViewModel
+    internal interface ISuiteViewModel : ISpecOrSuiteViewModel
     {
         bool IsExpanded { get; set; }
         BindableCollection<SpecViewModel> Specs { get; }
@@ -38,6 +38,15 @@ namespace AllGreen.Runner.WPF
         public virtual bool IsSuite(Suite suite)
         {
             return Name == suite.Name;
+        }
+
+        public static SuiteViewModel Create(Suite suite)
+        {
+            return new SuiteViewModel()
+            {
+                Id = suite.Id,
+                Name = suite.Name
+            };
         }
     }
 }

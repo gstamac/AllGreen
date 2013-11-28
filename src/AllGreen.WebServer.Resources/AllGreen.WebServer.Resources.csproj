@@ -144,26 +144,53 @@
     <EmbeddedResource Include="Client\client.html" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Client\allgreen.js.map">
+      <DependentUpon>allgreen.ts</DependentUpon>
+    </None>
     <None Include="Client\allgreen.min.js.map">
       <DependentUpon>allgreen.js</DependentUpon>
     </None>
     <None Include="Client\client.less" />
+    <None Include="Client\hub.js.map">
+      <DependentUpon>hub.ts</DependentUpon>
+    </None>
     <None Include="Client\hub.min.js.map">
       <DependentUpon>hub.js</DependentUpon>
     </None>
+    <None Include="Client\reporter.js.map">
+      <DependentUpon>reporter.ts</DependentUpon>
+    </None>
     <None Include="Client\reporter.min.js.map">
       <DependentUpon>reporter.js</DependentUpon>
+    </None>
+    <None Include="Client\ReporterAdapters\jasmineAdapter.js.map">
+      <DependentUpon>jasmineAdapter.ts</DependentUpon>
+    </None>
+    <None Include="Client\ReporterAdapters\jasmineAdapter.min.js.map">
+      <DependentUpon>jasmineAdapter.js</DependentUpon>
     </None>
     <None Include="packages.config" />
     <None Include="Scripts\jquery-2.0.3.min.js.map">
       <DependentUpon>jquery-2.0.3.js</DependentUpon>
     </None>
     <None Include="Scripts\jquery-2.0.3.min.map" />
+    <None Include="spec\AllGreenAppSpecs.js.map">
+      <DependentUpon>AllGreenAppSpecs.ts</DependentUpon>
+    </None>
     <None Include="spec\AllGreenAppSpecs.min.js.map">
       <DependentUpon>AllGreenAppSpecs.js</DependentUpon>
     </None>
+    <None Include="spec\AllGreenHubSpecs.js.map">
+      <DependentUpon>AllGreenHubSpecs.ts</DependentUpon>
+    </None>
+    <None Include="spec\AllGreenReporterSpecs.js.map">
+      <DependentUpon>AllGreenReporterSpecs.ts</DependentUpon>
+    </None>
     <None Include="spec\AllGreenReporterSpecs.min.js.map">
       <DependentUpon>AllGreenReporterSpecs.js</DependentUpon>
+    </None>
+    <None Include="spec\ReporterAdapter\JasmineAdapterSpecs.js.map">
+      <DependentUpon>JasmineAdapterSpecs.ts</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup />
@@ -184,7 +211,7 @@
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Properties__UseParentNamespace="False" Scripts__UseParentNamespace="False" spec__UseParentNamespace="False" Client__UseParentNamespace="False" />
+      <UserProperties css__UseParentNamespace="False" Scripts_typings_jasmine__UseParentNamespace="False" Scripts_typings__UseParentNamespace="False" Client_ReporterAdapters__UseParentNamespace="False" Client__UseParentNamespace="False" spec__UseParentNamespace="False" Scripts__UseParentNamespace="False" Properties__UseParentNamespace="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

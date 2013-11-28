@@ -17,7 +17,7 @@ namespace AllGreen.WebServer.Core.Tests
     public class AssemblyWebResourcesTests
     {
         [TestMethod]
-        public void Test()
+        public void GetContentTest()
         {
             Mock<_Assembly> assemblyMock = new Mock<_Assembly>();
             assemblyMock.Setup(a => a.GetName()).Returns(new AssemblyName("Assembly.Namespace"));
@@ -31,6 +31,18 @@ namespace AllGreen.WebServer.Core.Tests
         }
 
         [TestMethod]
+        public void GetSystemFilePathTest()
+        {
+            Mock<_Assembly> assemblyMock = new Mock<_Assembly>();
+            assemblyMock.Setup(a => a.GetName()).Returns(new AssemblyName("Assembly.Namespace"));
+            AssemblyWebResources webResources = new AssemblyWebResources(assemblyMock.Object);
+            webResources.GetSystemFilePath("").Should().BeNull();
+            webResources.GetSystemFilePath("file2.js").Should().BeNull();
+            webResources.GetSystemFilePath("file1.js").Should().BeNull();
+            webResources.GetSystemFilePath("folder1/file2.js").Should().BeNull();
+        }
+
+        [TestMethod]
         public void ExceptionTest()
         {
             Mock<_Assembly> assemblyMock = new Mock<_Assembly>();
@@ -40,4 +52,5 @@ namespace AllGreen.WebServer.Core.Tests
             webResources.GetContent("file1.js").Should().BeNull();
         }
     }
+
 }

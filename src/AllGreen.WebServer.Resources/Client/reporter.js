@@ -172,14 +172,11 @@ else
         return RunnerReporter;
     })();
     AllGreen.RunnerReporter = RunnerReporter;
-})(AllGreen || (AllGreen = {}));
 
-(function () {
-    var app = AllGreen.App.getCurrent();
-    if (app != null) {
+    function initializeDefaultReporters(app) {
         app.log('registering reporter factory');
         app.setServerReporter(new AllGreen.ServerReporter());
         app.registerRunnerReporter(new AllGreen.RunnerReporter());
     }
-})();
-//# sourceMappingURL=reporter.js.map
+    AllGreen.initializeDefaultReporters = initializeDefaultReporters;
+})(AllGreen || (AllGreen = {}));

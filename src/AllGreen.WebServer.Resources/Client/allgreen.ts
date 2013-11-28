@@ -1,10 +1,8 @@
 /// <reference path="reporter.ts" />
 
-module AllGreen {
+var AllGreenApp = null;
 
-    export function startApp() {
-        App.startApp();
-    }
+module AllGreen {
 
     export interface IServerReporter {
         setServerStatus(status: string);
@@ -45,6 +43,8 @@ module AllGreen {
     export interface ISpecStep {
         message: string;
         status: SpecStatus;
+        filename: string;
+        lineNumber: number;
         trace: string;
     }
 
@@ -54,20 +54,11 @@ module AllGreen {
 
     export interface IAdapterFactory {
         create(reporter: IRunnerReporter): IAdapter;
+        getName(): string;
     }
 
     export class App implements IServerReporter, IRunnerReporter {
         constructor() { }
-
-        private static currentApp: App = null;
-
-        public static startApp() {
-            if (this.currentApp == null) this.currentApp = new App();
-        }
-
-        public static getCurrent(): App {
-            return this.currentApp;
-        }
 
         private serverReporter: IServerReporter = null;
         private runnerReporters: IRunnerReporter[] = [];
@@ -84,20 +75,26 @@ module AllGreen {
         }
 
         public registerAdapterFactory(adapterFactory: IAdapterFactory) {
-            this.adapterFactories.push(adapterFactory);
+            var newName = adapterFactory.getName();
+            var found: boolean = false;
+            this.adapterFactories.forEach((adapterFactory: IAdapterFactory) =>
+            { found = found || adapterFactory.getName() == newName; });
+            if (!found)
+                this.adapterFactories.push(adapterFactory);
         }
 
-        public start = function () {
+        public runTests = function () {
             this.delayStartIfNeeded(this, this.adapterFactories);
         }
 
-        private delayStartIfNeeded(reporter: App, adapterFactories: IAdapterFactory[]) {
-            if (!reporter.isReady()) {
-                setTimeout(() =>  this.delayStartIfNeeded(reporter, adapterFactories), 10);
+        private delayStartIfNeeded(app: App, adapterFactories: IAdapterFactory[]) {
+            if (!app.isReady()) {
+                console.log('delaying test run');
+                setTimeout(() => this.delayStartIfNeeded(app, adapterFactories), 10);
             }
             else {
                 adapterFactories.forEach((adapterFactory: IAdapterFactory) =>
-                    { adapterFactory.create(reporter).start(); });
+                { adapterFactory.create(app).start(); });
             }
         }
 
@@ -141,7 +138,7 @@ module AllGreen {
         public reload() {
             this.adapterFactories = [];
             this.reset();
-            $('#runner').prop('src', 'Client/runner.html');
+            $('#runner-iframe').prop('src', '/~internal~/Client/runner.html');
         }
 
         public log(message?: any, ...optionalParams: any[]): void {

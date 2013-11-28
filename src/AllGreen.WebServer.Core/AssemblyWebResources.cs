@@ -39,5 +39,11 @@ namespace AllGreen.WebServer.Core
         {
             return String.Format("{0}.{1}", _WebSiteRoot, path.Replace('/', '.')).Replace("..", ".");
         }
+
+
+        public string GetSystemFilePath(string path)
+        {
+            return null;
+        }
     }
 }

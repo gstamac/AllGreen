@@ -13,24 +13,6 @@ namespace AllGreen.WebServer.Core.Tests
     [TestClass]
     public class RunnerHubTests
     {
-        [TestMethod]
-        public void SendTest()
-        {
-            dynamic all = new ExpandoObject();
-            bool reloadCalled = false;
-            all.reload = new Action(() => reloadCalled = true);
-
-            var clientsMock = new Mock<IHubCallerConnectionContext>();
-            clientsMock.Setup(c => c.All).Returns((ExpandoObject)all);
-
-            RunnerHub runnerHub = new RunnerHub(Mock.Of<IReporter>());
-            runnerHub.Clients = clientsMock.Object;
-
-            runnerHub.ReloadAll();
-
-            reloadCalled.Should().BeTrue();
-        }
-
         [TestClass]
         public class ReceiveTests
         {

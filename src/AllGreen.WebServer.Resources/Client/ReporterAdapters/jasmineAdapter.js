@@ -8,6 +8,10 @@ var AllGreen;
         JasmineAdapterFactory.prototype.create = function (reporter) {
             return new JasmineAdapter(reporter);
         };
+
+        JasmineAdapterFactory.prototype.getName = function () {
+            return 'jasmine';
+        };
         return JasmineAdapterFactory;
     })();
     AllGreen.JasmineAdapterFactory = JasmineAdapterFactory;
@@ -96,14 +100,32 @@ else {
                     var result = resultItems[i];
 
                     if (result.type === 'log') {
-                        this.steps.push({ message: result.toString(), status: AllGreen.SpecStatus.Undefined, trace: '' });
+                        this.steps.push({
+                            message: result.toString(),
+                            status: AllGreen.SpecStatus.Undefined,
+                            filename: null,
+                            lineNumber: -1,
+                            trace: ''
+                        });
                     } else if (result.type === 'expect') {
                         var expectationResult = result;
                         if (!expectationResult.passed()) {
                             if (expectationResult.trace.stack) {
-                                this.steps.push({ message: expectationResult.message, status: AllGreen.SpecStatus.Failed, trace: this.formatTraceStack(expectationResult.trace.stack) });
+                                this.steps.push({
+                                    message: expectationResult.message,
+                                    status: AllGreen.SpecStatus.Failed,
+                                    filename: null,
+                                    lineNumber: -1,
+                                    trace: this.formatTraceStack(expectationResult.trace.stack)
+                                });
                             } else {
-                                this.steps.push({ message: expectationResult.message, status: AllGreen.SpecStatus.Failed, trace: '' });
+                                this.steps.push({
+                                    message: expectationResult.message,
+                                    status: AllGreen.SpecStatus.Failed,
+                                    filename: null,
+                                    lineNumber: -1,
+                                    trace: ''
+                                });
                             }
                         }
                     }
@@ -112,7 +134,7 @@ else {
         };
 
         JasmineAdapterSpec.prototype.formatTraceStack = function (stack) {
-            return stack.replace(/[^\n]+jasmine\.js\:\d+(\n|$)/g, '').replace(/[\n]+$/, '');
+            return stack.replace(/[^\n]+\/jasmine\.js\:\d+(\n|$)/g, '').replace(/[\n]+$/, '');
         };
         return JasmineAdapterSpec;
     })();
@@ -131,11 +153,8 @@ else {
 })(AllGreen || (AllGreen = {}));
 
 (function () {
-    var app = AllGreen.App.getCurrent();
-    if (app != null) {
-        app.log('registering Jasmine adapter factory');
-        app.registerAdapterFactory(new AllGreen.JasmineAdapterFactory());
+    if (AllGreenApp != null) {
+        AllGreenApp.log('registering Jasmine adapter factory');
+        AllGreenApp.registerAdapterFactory(new AllGreen.JasmineAdapterFactory());
     }
-    ;
 })();
-//# sourceMappingURL=jasmineAdapter.js.map

@@ -14,12 +14,6 @@ namespace AllGreen.WebServer.Core
             _Reporter = reporter;
         }
 
-        public void ReloadAll()
-        {
-            // TODO: Cancel previous run
-            Clients.All.reload();
-        }
-
         public void Reset()
         {
             _Reporter.Reset(Context.ConnectionId);

@@ -1,17 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Microsoft.AspNet.SignalR;
 
 namespace AllGreen.WebServer.Core
 {
     public class FileWatcher : IDisposable
     {
-        IRunnerHub _RunnerHub;
+        IRunnerClients _RunnerClients;
         IEnumerable<IFolderWatcher> _FolderWatchers;
 
-        public FileWatcher(IRunnerHub runnerHub, IEnumerable<IFolderWatcher> folderWatchers)
+        public FileWatcher(IRunnerClients runnerClients, IEnumerable<IFolderWatcher> folderWatchers)
         {
-            _RunnerHub = runnerHub;
+            _RunnerClients = runnerClients;
             _FolderWatchers = folderWatchers;
 
             RegisterWatchers();
@@ -28,7 +29,7 @@ namespace AllGreen.WebServer.Core
 
         void folderWatcher_Changed(object sender, FileSystemEventArgs e)
         {
-            _RunnerHub.ReloadAll();
+            _RunnerClients.ReloadAll();
         }
 
         public void Dispose()

@@ -10,6 +10,7 @@ namespace AllGreen.WebServer.Core
 {
     public class WebServerResources : IWebResources
     {
+        const string INTERNAL_PATH_PREFIX = "~internal~/";
         private readonly AssemblyWebResources _AssemblyWebResources;
         private readonly String[] _ManifestResourceNames;
         private readonly IScriptList _ServedScriptList;
@@ -27,6 +28,10 @@ namespace AllGreen.WebServer.Core
 
         public string GetContent(string path)
         {
+            path = path.Trim('/');
+            if (!path.StartsWith(INTERNAL_PATH_PREFIX)) return null;
+            path = path.Substring(INTERNAL_PATH_PREFIX.Length);
+
             string content = _AssemblyWebResources.GetContent(path);
             if (content == null && !_ManifestResourceNames.Contains(path))
             {
@@ -46,10 +51,14 @@ namespace AllGreen.WebServer.Core
 
         private string ModifyRunnerHtml(string result)
         {
-            IEnumerable<string> scriptFiles = _ServedScriptList.Files;
+            IEnumerable<string> scriptFiles = _ServedScriptList.Scripts;
             string scripts = String.Join("", scriptFiles.Select(scriptFile => String.Format("<script src=\"/{0}\"></script>", scriptFile)));
             return result.Replace("<!--%SCRIPTS%-->", scripts);
         }
 
+        public string GetSystemFilePath(string path)
+        {
+            return null;
+        }
     }
 }

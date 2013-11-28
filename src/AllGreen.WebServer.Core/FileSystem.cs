@@ -3,8 +3,20 @@ using System.IO;
 
 namespace AllGreen.WebServer.Core
 {
-    public class SystemFileLocator : IFileLocator
+    public class FileSystem : IFileSystem
     {
+        public string ReadAllText(string path)
+        {
+            if (File.Exists(path))
+                return File.ReadAllText(path);
+            return null;
+        }
+
+        public bool FileExists(string path)
+        {
+            return File.Exists(path);
+        }
+
         public bool GetFiles(string path, string searchPattern, bool includeSubfolders, out string[] files)
         {
             files = null;
