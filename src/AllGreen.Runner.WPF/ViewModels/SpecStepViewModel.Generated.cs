@@ -6,6 +6,8 @@ using Caliburn.Micro;
 
 namespace AllGreen.Runner.WPF.ViewModels
 {
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("ImplementPropertyChangedCaliburn.tt", "")]
+	[System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
 	partial class SpecStepViewModel: PropertyChangedBase
 	{
 		private System.String _Message;
@@ -15,18 +17,25 @@ namespace AllGreen.Runner.WPF.ViewModels
 			set { ChangeProperty<System.String>("Message", ref _Message, value); }
 		}
 
+		private AllGreen.WebServer.Core.FileLocation _ErrorLocation;
+		public AllGreen.WebServer.Core.FileLocation ErrorLocation
+		{
+			get { return _ErrorLocation; }
+			set { ChangeProperty<AllGreen.WebServer.Core.FileLocation>("ErrorLocation", ref _ErrorLocation, value); }
+		}
+
+		private AllGreen.WebServer.Core.FileLocation _MappedLocation;
+		public AllGreen.WebServer.Core.FileLocation MappedLocation
+		{
+			get { return _MappedLocation; }
+			set { ChangeProperty<AllGreen.WebServer.Core.FileLocation>("MappedLocation", ref _MappedLocation, value); }
+		}
+
 		private AllGreen.WebServer.Core.SpecStatus _Status;
 		public AllGreen.WebServer.Core.SpecStatus Status
 		{
 			get { return _Status; }
 			set { ChangeProperty<AllGreen.WebServer.Core.SpecStatus>("Status", ref _Status, value); }
-		}
-
-		private AllGreen.WebServer.Core.FileLocation _ScriptLocation;
-		public AllGreen.WebServer.Core.FileLocation ScriptLocation
-		{
-			get { return _ScriptLocation; }
-			set { ChangeProperty<AllGreen.WebServer.Core.FileLocation>("ScriptLocation", ref _ScriptLocation, value); }
 		}
 
 		private Caliburn.Micro.BindableCollection<AllGreen.Runner.WPF.ViewModels.SpecTraceStepViewModel> _Trace;

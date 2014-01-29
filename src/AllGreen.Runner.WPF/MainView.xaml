@@ -78,22 +78,39 @@
                 <DockPanel>
                     <Image Source="{Binding Status, Converter={agvc:SpecStatusToImageConverter}}" Width="10" Height="10"/>
                     <TextBlock Text="{Binding Message}" Padding="4 0 0 0"/>
-                    <ContentControl Content="{Binding ScriptLocation}"/>
+                    <DockPanel Visibility="{Binding ErrorLocation, Converter={agvc:ObjectToVisibilityConverter}}">
+                        <TextBlock Text=" in " FontStyle="Italic"/>
+                        <ContentControl Content="{Binding ErrorLocation}"/>
+                        <DockPanel Visibility="{Binding MappedLocation, Converter={agvc:ObjectToVisibilityConverter}}">
+                            <TextBlock Text=" (" FontStyle="Italic"/>
+                            <ContentControl Content="{Binding MappedLocation}"/>
+                            <TextBlock Text=")" FontStyle="Italic"/>
+                        </DockPanel>
+                    </DockPanel>
                 </DockPanel>
-                <ItemsControl ItemsSource="{Binding Trace}"/>
+                <ItemsControl ItemsSource="{Binding Trace}" Padding="20 0 0 0"/>
             </StackPanel>
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type agvm:SpecTraceStepViewModel}">
             <DockPanel>
-                <TextBlock Text="{Binding MethodName}" FontStyle="Italic"/>
-                <ContentControl Content="{Binding ScriptLocation}"/>
+                <TextBlock Text="{Binding Message}" FontStyle="Italic" Visibility="{Binding ScriptLocation, Converter={agvc:ObjectToVisibilityConverter}, ConverterParameter='Reverse'}"/>
+                <DockPanel Visibility="{Binding ScriptLocation, Converter={agvc:ObjectToVisibilityConverter}}">
+                    <TextBlock Text="at " FontStyle="Italic"/>
+                    <TextBlock Text="{Binding MethodName}" FontStyle="Italic"/>
+                    <TextBlock Text=" in " FontStyle="Italic"/>
+                    <ContentControl Content="{Binding ScriptLocation}"/>
+                    <DockPanel Visibility="{Binding MappedLocation, Converter={agvc:ObjectToVisibilityConverter}}">
+                        <TextBlock Text=" (" FontStyle="Italic"/>
+                        <ContentControl Content="{Binding MappedLocation}"/>
+                        <TextBlock Text=")" FontStyle="Italic"/>
+                    </DockPanel>
+                </DockPanel>
             </DockPanel>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type agc:FileLocation}">
-            <DockPanel Visibility="{Binding Converter={agvc:ObjectToVisibilityConverter}}">
-                <TextBlock Text=" in " FontStyle="Italic"/>
+            <DockPanel>
                 <TextBlock>
             		<Hyperlink Command="{Binding Path=DataContext.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding}">
             			<TextBlock Text="{Binding}" FontStyle="Italic"/>
@@ -144,6 +161,8 @@
             </ag:StretchingTreeView.ItemContainerStyle>
         </ag:StretchingTreeView>
         <GridSplitter ResizeDirection="Columns" Width="4" Grid.Row="2"/>
-        <ItemsControl ItemsSource="{Binding SelectedItem.Statuses.Values, ElementName=resultsTree}" Grid.Row="2" Grid.Column="1"/>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" Grid.Row="2" Grid.Column="1">
+            <ItemsControl ItemsSource="{Binding SelectedItem.Statuses.Values, ElementName=resultsTree}"/>
+        </ScrollViewer>
     </Grid>
 </UserControl>

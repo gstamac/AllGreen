@@ -107,40 +107,54 @@ module AllGreen {
                     if (result.type === 'log') {
                         this.steps.push({
                             message: result.toString(),
+                            errorLocation: null,
                             status: AllGreen.SpecStatus.Undefined,
-                            filename: null,
-                            lineNumber: -1,
                             trace: ''
                         });
                     } else if (result.type === 'expect') {
                         var expectationResult = <jasmine.ExpectationResult>result;
                         if (!expectationResult.passed()) {
-                            if (expectationResult.trace.stack) {
-                                this.steps.push({
-                                    message: expectationResult.message,
-                                    status: AllGreen.SpecStatus.Failed,
-                                    filename: null,
-                                    lineNumber: -1,
-                                    trace: this.formatTraceStack(expectationResult.trace.stack)
-                                });
-                            } else {
-                                this.steps.push({
-                                    message: expectationResult.message,
-                                    status: AllGreen.SpecStatus.Failed,
-                                    filename: null,
-                                    lineNumber: -1,
-                                    trace: ''
-                                });
-                            }
+                            this.steps.push(this.createFailedStep(expectationResult.message, expectationResult.trace.stack));
                         }
                     }
                 }
             }
         }
 
-        formatTraceStack(stack) {
+        createFailedStep(error, stack): AllGreen.ISpecStep {
+            var message = this.formatException(error);
+            var trace = stack ? this.formatTraceStack(stack, message) : '';
+            var step : AllGreen.ISpecStep = {
+                message: message,
+                errorLocation: null,
+                status: AllGreen.SpecStatus.Failed,
+                trace: trace
+            };
+            if (error.fileName || error.sourceURL) {
+                step.errorLocation = (error.fileName || error.sourceURL);
+                if (error.line || error.lineNumber) {
+                    step.errorLocation += ":" + (error.line || error.lineNumber);
+                    if (error.columnNumber) {
+                        step.errorLocation += ":" + error.columnNumber;
+                    }
+                }
+            }
+            return step;
+        }
+
+        formatException(error): string {
+            if (typeof (error) === "string")
+                return error;
+
+            return error.name + ': ' + error.message;
+        }
+
+        formatTraceStack(stack: string, message: string) {
+            if (stack.substring(0, message.length + 1) == message + "\n")
+                stack = stack.substring(message.length + 1);
             return stack
-                .replace(/[^\n]+\/jasmine\.js\:\d+(\n|$)/g, '')
+                .replace('/^' + message + '\n/g', '')
+                .replace(/[^\n]+\/jasmine\.js[\:\d)]+(\n|$)/g, '')
                 .replace(/[\n]+$/, '');
         }
     }
@@ -162,9 +176,30 @@ module AllGreen {
     }
 }
 
+declare module jasmine {
+    var util: any;
+}
+
 () => {
     if (AllGreenApp != null) {
         AllGreenApp.log('registering Jasmine adapter factory');
         AllGreenApp.registerAdapterFactory(new AllGreen.JasmineAdapterFactory());
+
+        jasmine.util.formatException = function (error) {
+            /*var message = error.name + ': ' + error.message;
+
+            if (error.fileName || error.sourceURL) {
+                message += " in " + (error.fileName || error.sourceURL);
+                if (error.line || error.lineNumber) {
+                    message += ":" + (error.line || error.lineNumber);
+                    if (error.columnNumber) {
+                        message += ":" + error.columnNumber;
+                    }
+                }
+            }
+
+            return message;*/
+            return error;
+        }
     }
 } ();

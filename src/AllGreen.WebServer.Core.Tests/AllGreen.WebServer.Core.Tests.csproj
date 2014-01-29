@@ -183,7 +183,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties AllGreenWebServerResources_EmbededResourcesTests_cs_UseParentNamespace="False" EmbededResourcesTests_cs_UseParentNamespace="False" FilesControllerTests_cs_UseParentNamespace="False" RunnerControllerTests_cs_UseParentNamespace="False" WebControllerTests_cs_UseParentNamespace="False" AssemblyWebResourcesTests_cs_UseParentNamespace="False" WebServerResourcesTests_cs_UseParentNamespace="False" />
+      <UserProperties WebServerResourcesTests_cs_UseParentNamespace="False" AssemblyWebResourcesTests_cs_UseParentNamespace="False" WebControllerTests_cs_UseParentNamespace="False" RunnerControllerTests_cs_UseParentNamespace="False" FilesControllerTests_cs_UseParentNamespace="False" EmbededResourcesTests_cs_UseParentNamespace="False" AllGreenWebServerResources_EmbededResourcesTests_cs_UseParentNamespace="False" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

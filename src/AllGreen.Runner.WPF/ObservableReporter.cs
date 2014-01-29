@@ -10,14 +10,16 @@ namespace AllGreen.Runner.WPF
     public class ObservableReporter : IReporter
     {
         private Dispatcher _Dispatcher;
+        IFileLocationParser _FileLocationParser;
         IFileLocationMapper _FileLocationMapper;
 
         public BindableCollection<RunnerViewModel> Runners { get; private set; }
         public BindableCollection<SuiteViewModel> Suites { get; private set; }
 
-        public ObservableReporter(IFileLocationMapper fileLocationMapper)
+        public ObservableReporter(IFileLocationParser fileLocationParser, IFileLocationMapper fileLocationMapper)
         {
             _Dispatcher = Dispatcher.CurrentDispatcher;
+            _FileLocationParser = fileLocationParser;
             _FileLocationMapper = fileLocationMapper;
             Runners = new BindableCollection<RunnerViewModel>();
             Suites = new BindableCollection<SuiteViewModel>();
@@ -171,7 +173,7 @@ namespace AllGreen.Runner.WPF
             {
                 specViewModel.Time = spec.Time;
             }
-            specViewModel.SetStatus(runnerId, spec.Status, spec.Time, spec.Steps, _FileLocationMapper);
+            specViewModel.SetStatus(runnerId, spec.Status, spec.Time, spec.Steps, _FileLocationParser, _FileLocationMapper);
             return specViewModel;
         }
     }

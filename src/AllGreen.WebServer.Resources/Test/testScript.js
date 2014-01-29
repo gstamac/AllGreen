@@ -1,4 +1,4 @@
-﻿
+﻿/// <reference path="../Scripts/typings/jasmine/jasmine.d.ts" />
 describe("Suite 1", function () {
     it("Test 1", function () {
         expect(true).not.toBe(false);
@@ -20,10 +20,18 @@ describe("Suite 2", function () {
         expect(true).not.toBe(false);
     });
 
+    function level1() {
+        return level2();
+    }
+
+    function level2() {
+        throw new Error('Something went terible wrong');
+    }
+
     describe("Suite 3", function () {
         it("Test 2", function () {
             runs(function () {
-                expect(true).toBe(false);
+                expect(level1()).toBe(false);
             });
             runs(function () {
                 expect(true).not.toBe(false);
@@ -41,3 +49,4 @@ describe("Suite 2", function () {
         });
     });
 });
+//# sourceMappingURL=testScript.js.map

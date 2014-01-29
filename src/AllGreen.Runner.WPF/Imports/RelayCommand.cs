@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Input;
 
-namespace AllGreen.Runner.WPF
+namespace Imports
 {
     public class RelayCommand<T> : ICommand where T : class
     {

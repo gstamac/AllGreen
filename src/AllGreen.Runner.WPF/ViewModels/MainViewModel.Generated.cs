@@ -6,6 +6,8 @@ using Caliburn.Micro;
 
 namespace AllGreen.Runner.WPF.ViewModels
 {
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("ImplementPropertyChangedCaliburn.tt", "")]
+	[System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
 	partial class MainViewModel: PropertyChangedBase
 	{
 		private System.String _ServerStatus;

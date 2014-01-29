@@ -477,6 +477,8 @@
 	private void OutputClassHeader(CodeClass codeClass, bool emptyLineBefore)
 	{
 		if (emptyLineBefore) WriteLine("");
+		WriteLine("[System.CodeDom.Compiler.GeneratedCodeAttribute(\"AddDataMsTests.tt\", \"\")]");
+		WriteLine("[System.Runtime.CompilerServices.CompilerGeneratedAttribute()]");
 		WriteLine("partial class " + codeClass.Name);
 		WriteLine("{");
 		PushIndent("\t");

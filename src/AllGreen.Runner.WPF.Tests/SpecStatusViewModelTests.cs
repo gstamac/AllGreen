@@ -55,9 +55,9 @@ namespace AllGreen.Runner.WPF.Tests
 
             specStatusViewModel.Steps = new BindableCollection<SpecStepViewModel>(new SpecStepViewModel[] { 
                     new SpecStepViewModel { Message = "Step 1 message", Status = SpecStatus.Passed, 
-                        Trace = new BindableCollection<SpecTraceStepViewModel>(new SpecTraceStepViewModel[] { SpecTraceStepViewModel.Create( "Step 1 trace", null), SpecTraceStepViewModel.Create("Step 1 trace continued", null)}) },
+                        Trace = new BindableCollection<SpecTraceStepViewModel>(new SpecTraceStepViewModel[] { SpecTraceStepViewModel.Create( "Step 1 trace", null, null), SpecTraceStepViewModel.Create("Step 1 trace continued", null, null)}) },
                     new SpecStepViewModel { Message = "Step 2 message", Status = SpecStatus.Failed, 
-                        Trace = new BindableCollection<SpecTraceStepViewModel>(new SpecTraceStepViewModel[]{SpecTraceStepViewModel.Create("Step 2 trace", null)}) }
+                        Trace = new BindableCollection<SpecTraceStepViewModel>(new SpecTraceStepViewModel[]{SpecTraceStepViewModel.Create("Step 2 trace", null, null)}) }
                 });
 
             specStatusViewModel.Description.Replace("\r", "").Should().Be("Passed in 11 ms\nStep 1 message Passed\nStep 1 trace\nStep 1 trace continued\nStep 2 message Failed\nStep 2 trace");

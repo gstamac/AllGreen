@@ -17,13 +17,13 @@ namespace AllGreen.Runner.WPF
     //ncrunch: no coverage start
     public class ExternalFileViewer : IFileViewer
     {
-        public void Open(FileLocation FileLocation)
+        public void Open(string fullPath, int lineNumber, int columnNumber)
         {
-            if (!String.IsNullOrEmpty(FileLocation.FullPath))
+            if (!String.IsNullOrEmpty(fullPath))
             {
                 System.Diagnostics.Process process = new System.Diagnostics.Process() { EnableRaisingEvents = false };
                 process.StartInfo.FileName = "editplus.exe";
-                process.StartInfo.Arguments = String.Format("-e {0} -cursor {1}:0", FileLocation.FullPath, FileLocation.LineNumber);
+                process.StartInfo.Arguments = String.Format("-e {0} -cursor {1}:{2}", fullPath, lineNumber, columnNumber);
                 process.Start();
             }
         }

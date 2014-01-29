@@ -51,15 +51,13 @@ namespace AllGreen.WebServer.Core
     {
         /*
         message: string;
+        errorLocation: string;
         status: SpecStatus;
-        filename: string;
-        lineNumber: number;
         trace: string;
         */
         public string Message { get; set; }
+        public string ErrorLocation { get; set; }
         public SpecStatus Status { get; set; }
-        public string Filename { get; set; }
-        public int LineNumber { get; set; }
         public string Trace { get; set; }
     }
 

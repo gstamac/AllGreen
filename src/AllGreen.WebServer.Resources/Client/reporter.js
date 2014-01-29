@@ -180,3 +180,4 @@ else
     }
     AllGreen.initializeDefaultReporters = initializeDefaultReporters;
 })(AllGreen || (AllGreen = {}));
+//# sourceMappingURL=reporter.js.map

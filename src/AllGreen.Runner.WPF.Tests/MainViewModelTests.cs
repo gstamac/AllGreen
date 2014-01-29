@@ -24,6 +24,7 @@ namespace AllGreen.Runner.WPF.Tests
             _ResourceResolver.Register<IConfiguration>(_Configuration);
             _FileViewer = Mock.Of<IFileViewer>();
             _ResourceResolver.Register<IFileViewer>(_FileViewer);
+            _ResourceResolver.Register<IFileLocationParser>(Mock.Of<IFileLocationParser>());
             _ResourceResolver.Register<IFileLocationMapper>(Mock.Of<IFileLocationMapper>());
             _MainViewModel = new MainViewModel(_ResourceResolver);
         }
@@ -83,11 +84,11 @@ namespace AllGreen.Runner.WPF.Tests
         [TestMethod]
         public void OpenFileCommandShouldOpenFileViewer()
         {
-            FileLocation fileLocation = new FileLocation("file", "fullPath", 10);
+            FileLocation fileLocation = new FileLocation("file", "fullPath", 10, 20);
 
             _MainViewModel.OpenFileCommand.Execute(fileLocation);
 
-            Mock.Get(_FileViewer).Verify(fv => fv.Open(fileLocation));
+            Mock.Get(_FileViewer).Verify(fv => fv.Open("fullPath", 10, 20));
         }
     }
 }

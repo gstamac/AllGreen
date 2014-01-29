@@ -42,9 +42,8 @@ module AllGreen {
 
     export interface ISpecStep {
         message: string;
+        errorLocation: string;
         status: SpecStatus;
-        filename: string;
-        lineNumber: number;
         trace: string;
     }
 

@@ -5,6 +5,6 @@ namespace AllGreen.WebServer.Core
 {
     public interface IFileViewer
     {
-        void Open(FileLocation FileLocation);
+        void Open(string fullPath, int lineNumber, int columnNumber);
     }
 }

@@ -11,6 +11,7 @@ using Microsoft.Owin.Hosting;
 using TemplateAttributes;
 using TinyIoC;
 using System.Windows;
+using Imports;
 
 namespace AllGreen.Runner.WPF.ViewModels
 {
@@ -46,14 +47,14 @@ namespace AllGreen.Runner.WPF.ViewModels
             Configuration = _ResourceResolver.Resolve<IConfiguration>();
             _FileViewer = _ResourceResolver.Resolve<IFileViewer>();
 
-            _Reporter = new ObservableReporter(_ResourceResolver.Resolve<IFileLocationMapper>());
+            _Reporter = new ObservableReporter(_ResourceResolver.Resolve<IFileLocationParser>(), _ResourceResolver.Resolve<IFileLocationMapper>());
 
             _ResourceResolver.Register<IReporter>(_Reporter);
 
             StartServerCommand = new RelayCommand(StartServer);
             RunAllTestsCommand = new RelayCommand(RunAllTests);
             ConfigurationCommand = new RelayCommand(() => ConfigurationVisible = true);
-            OpenFileCommand = new RelayCommand<FileLocation>(fl => _FileViewer.Open(fl));
+            OpenFileCommand = new RelayCommand<FileLocation>(fl => _FileViewer.Open(fl.FullPath, fl.LineNumber, fl.ColumnNumber));
         }
 
         //ncrunch: no coverage start

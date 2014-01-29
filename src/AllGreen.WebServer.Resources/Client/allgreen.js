@@ -115,3 +115,4 @@ var AllGreen;
     })();
     AllGreen.App = App;
 })(AllGreen || (AllGreen = {}));
+//# sourceMappingURL=allgreen.js.map

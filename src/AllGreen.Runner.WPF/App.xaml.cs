@@ -31,7 +31,8 @@ namespace AllGreen.Runner.WPF
             resourceResolver.Register<IRunnerHub, RunnerHub>();
             resourceResolver.Register<IRunnerClients>((ioc, npo) => new RunnerClients(GlobalHost.ConnectionManager.GetHubContext<RunnerHub>().Clients));
             resourceResolver.Register<IFileViewer, ExternalFileViewer>();
-            resourceResolver.Register<IFileLocationMapper>(new UrlToPathMapper(configuration.ServerUrl, webResources));
+            resourceResolver.Register<IFileLocationParser>(new FileLocationParser(configuration.ServerUrl, webResources));
+            resourceResolver.Register<IFileLocationMapper>(new JsMapFileMapper(new FileSystem()));
 
             MainWindow mainWindow = new MainWindow() { DataContext = new MainViewModel(resourceResolver) };
             mainWindow.Show();
@@ -47,7 +48,7 @@ namespace AllGreen.Runner.WPF
                     new FolderFilter[] { 
                         new FolderFilter() { Folder = "Scripts", FilePattern = "jasmine.js", IncludeSubfolders = false },
                         new FolderFilter() { Folder = "Client/ReporterAdapters", FilePattern = "jasmineAdapter.js", IncludeSubfolders = false },
-                        new FolderFilter() { Folder = "Client", FilePattern = "testScript.js", IncludeSubfolders = false },
+                        new FolderFilter() { Folder = "Test", FilePattern = "testScript.js", IncludeSubfolders = false },
 
                         //new FolderFilter() { Folder = "Scripts", FilePattern = "jasmine.js", IncludeSubfolders = false },
                         //new FolderFilter() { Folder = "Scripts", FilePattern = "*.js", IncludeSubfolders = true },

@@ -6,6 +6,7 @@ using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Caliburn.Micro;
 using AllGreen.Runner.WPF.ViewModels;
+using Moq;
 
 namespace AllGreen.Runner.WPF.Tests
 {
@@ -53,7 +54,7 @@ namespace AllGreen.Runner.WPF.Tests
             TestHelper.TestCollectionChanged<BindableDictionary<string, SpecStatusViewModel>, KeyValuePair<string, SpecStatusViewModel>>(_SpecOrSuiteViewModel.Statuses)
                 .Action(c => _SpecOrSuiteViewModel.SetStatus(guid1, SpecStatus.Failed, 1)).Adds(CreateKeyValue(guid1, SpecStatus.Failed, 1, 0)).CountIs(1)
                 .Action(c => _SpecOrSuiteViewModel.SetStatus(guid2, SpecStatus.Skipped, 2)).Adds(CreateKeyValue(guid2, SpecStatus.Skipped, 2, 0)).CountIs(2)
-                .Action(c => _SpecOrSuiteViewModel.SetStatus(guid1, SpecStatus.Skipped, 3, steps, null)).DoesNoChange();
+                .Action(c => _SpecOrSuiteViewModel.SetStatus(guid1, SpecStatus.Skipped, 3, steps, Mock.Of<IFileLocationParser>(), null)).DoesNoChange();
 
             _SpecOrSuiteViewModel.Statuses.ShouldAllBeEquivalentTo(new KeyValuePair<string, SpecStatusViewModel>[] { 
                 CreateKeyValue(guid1, SpecStatus.Skipped, 3, 2, steps),
@@ -81,7 +82,7 @@ namespace AllGreen.Runner.WPF.Tests
                 {
                     Message = s.Message,
                     Status = s.Status,
-                    Trace = new BindableCollection<SpecTraceStepViewModel>(new SpecTraceStepViewModel[] { SpecTraceStepViewModel.Create(s.Trace, null) })
+                    Trace = new BindableCollection<SpecTraceStepViewModel>(new SpecTraceStepViewModel[] { SpecTraceStepViewModel.Create(s.Trace, null, null) })
                 }));
             return vm;
         }

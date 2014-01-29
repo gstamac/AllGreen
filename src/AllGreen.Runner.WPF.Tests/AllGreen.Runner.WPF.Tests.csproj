@@ -74,8 +74,27 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AddDataMsTests.tt</DependentUpon>
     </Compile>
+    <Compile Include="CompositeFileLocationMapperTests.cs" />
     <Compile Include="ConverterTests.cs" />
-    <Compile Include="FileLocationMapperTests.cs" />
+    <Compile Include="FileLocationParserTests.cs">
+      <Template>AddDataMsTests.tt</Template>
+      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
+      <LastGenOutput>FileLocationParserTests.Generated.cs</LastGenOutput>
+    </Compile>
+    <Compile Include="FileLocationParserTests.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FileLocationParserTests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JsMapFileMapperTests.cs">
+      <Template>AddDataMsTests.tt</Template>
+      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
+      <LastGenOutput>JsMapFileMapperTests.Generated.cs</LastGenOutput>
+    </Compile>
+    <Compile Include="JsMapFileMapperTests.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>JsMapFileMapperTests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JsMapFileTests.cs" />
     <Compile Include="MainViewModelTests.cs" />
     <Compile Include="ObservableReporterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -137,6 +156,11 @@
   </Choose>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties JsMapFileMapperTests_cs_UseParentNamespace="False" />
+    </VisualStudio>
+  </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

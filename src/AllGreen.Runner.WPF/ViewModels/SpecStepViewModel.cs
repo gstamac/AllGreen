@@ -10,8 +10,9 @@ namespace AllGreen.Runner.WPF.ViewModels
     internal interface ISpecStepViewModel
     {
         string Message { get; set; }
+        FileLocation ErrorLocation { get; set; }
+        FileLocation MappedLocation { get; set; }
         SpecStatus Status { get; set; }
-        FileLocation ScriptLocation { get; set; }
         BindableCollection<SpecTraceStepViewModel> Trace { get; set; }
     }
 
@@ -23,29 +24,30 @@ namespace AllGreen.Runner.WPF.ViewModels
             return String.Format("{0} {1}{2}{3}{2}", Message, Status, Environment.NewLine, String.Join(Environment.NewLine, Trace.Select(t => t.Message)));
         }
 
-        public static SpecStepViewModel Create(SpecStep specStep, IFileLocationMapper fileLocationMapper)
+        public static SpecStepViewModel Create(SpecStep specStep, IFileLocationParser fileLocationParser, IFileLocationMapper fileLocationMapper)
         {
             SpecStepViewModel specStepViewModel = new SpecStepViewModel
                         {
                             Message = specStep.Message,
+                            ErrorLocation = fileLocationParser.Parse(specStep.ErrorLocation),
                             Status = specStep.Status,
-                            ScriptLocation = null,
-                            Trace = ParseTrace(specStep.Trace, fileLocationMapper)
+                            Trace = ParseTrace(specStep.Trace, fileLocationParser, fileLocationMapper)
                         };
-            if (specStep.Filename != null)
-            {
-                specStepViewModel.ScriptLocation = fileLocationMapper.Map(specStep.Filename, specStep.LineNumber);
-            }
+            if (specStepViewModel.ErrorLocation != null)
+                specStepViewModel.MappedLocation = fileLocationMapper.Map(specStepViewModel.ErrorLocation);
             return specStepViewModel;
         }
 
-        private static BindableCollection<SpecTraceStepViewModel> ParseTrace(string trace, IFileLocationMapper fileLocationMapper)
+        private static BindableCollection<SpecTraceStepViewModel> ParseTrace(string trace, IFileLocationParser fileLocationParser, IFileLocationMapper fileLocationMapper)
         {
             BindableCollection<SpecTraceStepViewModel> traceLines = new BindableCollection<SpecTraceStepViewModel>();
 
-            foreach (string traceLine in trace.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+            if (!String.IsNullOrEmpty(trace))
             {
-                traceLines.Add(SpecTraceStepViewModel.Create(traceLine, fileLocationMapper));
+                foreach (string traceLine in trace.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    traceLines.Add(SpecTraceStepViewModel.Create(traceLine, fileLocationParser, fileLocationMapper));
+                }
             }
 
             return traceLines;

@@ -4,6 +4,7 @@ using AllGreen.Runner.WPF.ViewModels;
 using AllGreen.WebServer.Core;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace AllGreen.Runner.WPF.Tests
 {
@@ -15,7 +16,7 @@ namespace AllGreen.Runner.WPF.Tests
         [TestInitialize]
         public void Setup()
         {
-            _Reporter = new ObservableReporter(null);
+            _Reporter = new ObservableReporter(Mock.Of<IFileLocationParser>(), null);
         }
 
         [TestClass]

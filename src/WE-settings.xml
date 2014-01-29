@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <webessentials version="1.9">
   <settings>
-    <CoffeeScriptGenerateJsFile>True</CoffeeScriptGenerateJsFile>
-    <CoffeeScriptMinify>True</CoffeeScriptMinify>
-    <CoffeeScriptShowPreviewWindow>True</CoffeeScriptShowPreviewWindow>
-    <CoffeeScriptWrapClosure>True</CoffeeScriptWrapClosure>
+    <CoffeeScriptCompileOnBuild>false</CoffeeScriptCompileOnBuild>
+    <CoffeeScriptCompileToFolder>false</CoffeeScriptCompileToFolder>
+    <CoffeeScriptEnableIced>false</CoffeeScriptEnableIced>
+    <CoffeeScriptGenerateJsFile>true</CoffeeScriptGenerateJsFile>
+    <CoffeeScriptMinify>true</CoffeeScriptMinify>
+    <CoffeeScriptShowPreviewWindow>true</CoffeeScriptShowPreviewWindow>
+    <CoffeeScriptWrapClosure>true</CoffeeScriptWrapClosure>
     <CssAutoCloseCurlyBraces>True</CssAutoCloseCurlyBraces>
     <CssEnableMinification>True</CssEnableMinification>
     <CssEnableSelectorHighligting>True</CssEnableSelectorHighligting>
@@ -86,9 +89,13 @@
     <ScssGenerateCssFile>True</ScssGenerateCssFile>
     <ScssMinify>True</ScssMinify>
     <ScssShowPreviewWindow>True</ScssShowPreviewWindow>
-    <TypeScriptAddGeneratedFilesToProject>True</TypeScriptAddGeneratedFilesToProject>
-    <TypeScriptGenerateJsFile>True</TypeScriptGenerateJsFile>
-    <TypeScriptMinify>True</TypeScriptMinify>
-    <TypeScriptShowPreviewWindow>True</TypeScriptShowPreviewWindow>
+    <TypeScriptAddGeneratedFilesToProject>true</TypeScriptAddGeneratedFilesToProject>
+    <TypeScriptCompileES3>false</TypeScriptCompileES3>
+    <TypeScriptCompileOnBuild>false</TypeScriptCompileOnBuild>
+    <TypeScriptGenerateJsFile>true</TypeScriptGenerateJsFile>
+    <TypeScriptMinify>true</TypeScriptMinify>
+    <TypeScriptProduceSourceMap>true</TypeScriptProduceSourceMap>
+    <TypeScriptResaveWithUtf8BOM>false</TypeScriptResaveWithUtf8BOM>
+    <TypeScriptShowPreviewWindow>true</TypeScriptShowPreviewWindow>
   </settings>
 </webessentials>

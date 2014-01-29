@@ -145,6 +145,102 @@ describe("AllGreen JasmineAdapter", () => {
         ]);
     });
 
+    it("Handles string messages", () => {
+        this.spec.results = createSpecResults(false, false, [
+            {
+                type: 'expect',
+                passed: () => false,
+                message: 'expected something and failed',
+                trace: ''
+            }
+        ]);
+        this.adapter.reportSpecResults(this.spec);
+        expect(this.reporter.specUpdated).toHaveBeenCalledForSpec(this.specGuid, 'test 1', this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, [
+            { message: 'expected something and failed' }
+        ]);
+    });
+
+    it("Handles Firefox error object messages", () => {
+        this.spec.results = createSpecResults(false, false, [
+            {
+                type: 'expect',
+                passed: () => false,
+                message: {
+                    name: 'Error',
+                    message: 'expected something and failed',
+                    fileName: 'file.js',
+                    lineNumber: 10,
+                    columnNumber: 12
+                },
+                trace: ''
+            }
+        ]);
+        this.adapter.reportSpecResults(this.spec);
+        expect(this.reporter.specUpdated).toHaveBeenCalledForSpec(this.specGuid, 'test 1', this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, [
+            {
+                message: 'Error: expected something and failed',
+                errorLocation: 'file.js:10:12'
+            }
+        ]);
+    });
+
+    it("Handles Safari error object messages", () => {
+        this.spec.results = createSpecResults(false, false, [
+            {
+                type: 'expect',
+                passed: () => false,
+                message: {
+                    name: 'Error',
+                    message: 'expected something and failed',
+                    sourceURL: 'file.js',
+                    line: 10
+                },
+                trace: ''
+            }
+        ]);
+        this.adapter.reportSpecResults(this.spec);
+        expect(this.reporter.specUpdated).toHaveBeenCalledForSpec(this.specGuid, 'test 1', this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, [
+            {
+                message: 'Error: expected something and failed',
+                errorLocation: 'file.js:10'
+            }
+        ]);
+    });
+
+    it("Handles IE,Opera,Chrome error object messages", () => {
+        this.spec.results = createSpecResults(false, false, [
+            {
+                type: 'expect',
+                passed: () => false,
+                message: {
+                    name: 'Error',
+                    message: 'expected something and failed'
+                },
+                trace: ''
+            }
+        ]);
+        this.adapter.reportSpecResults(this.spec);
+        expect(this.reporter.specUpdated).toHaveBeenCalledForSpec(this.specGuid, 'test 1', this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, [
+            {
+                message: 'Error: expected something and failed'
+            }
+        ]);
+    });
+
+    it("Removes error message from first line of stack", () => {
+        var trace =
+            'error message\n' +
+            'trace 1\n' +
+            'trace 2\n';
+        this.spec.results = createSpecResults(false, false, [
+            createSpecResultExpectStep(false, 'error message', trace)
+        ]);
+        this.adapter.reportSpecResults(this.spec);
+        expect(this.reporter.specUpdated).toHaveBeenCalledForSpec(this.specGuid, 'test 1', this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, [
+            { message: 'error message', status: AllGreen.SpecStatus.Failed, trace: 'trace 1\ntrace 2' }
+        ]);
+    });
+
     it("Removes jasmine entries from stack", () => {
         var trace =
             'jasmine.ExpectationResult@http://localhost:8080/Scripts/jasmine.js:114\n' +

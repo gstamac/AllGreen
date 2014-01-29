@@ -64,7 +64,12 @@ namespace AllGreen.WebServer.Core
             if (String.IsNullOrEmpty(userAgent)) return "";
 
             Parser uaParser = Parser.GetDefault();
-            return uaParser.Parse(userAgent).ToString();
+            ClientInfo clientInfo = uaParser.Parse(userAgent);
+            string os = clientInfo.OS.ToString();
+            string device = clientInfo.Device.ToString();
+            if (device == "Other") device = "";
+            string browser = clientInfo.UserAgent.ToString();
+            return String.Format("{0} {1} {2}", os, device, browser).Replace("  ", " ");
         }
     }
 }

@@ -147,6 +147,107 @@ describe("AllGreen JasmineAdapter", function () {
         ]);
     });
 
+    it("Handles string messages", function () {
+        _this.spec.results = createSpecResults(false, false, [
+            {
+                type: 'expect',
+                passed: function () {
+                    return false;
+                },
+                message: 'expected something and failed',
+                trace: ''
+            }
+        ]);
+        _this.adapter.reportSpecResults(_this.spec);
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, [
+            { message: 'expected something and failed' }
+        ]);
+    });
+
+    it("Handles Firefox error object messages", function () {
+        _this.spec.results = createSpecResults(false, false, [
+            {
+                type: 'expect',
+                passed: function () {
+                    return false;
+                },
+                message: {
+                    name: 'Error',
+                    message: 'expected something and failed',
+                    fileName: 'file.js',
+                    lineNumber: 10,
+                    columnNumber: 12
+                },
+                trace: ''
+            }
+        ]);
+        _this.adapter.reportSpecResults(_this.spec);
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, [
+            {
+                message: 'Error: expected something and failed',
+                errorLocation: 'file.js:10:12'
+            }
+        ]);
+    });
+
+    it("Handles Safari error object messages", function () {
+        _this.spec.results = createSpecResults(false, false, [
+            {
+                type: 'expect',
+                passed: function () {
+                    return false;
+                },
+                message: {
+                    name: 'Error',
+                    message: 'expected something and failed',
+                    sourceURL: 'file.js',
+                    line: 10
+                },
+                trace: ''
+            }
+        ]);
+        _this.adapter.reportSpecResults(_this.spec);
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, [
+            {
+                message: 'Error: expected something and failed',
+                errorLocation: 'file.js:10'
+            }
+        ]);
+    });
+
+    it("Handles IE,Opera,Chrome error object messages", function () {
+        _this.spec.results = createSpecResults(false, false, [
+            {
+                type: 'expect',
+                passed: function () {
+                    return false;
+                },
+                message: {
+                    name: 'Error',
+                    message: 'expected something and failed'
+                },
+                trace: ''
+            }
+        ]);
+        _this.adapter.reportSpecResults(_this.spec);
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, [
+            {
+                message: 'Error: expected something and failed'
+            }
+        ]);
+    });
+
+    it("Removes error message from first line of stack", function () {
+        var trace = 'error message\n' + 'trace 1\n' + 'trace 2\n';
+        _this.spec.results = createSpecResults(false, false, [
+            createSpecResultExpectStep(false, 'error message', trace)
+        ]);
+        _this.adapter.reportSpecResults(_this.spec);
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, [
+            { message: 'error message', status: AllGreen.SpecStatus.Failed, trace: 'trace 1\ntrace 2' }
+        ]);
+    });
+
     it("Removes jasmine entries from stack", function () {
         var trace = 'jasmine.ExpectationResult@http://localhost:8080/Scripts/jasmine.js:114\n' + 'trace 1\n' + 'jasmine.Block.prototype.execute@http://localhost:8080/Scripts/jasmine.js:1064\n' + 'trace 2\n' + 'jasmine.Queue.prototype.next_/onComplete@http://localhost:8080/Scripts/jasmine.js:2092' + 'jasmine.Suite.prototype.finish@http://localhost:8080/Scripts/jasmine.js:2478' + 'jasmine.Suite.prototype.execute/<@http://localhost:8080/Scripts/jasmine.js:2522';
         _this.spec.results = createSpecResults(false, false, [
@@ -223,3 +324,4 @@ describe("AllGreen JasmineAdapter", function () {
         });
     });
 });
+//# sourceMappingURL=JasmineAdapterSpecs.js.map

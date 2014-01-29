@@ -52,7 +52,7 @@ namespace AllGreen.Runner.WPF.Tests
                 Time = 100,
                 Steps = new SpecStep[] 
                     { 
-                        new SpecStep { Message = "Step 1", Status = SpecStatus.Running, Filename = "file.js", LineNumber = 10, Trace = "Step 1 Trace line 1\nTrace line 2\nTrace line 3" },
+                        new SpecStep { Message = "Step 1", Status = SpecStatus.Running, Trace = "Step 1 Trace line 1\nTrace line 2\nTrace line 3" },
                         new SpecStep { Message = "Step 2", Status = SpecStatus.Failed, Trace = "Step 2 Trace line 1\nTrace line 2\nTrace line 3" },
                     }
             };

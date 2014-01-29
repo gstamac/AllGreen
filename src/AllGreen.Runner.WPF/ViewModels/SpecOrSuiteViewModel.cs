@@ -25,10 +25,10 @@ namespace AllGreen.Runner.WPF.ViewModels
 
         public void SetStatus(string runnerId, SpecStatus specStatus, UInt64 time)
         {
-            SetStatus(runnerId, specStatus, time, null, null);
+            SetStatus(runnerId, specStatus, time, null, null, null);
         }
 
-        public void SetStatus(string runnerId, SpecStatus specStatus, UInt64 time, IEnumerable<SpecStep> steps, IFileLocationMapper fileLocationMapper)
+        public void SetStatus(string runnerId, SpecStatus specStatus, UInt64 time, IEnumerable<SpecStep> steps, IFileLocationParser fileLocationParser, IFileLocationMapper fileLocationMapper)
         {
             SpecStatusViewModel specStatusViewModel = null;
             if (!Statuses.TryGetValue(runnerId, out specStatusViewModel) || specStatusViewModel.Time <= time)
@@ -45,7 +45,7 @@ namespace AllGreen.Runner.WPF.ViewModels
                 specStatusViewModel.Status = specStatus;
                 specStatusViewModel.Time = time;
                 if (steps != null)
-                    specStatusViewModel.Steps = new BindableCollection<SpecStepViewModel>(steps.Select(s => SpecStepViewModel.Create(s, fileLocationMapper)));
+                    specStatusViewModel.Steps = new BindableCollection<SpecStepViewModel>(steps.Select(s => SpecStepViewModel.Create(s, fileLocationParser, fileLocationMapper)));
                 UpdateDuration();
             }
         }

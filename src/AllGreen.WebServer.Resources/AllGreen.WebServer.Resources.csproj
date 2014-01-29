@@ -63,6 +63,19 @@
     <Content Include="..\..\..\DefinitelyTyped\jasmine\jasmine.d.ts">
       <Link>Scripts\typings\jasmine\jasmine.d.ts</Link>
     </Content>
+    <TypeScriptCompile Include="Test\file1.ts" />
+    <Content Include="Test\file1.js">
+      <DependentUpon>file1.ts</DependentUpon>
+    </Content>
+    <Content Include="Test\file1.min.js">
+      <DependentUpon>file1.ts</DependentUpon>
+    </Content>
+    <Content Include="Test\testScript.js">
+      <DependentUpon>testScript.ts</DependentUpon>
+    </Content>
+    <Content Include="Test\testScript.min.js">
+      <DependentUpon>testScript.ts</DependentUpon>
+    </Content>
     <EmbeddedResource Include="Client\ReporterAdapters\jasmineAdapter.js">
       <DependentUpon>jasmineAdapter.ts</DependentUpon>
     </EmbeddedResource>
@@ -139,7 +152,7 @@
     </Content>
     <EmbeddedResource Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />
-    <EmbeddedResource Include="Client\testScript.js" />
+    <TypeScriptCompile Include="Test\testScript.ts" />
     <EmbeddedResource Include="Client\runner.html" />
     <EmbeddedResource Include="Client\client.html" />
   </ItemGroup>
@@ -192,6 +205,15 @@
     <None Include="spec\ReporterAdapter\JasmineAdapterSpecs.js.map">
       <DependentUpon>JasmineAdapterSpecs.ts</DependentUpon>
     </None>
+    <None Include="Test\file1.js.map">
+      <DependentUpon>file1.ts</DependentUpon>
+    </None>
+    <None Include="Test\testScript.js.map">
+      <DependentUpon>testScript.ts</DependentUpon>
+    </None>
+    <None Include="Test\testScript.min.js.map">
+      <DependentUpon>testScript.js</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -211,7 +233,7 @@
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties css__UseParentNamespace="False" Scripts_typings_jasmine__UseParentNamespace="False" Scripts_typings__UseParentNamespace="False" Client_ReporterAdapters__UseParentNamespace="False" Client__UseParentNamespace="False" spec__UseParentNamespace="False" Scripts__UseParentNamespace="False" Properties__UseParentNamespace="False" />
+      <UserProperties NewFolder1__UseParentNamespace="False" Properties__UseParentNamespace="False" Scripts__UseParentNamespace="False" spec__UseParentNamespace="False" Client__UseParentNamespace="False" Client_ReporterAdapters__UseParentNamespace="False" Scripts_typings__UseParentNamespace="False" Scripts_typings_jasmine__UseParentNamespace="False" css__UseParentNamespace="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

@@ -43,6 +43,8 @@ namespace AllGreen.Runner.WPF.Tests
 
             objectToVisibilityConverter.Convert(null, typeof(Visibility), null, null).Should().Be(Visibility.Collapsed);
             objectToVisibilityConverter.Convert("something", typeof(Visibility), null, null).Should().Be(Visibility.Visible);
+            objectToVisibilityConverter.Convert(null, typeof(Visibility), "Reverse", null).Should().Be(Visibility.Visible);
+            objectToVisibilityConverter.Convert("something", typeof(Visibility), "Reverse", null).Should().Be(Visibility.Collapsed);
 
             objectToVisibilityConverter.ConvertBack(null, typeof(object), null, null).Should().BeNull();
         }

@@ -9,6 +9,6 @@ namespace AllGreen.Runner.WPF
 {
     public interface IFileLocationMapper
     {
-        FileLocation Map(string filename, int lineNumber);
+        FileLocation Map(FileLocation fileLocation);
     }
 }

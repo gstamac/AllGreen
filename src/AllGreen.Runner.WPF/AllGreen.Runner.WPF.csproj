@@ -111,20 +111,24 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BindableDictionary.cs" />
-    <Compile Include="FileLocationMapper.cs" />
-    <Compile Include="IFileLocationMapper.cs" />
+    <Compile Include="CompositeFileLocationMapper.cs" />
+    <Compile Include="FileLocationParser.cs" />
+    <Compile Include="IFileLocationParser.cs" />
     <Compile Include="ImplementPropertyChangedCaliburn.Generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ImplementPropertyChangedCaliburn.tt</DependentUpon>
     </Compile>
+    <Compile Include="Imports\RelayCommand.cs" />
+    <Compile Include="JsMapFile.cs" />
+    <Compile Include="JsMapFileMapper.cs" />
+    <Compile Include="IFileLocationMapper.cs" />
     <Compile Include="MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ObservableReporter.cs" />
-    <Compile Include="RelayCommand.cs" />
     <Compile Include="ValueConverters\ObjectToVisibilityConverter.cs" />
-    <Compile Include="ViewModels\ExternalFileViewer.cs" />
+    <Compile Include="ExternalFileViewer.cs" />
     <Compile Include="ViewModels\SpecStatusViewModel.Generated.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>SpecStatusViewModel.cs</DependentUpon>
@@ -239,7 +243,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Properties\Licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

@@ -191,6 +191,8 @@
 	private void OutputClassHeader(CodeClass codeClass, bool emptyLineBefore, bool needsPropertyChangedBase)
 	{
 		if (emptyLineBefore) WriteLine("");
+		WriteLine("[System.CodeDom.Compiler.GeneratedCodeAttribute(\"ImplementPropertyChangedCaliburn.tt\", \"\")]");
+		WriteLine("[System.Runtime.CompilerServices.CompilerGeneratedAttribute()]");
 		if (needsPropertyChangedBase)
 			WriteLine("partial class " + codeClass.Name + ": PropertyChangedBase");
 		else
