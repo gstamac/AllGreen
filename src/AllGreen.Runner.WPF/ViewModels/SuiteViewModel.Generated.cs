@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
@@ -6,8 +7,12 @@ using Caliburn.Micro;
 
 namespace AllGreen.Runner.WPF.ViewModels
 {
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("ImplementPropertyChangedCaliburn.tt", "")]
+	[System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
 	partial class SuiteViewModel
 	{
+		#region ISuiteViewModel
+
 		private System.Boolean _IsExpanded;
 		public System.Boolean IsExpanded
 		{
@@ -29,5 +34,6 @@ namespace AllGreen.Runner.WPF.ViewModels
 			private set { ChangeProperty<Caliburn.Micro.BindableCollection<AllGreen.Runner.WPF.ViewModels.SuiteViewModel>>("Suites", ref _Suites, value); }
 		}
 
+		#endregion
 	}
 }

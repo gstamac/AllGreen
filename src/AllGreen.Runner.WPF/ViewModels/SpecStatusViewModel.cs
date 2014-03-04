@@ -7,20 +7,20 @@ using TemplateAttributes;
 
 namespace AllGreen.Runner.WPF.ViewModels
 {
-    public interface ISpecStatusViewModel
-    {
-        SpecStatus Status { get; set; }
-        UInt64 Time { get; set; }
-        int Duration { get; set; }
-        string DurationText { get; }
-        RunnerViewModel Runner { get; set; }
-        BindableCollection<SpecStepViewModel> Steps { get; set; }
-        string Description { get; }
-    }
-
     [ImplementPropertyChangedCaliburn(typeof(ISpecStatusViewModel))]
-    public partial class SpecStatusViewModel : ISpecStatusViewModel
+    public partial class SpecStatusViewModel
     {
+        interface ISpecStatusViewModel
+        {
+            SpecStatus Status { get; set; }
+            UInt64 Time { get; set; }
+            int Duration { get; set; }
+            string DurationText { get; }
+            RunnerViewModel Runner { get; set; }
+            BindableCollection<SpecStepViewModel> Steps { get; set; }
+            string Description { get; }
+        }
+
         private void OnStatusChanged(SpecStatus oldValue, SpecStatus newValue)
         {
             UpdateDescription();

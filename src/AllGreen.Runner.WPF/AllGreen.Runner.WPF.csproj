@@ -134,7 +134,7 @@
       <DependentUpon>SpecStatusViewModel.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\SpecStepViewModel.cs">
-      <Template>..\ImplementPropertyChangedCaliburn.tt</Template>
+      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
       <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
       <LastGenOutput>SpecStepViewModel.Generated.cs</LastGenOutput>
       <LastOutputs>.\SpecStepViewModel.Generated.cs</LastOutputs>
@@ -146,7 +146,7 @@
     <Compile Include="ValueConverters\NotConverter.cs" />
     <Compile Include="ValueConverters\RunnersToStatusesConverter.cs" />
     <Compile Include="ViewModels\RunnerViewModel.cs">
-      <Template>..\ImplementPropertyChangedCaliburn.tt</Template>
+      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
       <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
       <LastGenOutput>RunnerViewModel.Generated.cs</LastGenOutput>
       <LastOutputs>.\RunnerViewModel.Generated.cs</LastOutputs>
@@ -156,7 +156,7 @@
       <DependentUpon>RunnerViewModel.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\SpecOrSuiteViewModel.cs">
-      <Template>..\ImplementPropertyChangedCaliburn.tt</Template>
+      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
       <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
       <LastGenOutput>SpecOrSuiteViewModel.Generated.cs</LastGenOutput>
       <LastOutputs>.\SpecOrSuiteViewModel.Generated.cs</LastOutputs>
@@ -167,23 +167,16 @@
     </Compile>
     <Compile Include="ValueConverters\SpecStatusToImageConverter.cs" />
     <Compile Include="ViewModels\SpecStatusViewModel.cs">
-      <Template>..\ImplementPropertyChangedCaliburn.tt</Template>
+      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
       <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
       <LastGenOutput>SpecStatusViewModel.Generated.cs</LastGenOutput>
       <LastOutputs>.\SpecStatusViewModel.Generated.cs</LastOutputs>
     </Compile>
     <Compile Include="ViewModels\SpecTraceStepViewModel.cs">
-      <Template>..\ImplementPropertyChangedCaliburn.tt</Template>
-      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
-      <LastGenOutput>SpecTraceStepViewModel.Generated.cs</LastGenOutput>
       <LastOutputs>.\SpecTraceStepViewModel.Generated.cs</LastOutputs>
     </Compile>
-    <Compile Include="ViewModels\SpecTraceStepViewModel.Generated.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>SpecTraceStepViewModel.cs</DependentUpon>
-    </Compile>
     <Compile Include="ViewModels\SpecViewModel.cs">
-      <Template>..\ImplementPropertyChangedCaliburn.tt</Template>
+      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
       <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
       <LastGenOutput>SpecViewModel.Generated.cs</LastGenOutput>
       <LastOutputs>.\SpecViewModel.Generated.cs</LastOutputs>
@@ -193,7 +186,7 @@
       <DependentUpon>SpecViewModel.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\SuiteViewModel.cs">
-      <Template>..\ImplementPropertyChangedCaliburn.tt</Template>
+      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
       <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
       <LastGenOutput>SuiteViewModel.Generated.cs</LastGenOutput>
       <LastOutputs>.\SuiteViewModel.Generated.cs</LastOutputs>
@@ -215,10 +208,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewModels\MainViewModel.cs">
-      <Template>..\ImplementPropertyChangedCaliburn.tt</Template>
       <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
       <LastGenOutput>MainViewModel.Generated.cs</LastGenOutput>
       <LastOutputs>.\MainViewModel.Generated.cs</LastOutputs>
+      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
     </Compile>
     <Compile Include="ViewModels\MainViewModel.Generated.cs">
       <AutoGen>True</AutoGen>
@@ -292,7 +285,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties MainView_xaml_UseParentNamespace="False" MainWindow_xaml_UseParentNamespace="False" Properties__UseParentNamespace="False" NewFolder1__UseParentNamespace="False" ValueConverters__UseParentNamespace="False" StepViewModel_cs_UseParentNamespace="False" SpecStepViewModel_cs_UseParentNamespace="False" SpecStatusViewModel_cs_UseParentNamespace="False" ViewModels__UseParentNamespace="False" ViewModels_SpecTraceStepViewModel_cs_UseParentNamespace="False" T4Templates_ImplementPropertyChangedCaliburn__UseParentNamespace="False" />
+      <UserProperties T4Templates_ImplementPropertyChangedCaliburn__UseParentNamespace="False" ViewModels_SpecTraceStepViewModel_cs_UseParentNamespace="False" ViewModels__UseParentNamespace="False" SpecStatusViewModel_cs_UseParentNamespace="False" SpecStepViewModel_cs_UseParentNamespace="False" StepViewModel_cs_UseParentNamespace="False" ValueConverters__UseParentNamespace="False" NewFolder1__UseParentNamespace="False" Properties__UseParentNamespace="False" MainWindow_xaml_UseParentNamespace="False" MainView_xaml_UseParentNamespace="False" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

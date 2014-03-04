@@ -4,18 +4,18 @@ using TemplateAttributes;
 
 namespace AllGreen.Runner.WPF.ViewModels
 {
-    internal interface IRunnerViewModel
-    {
-        string ConnectionId { get; set; }
-        string Name { get; set; }
-        string UserAgent { get; set; }
-        string Status { get; set; }
-        Brush Background { get; set; }
-    }
-
     [ImplementPropertyChangedCaliburn(typeof(IRunnerViewModel))]
-    public partial class RunnerViewModel : IRunnerViewModel
+    public partial class RunnerViewModel
     {
+        interface IRunnerViewModel
+        {
+            string ConnectionId { get; set; }
+            string Name { get; set; }
+            string UserAgent { get; set; }
+            string Status { get; set; }
+            Brush Background { get; set; }
+        }
+
         private static Random _Random = new Random();
 
         public RunnerViewModel()

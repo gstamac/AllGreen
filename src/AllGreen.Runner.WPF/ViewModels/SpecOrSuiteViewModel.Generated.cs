@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
@@ -6,8 +7,12 @@ using Caliburn.Micro;
 
 namespace AllGreen.Runner.WPF.ViewModels
 {
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("ImplementPropertyChangedCaliburn.tt", "")]
+	[System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
 	partial class SpecOrSuiteViewModel: PropertyChangedBase
 	{
+		#region ISpecOrSuiteViewModel
+
 		private System.Guid _Id;
 		public System.Guid Id
 		{
@@ -36,6 +41,7 @@ namespace AllGreen.Runner.WPF.ViewModels
 			set { ChangeProperty<System.String>("Duration", ref _Duration, value); }
 		}
 
+		#endregion
 
 		#region INotifyPropertyChanged implementation
 		//ncrunch: no coverage start

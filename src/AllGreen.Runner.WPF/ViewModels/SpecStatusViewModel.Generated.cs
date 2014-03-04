@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
@@ -6,8 +7,12 @@ using Caliburn.Micro;
 
 namespace AllGreen.Runner.WPF.ViewModels
 {
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("ImplementPropertyChangedCaliburn.tt", "")]
+	[System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
 	partial class SpecStatusViewModel: PropertyChangedBase
 	{
+		#region ISpecStatusViewModel
+
 		private AllGreen.WebServer.Core.SpecStatus _Status;
 		public AllGreen.WebServer.Core.SpecStatus Status
 		{
@@ -57,6 +62,7 @@ namespace AllGreen.Runner.WPF.ViewModels
 			private set { ChangeProperty<System.String>("Description", ref _Description, value); }
 		}
 
+		#endregion
 
 		#region INotifyPropertyChanged implementation
 		//ncrunch: no coverage start

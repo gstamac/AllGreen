@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
@@ -6,8 +7,12 @@ using Caliburn.Micro;
 
 namespace AllGreen.Runner.WPF.ViewModels
 {
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("ImplementPropertyChangedCaliburn.tt", "")]
+	[System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
 	partial class RunnerViewModel: PropertyChangedBase
 	{
+		#region IRunnerViewModel
+
 		private System.String _ConnectionId;
 		public System.String ConnectionId
 		{
@@ -43,6 +48,7 @@ namespace AllGreen.Runner.WPF.ViewModels
 			set { ChangeProperty<System.Windows.Media.Brush>("Background", ref _Background, value); }
 		}
 
+		#endregion
 
 		#region INotifyPropertyChanged implementation
 		//ncrunch: no coverage start

@@ -7,17 +7,17 @@ using System.Collections.Generic;
 
 namespace AllGreen.Runner.WPF.ViewModels
 {
-    internal interface ISpecOrSuiteViewModel
-    {
-        Guid Id { get; set; }
-        string Name { get; set; }
-        BindableDictionary<string, SpecStatusViewModel> Statuses { get; }
-        string Duration { get; set; }
-    }
-
     [ImplementPropertyChangedCaliburn(typeof(ISpecOrSuiteViewModel))]
-    public partial class SpecOrSuiteViewModel : ISpecOrSuiteViewModel
+    public partial class SpecOrSuiteViewModel
     {
+        internal interface ISpecOrSuiteViewModel
+        {
+            Guid Id { get; set; }
+            string Name { get; set; }
+            BindableDictionary<string, SpecStatusViewModel> Statuses { get; }
+            string Duration { get; set; }
+        }
+
         public SpecOrSuiteViewModel()
         {
             Statuses = new BindableDictionary<string, SpecStatusViewModel>();

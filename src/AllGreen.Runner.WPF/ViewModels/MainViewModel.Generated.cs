@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
@@ -10,6 +11,8 @@ namespace AllGreen.Runner.WPF.ViewModels
 	[System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
 	partial class MainViewModel: PropertyChangedBase
 	{
+		#region IMainViewModelProperties
+
 		private System.String _ServerStatus;
 		public System.String ServerStatus
 		{
@@ -59,6 +62,7 @@ namespace AllGreen.Runner.WPF.ViewModels
 			private set { ChangeProperty<System.Windows.Input.ICommand>("OpenFileCommand", ref _OpenFileCommand, value); }
 		}
 
+		#endregion
 
 		#region INotifyPropertyChanged implementation
 		//ncrunch: no coverage start

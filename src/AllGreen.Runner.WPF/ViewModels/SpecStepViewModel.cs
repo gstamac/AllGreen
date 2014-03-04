@@ -7,18 +7,18 @@ using Caliburn.Micro;
 
 namespace AllGreen.Runner.WPF.ViewModels
 {
-    internal interface ISpecStepViewModel
-    {
-        string Message { get; set; }
-        FileLocation ErrorLocation { get; set; }
-        FileLocation MappedLocation { get; set; }
-        SpecStatus Status { get; set; }
-        BindableCollection<SpecTraceStepViewModel> Trace { get; set; }
-    }
-
     [ImplementPropertyChangedCaliburn(typeof(ISpecStepViewModel))]
-    public partial class SpecStepViewModel : ISpecStepViewModel
+    public partial class SpecStepViewModel
     {
+        interface ISpecStepViewModel
+        {
+            string Message { get; set; }
+            FileLocation ErrorLocation { get; set; }
+            FileLocation MappedLocation { get; set; }
+            SpecStatus Status { get; set; }
+            BindableCollection<SpecTraceStepViewModel> Trace { get; set; }
+        }
+
         public override string ToString()
         {
             return String.Format("{0} {1}{2}{3}{2}", Message, Status, Environment.NewLine, String.Join(Environment.NewLine, Trace.Select(t => t.Message)));

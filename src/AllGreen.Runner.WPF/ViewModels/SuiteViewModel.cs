@@ -4,16 +4,16 @@ using TemplateAttributes;
 
 namespace AllGreen.Runner.WPF.ViewModels
 {
-    internal interface ISuiteViewModel : ISpecOrSuiteViewModel
-    {
-        bool IsExpanded { get; set; }
-        BindableCollection<SpecViewModel> Specs { get; }
-        BindableCollection<SuiteViewModel> Suites { get; }
-    }
-
     [ImplementPropertyChangedCaliburn(typeof(ISuiteViewModel))]
-    public partial class SuiteViewModel : SpecOrSuiteViewModel, ISuiteViewModel
+    public partial class SuiteViewModel : SpecOrSuiteViewModel
     {
+        interface ISuiteViewModel : ISpecOrSuiteViewModel
+        {
+            bool IsExpanded { get; set; }
+            BindableCollection<SpecViewModel> Specs { get; }
+            BindableCollection<SuiteViewModel> Suites { get; }
+        }
+
         public SuiteViewModel()
         {
             Specs = new BindableCollection<SpecViewModel>();

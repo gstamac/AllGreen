@@ -15,22 +15,22 @@ using Imports;
 
 namespace AllGreen.Runner.WPF.ViewModels
 {
-    internal interface IMainViewModelProperties
-    {
-        string ServerStatus { get; set; }
-
-        IConfiguration Configuration { get; }
-        bool ConfigurationVisible { get; set; }
-
-        ICommand StartServerCommand { get; }
-        ICommand RunAllTestsCommand { get; }
-        ICommand ConfigurationCommand { get; }
-        ICommand OpenFileCommand { get; }
-    }
-
     [ImplementPropertyChangedCaliburn(typeof(IMainViewModelProperties))]
-    public partial class MainViewModel : IMainViewModelProperties, IDisposable
+    public partial class MainViewModel : IDisposable
     {
+        interface IMainViewModelProperties
+        {
+            string ServerStatus { get; set; }
+
+            IConfiguration Configuration { get; }
+            bool ConfigurationVisible { get; set; }
+
+            ICommand StartServerCommand { get; }
+            ICommand RunAllTestsCommand { get; }
+            ICommand ConfigurationCommand { get; }
+            ICommand OpenFileCommand { get; }
+        }
+
         public BindableCollection<RunnerViewModel> Runners { get { return _Reporter.Runners; } }
         public BindableCollection<SuiteViewModel> Suites { get { return _Reporter.Suites; } }
 

@@ -6,14 +6,14 @@ using TemplateAttributes;
 
 namespace AllGreen.Runner.WPF.ViewModels
 {
-    internal interface ISpecViewModel : ISpecOrSuiteViewModel
-    {
-        UInt64 Time { get; set; }
-    }
-
     [ImplementPropertyChangedCaliburn(typeof(ISpecViewModel))]
-    public partial class SpecViewModel : SpecOrSuiteViewModel, ISpecViewModel
+    public partial class SpecViewModel : SpecOrSuiteViewModel
     {
+        interface ISpecViewModel : ISpecOrSuiteViewModel
+        {
+            UInt64 Time { get; set; }
+        }
+
         public virtual bool IsSpec(Spec spec)
         {
             return Name == spec.Name;

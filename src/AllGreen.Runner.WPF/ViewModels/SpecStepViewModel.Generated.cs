@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
@@ -10,6 +11,8 @@ namespace AllGreen.Runner.WPF.ViewModels
 	[System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
 	partial class SpecStepViewModel: PropertyChangedBase
 	{
+		#region ISpecStepViewModel
+
 		private System.String _Message;
 		public System.String Message
 		{
@@ -45,6 +48,7 @@ namespace AllGreen.Runner.WPF.ViewModels
 			set { ChangeProperty<Caliburn.Micro.BindableCollection<AllGreen.Runner.WPF.ViewModels.SpecTraceStepViewModel>>("Trace", ref _Trace, value); }
 		}
 
+		#endregion
 
 		#region INotifyPropertyChanged implementation
 		//ncrunch: no coverage start
