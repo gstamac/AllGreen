@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 
 //ncrunch: no coverage start
 namespace TemplateAttributes

@@ -1,4 +1,4 @@
-/// <reference path="reporter.ts" />
+﻿/// <reference path="reporter.ts" />
 var AllGreenApp = null;
 
 var AllGreen;

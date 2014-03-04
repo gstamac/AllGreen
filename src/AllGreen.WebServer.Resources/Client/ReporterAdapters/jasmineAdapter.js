@@ -1,4 +1,4 @@
-/// <reference path="../allgreen.ts" />
+﻿/// <reference path="../allgreen.ts" />
 /// <reference path="../../Scripts/typings/jasmine/jasmine.d.ts" />
 var AllGreen;
 (function (AllGreen) {
@@ -33,7 +33,7 @@ var AllGreen;
         };
 
         JasmineAdapter.prototype.reportSpecStarting = function (jasmineSpec) {
-            var spec = new JasmineAdapterSpec(jasmineSpec, AllGreen.SpecStatus.Running);
+            var spec = new JasmineAdapterSpec(jasmineSpec, 1 /* Running */);
             this.reporter.specUpdated(spec);
         };
 
@@ -65,7 +65,7 @@ var AllGreen;
 
     var JasmineAdapterSpec = (function () {
         function JasmineAdapterSpec(jasmineSpec, status) {
-            if (typeof status === "undefined") { status = AllGreen.SpecStatus.Undefined; }
+            if (typeof status === "undefined") { status = 0 /* Undefined */; }
             this.id = JasmineAdapter.convertIdToGuid(jasmineSpec.id);
             this.name = jasmineSpec.description;
             this.status = status;
@@ -73,20 +73,20 @@ var AllGreen;
             this.steps = [];
             this.suite = new JasmineAdapterSuite(jasmineSpec.suite);
 
-            if (this.status == AllGreen.SpecStatus.Undefined)
+            if (this.status == 0 /* Undefined */)
                 this.calculateStatus(jasmineSpec);
-            if (this.status == AllGreen.SpecStatus.Failed)
+            if (this.status == 3 /* Failed */)
                 this.calculateSteps(jasmineSpec);
         }
         JasmineAdapterSpec.prototype.calculateStatus = function (jasmineSpec) {
             var results = jasmineSpec.results();
             if (results.skipped)
-                this.status = AllGreen.SpecStatus.Skipped;
-else {
+                this.status = 4 /* Skipped */;
+            else {
                 if (results.passed()) {
-                    this.status = AllGreen.SpecStatus.Passed;
+                    this.status = 2 /* Passed */;
                 } else {
-                    this.status = AllGreen.SpecStatus.Failed;
+                    this.status = 3 /* Failed */;
                 }
             }
         };
@@ -103,7 +103,7 @@ else {
                         this.steps.push({
                             message: result.toString(),
                             errorLocation: null,
-                            status: AllGreen.SpecStatus.Undefined,
+                            status: 0 /* Undefined */,
                             trace: ''
                         });
                     } else if (result.type === 'expect') {
@@ -122,7 +122,7 @@ else {
             var step = {
                 message: message,
                 errorLocation: null,
-                status: AllGreen.SpecStatus.Failed,
+                status: 3 /* Failed */,
                 trace: trace
             };
             if (error.fileName || error.sourceURL) {

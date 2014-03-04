@@ -29,9 +29,13 @@ namespace Imports
             return _CanExecute(parameter as T);
         }
 
-#pragma warning disable 67
+        public void RaiseCanExecuteChanged()
+        {
+            if (CanExecuteChanged != null)
+                CanExecuteChanged(this, new EventArgs());
+        }
+
         public event EventHandler CanExecuteChanged;
-#pragma warning restore 67
     }
 
     public class RelayCommand : RelayCommand<object>
@@ -42,6 +46,10 @@ namespace Imports
         }
         public RelayCommand(Action<object> execute)
             : base(execute)
+        {
+        }
+        public RelayCommand(Func<bool> canExecute, System.Action execute)
+            : base(o => canExecute(), o => execute())
         {
         }
         public RelayCommand(System.Action execute)

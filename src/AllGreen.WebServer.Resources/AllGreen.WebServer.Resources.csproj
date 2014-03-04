@@ -64,6 +64,11 @@
       <Link>Scripts\typings\jasmine\jasmine.d.ts</Link>
     </Content>
     <TypeScriptCompile Include="Test\file1.ts" />
+    <Content Include="Scripts\jquery-2.1.0.intellisense.js" />
+    <EmbeddedResource Include="Scripts\jquery-2.1.0.js" />
+    <Content Include="Scripts\jquery-2.1.0.min.js" />
+    <EmbeddedResource Include="Scripts\jquery.signalR-2.0.2.js" />
+    <Content Include="Scripts\jquery.signalR-2.0.2.min.js" />
     <Content Include="Test\file1.js">
       <DependentUpon>file1.ts</DependentUpon>
     </Content>
@@ -109,7 +114,6 @@
       <DependentUpon>allgreen.ts</DependentUpon>
     </Content>
     <TypeScriptCompile Include="spec\AllGreenHubSpecs.ts" />
-    <EmbeddedResource Include="Scripts\jquery.signalR-2.0.0.js" />
     <Content Include="Scripts\jquery.signalR-2.0.0.min.js" />
     <Content Include="spec\AllGreenAppSpecs.js">
       <DependentUpon>AllGreenAppSpecs.ts</DependentUpon>
@@ -142,7 +146,6 @@
     <EmbeddedResource Include="Scripts\jasmine-html.js" />
     <EmbeddedResource Include="Scripts\jasmine-jquery.js" />
     <EmbeddedResource Include="Scripts\jasmine.js" />
-    <Content Include="Scripts\jquery-2.0.3.intellisense.js" />
     <TypeScriptCompile Include="spec\ReporterAdapter\JasmineAdapterSpecs.ts" />
     <Content Include="spec\ReporterAdapter\JasmineAdapterSpecs.js">
       <DependentUpon>JasmineAdapterSpecs.ts</DependentUpon>
@@ -150,7 +153,6 @@
     <Content Include="spec\ReporterAdapter\JasmineAdapterSpecs.min.js">
       <DependentUpon>JasmineAdapterSpecs.ts</DependentUpon>
     </Content>
-    <EmbeddedResource Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />
     <TypeScriptCompile Include="Test\testScript.ts" />
     <EmbeddedResource Include="Client\runner.html" />
@@ -183,10 +185,7 @@
       <DependentUpon>jasmineAdapter.js</DependentUpon>
     </None>
     <None Include="packages.config" />
-    <None Include="Scripts\jquery-2.0.3.min.js.map">
-      <DependentUpon>jquery-2.0.3.js</DependentUpon>
-    </None>
-    <None Include="Scripts\jquery-2.0.3.min.map" />
+    <None Include="Scripts\jquery-2.1.0.min.map" />
     <None Include="spec\AllGreenAppSpecs.js.map">
       <DependentUpon>AllGreenAppSpecs.ts</DependentUpon>
     </None>
@@ -233,7 +232,7 @@
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties NewFolder1__UseParentNamespace="False" Properties__UseParentNamespace="False" Scripts__UseParentNamespace="False" spec__UseParentNamespace="False" Client__UseParentNamespace="False" Client_ReporterAdapters__UseParentNamespace="False" Scripts_typings__UseParentNamespace="False" Scripts_typings_jasmine__UseParentNamespace="False" css__UseParentNamespace="False" />
+      <UserProperties css__UseParentNamespace="False" Scripts_typings_jasmine__UseParentNamespace="False" Scripts_typings__UseParentNamespace="False" Client_ReporterAdapters__UseParentNamespace="False" Client__UseParentNamespace="False" spec__UseParentNamespace="False" Scripts__UseParentNamespace="False" Properties__UseParentNamespace="False" NewFolder1__UseParentNamespace="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

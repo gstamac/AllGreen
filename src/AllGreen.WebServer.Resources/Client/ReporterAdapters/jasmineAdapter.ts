@@ -180,7 +180,7 @@ declare module jasmine {
     var util: any;
 }
 
-() => {
+(() => {
     if (AllGreenApp != null) {
         AllGreenApp.log('registering Jasmine adapter factory');
         AllGreenApp.registerAdapterFactory(new AllGreen.JasmineAdapterFactory());
@@ -202,4 +202,4 @@ declare module jasmine {
             return error;
         }
     }
-} ();
+}) ();

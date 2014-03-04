@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.WebServer.Core", "AllGreen.WebServer.Core\AllGreen.WebServer.Core.csproj", "{061D51C9-B850-4187-9B49-FB87770BA753}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.WebServer.Core.Tests", "AllGreen.WebServer.Core.Tests\AllGreen.WebServer.Core.Tests.csproj", "{216FCF6A-7B92-4608-A544-70A6532A89B7}"
@@ -61,8 +63,5 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{216FCF6A-7B92-4608-A544-70A6532A89B7} = {26A04B86-C877-4E45-8EBD-335573BA051B}
 		{09F3E68D-1441-45C1-8217-417B6EDB88A8} = {26A04B86-C877-4E45-8EBD-335573BA051B}
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal
