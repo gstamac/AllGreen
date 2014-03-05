@@ -33,7 +33,7 @@ namespace AllGreen.WebServer.Core
             return new XmlSerializer(typeof(XmlConfiguration)).Deserialize(stream) as XmlConfiguration;
         }
 
-        //ncrunch: no coverage start
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage()]
         public static XmlConfiguration LoadFrom(string filename)
         {
             XmlConfiguration configuration = new XmlConfiguration();
@@ -46,6 +46,5 @@ namespace AllGreen.WebServer.Core
             }
             return configuration;
         }
-        //ncrunch: no coverage start
     }
 }

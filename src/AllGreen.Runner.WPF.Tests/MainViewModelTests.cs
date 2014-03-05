@@ -4,6 +4,8 @@ using Moq;
 using TinyIoC;
 using FluentAssertions;
 using AllGreen.Runner.WPF.ViewModels;
+using TestingExtensions;
+using System;
 
 namespace AllGreen.Runner.WPF.Tests
 {
@@ -47,6 +49,7 @@ namespace AllGreen.Runner.WPF.Tests
             _MainViewModel.ConfigurationVisible.Should().BeTrue();
             _MainViewModel.StartServerCommand.Should().NotBeNull();
             _MainViewModel.RunAllTestsCommand.Should().NotBeNull();
+            _MainViewModel.CopyServerUrlCommand.Should().NotBeNull();
             _MainViewModel.ConfigurationCommand.Should().NotBeNull();
             _MainViewModel.OpenFileCommand.Should().NotBeNull();
         }
@@ -64,6 +67,20 @@ namespace AllGreen.Runner.WPF.Tests
         }
 
         [TestMethod]
+        public void StartServerCommandTest()
+        {
+            IServerStarter owinServerStarter = Mock.Of<IServerStarter>();
+            _ResourceResolver.Register<IServerStarter>(owinServerStarter);
+
+            IRunnerClients mockOfRunnerClients = Mock.Of<IRunnerClients>();
+            _ResourceResolver.Register<IRunnerClients>(mockOfRunnerClients);
+
+            _MainViewModel.StartServerCommand.Execute(null);
+
+            owinServerStarter.Mock().Verify(oss => oss.Start());
+        }
+
+        [TestMethod]
         public void RunAllTestsCommandShouldFireReloadOnAllClients()
         {
             Mock<IRunnerClients> mockOfRunnerClients = new Mock<IRunnerClients>();
@@ -71,6 +88,16 @@ namespace AllGreen.Runner.WPF.Tests
             _MainViewModel.RunAllTestsCommand.Execute(null);
 
             mockOfRunnerClients.Verify(rh => rh.ReloadAll());
+        }
+
+        [TestMethod]
+        public void CopyServerUrlCommandTest()
+        {
+            _Configuration.Mock().Setup(c => c.ServerUrl).Returns("localhost:8080");
+
+            _MainViewModel.CopyServerUrlCommand.Execute(null);
+
+            System.Windows.Clipboard.GetText().Should().Be("http://localhost:8080");
         }
 
         [TestMethod]

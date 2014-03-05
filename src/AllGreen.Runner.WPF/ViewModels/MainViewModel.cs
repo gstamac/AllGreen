@@ -12,6 +12,7 @@ using TemplateAttributes;
 using TinyIoC;
 using System.Windows;
 using Imports;
+using AllGreen.WebServer.Owin;
 
 namespace AllGreen.Runner.WPF.ViewModels
 {
@@ -27,6 +28,7 @@ namespace AllGreen.Runner.WPF.ViewModels
 
             ICommand StartServerCommand { get; }
             ICommand RunAllTestsCommand { get; }
+            ICommand CopyServerUrlCommand { get; }
             ICommand ConfigurationCommand { get; }
             ICommand OpenFileCommand { get; }
         }
@@ -37,8 +39,6 @@ namespace AllGreen.Runner.WPF.ViewModels
         private TinyIoCContainer _ResourceResolver;
         private ObservableReporter _Reporter;
         private IFileViewer _FileViewer;
-
-        private FileWatcher _FileWatcher;
 
         public MainViewModel(TinyIoCContainer resourceResolver)
         {
@@ -53,19 +53,19 @@ namespace AllGreen.Runner.WPF.ViewModels
 
             StartServerCommand = new RelayCommand(StartServer);
             RunAllTestsCommand = new RelayCommand(RunAllTests);
+            CopyServerUrlCommand = new RelayCommand(() => Clipboard.SetText(String.Format("http://{0}", Configuration.ServerUrl)));
             ConfigurationCommand = new RelayCommand(() => ConfigurationVisible = true);
             OpenFileCommand = new RelayCommand<FileLocation>(fl => _FileViewer.Open(fl.FullPath, fl.LineNumber, fl.ColumnNumber));
         }
 
-        //ncrunch: no coverage start
-        public void StartServer()
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage()]
+        private void StartServer()
         {
-            WebApp.Start(Configuration.ServerUrl, appBuilder => new OwinStartup(_ResourceResolver).Configuration(appBuilder));
+            _ResourceResolver.Resolve<IServerStarter>()
+//                .Start(Configuration.ServerUrl, appBuilder => new OwinStartup(_ResourceResolver).Configuration(appBuilder));
+                .Start();
             ServerStatus = "Server running at " + Configuration.ServerUrl;
-
-            _FileWatcher = new FileWatcher(_ResourceResolver.Resolve<IRunnerClients>(), Configuration.WatchedFolderFilters.Select(ff => new FolderWatcher(Path.GetFullPath(ff.Folder), ff.FilePattern, ff.IncludeSubfolders)));
         }
-        //ncrunch: no coverage end
 
         private void RunAllTests()
         {

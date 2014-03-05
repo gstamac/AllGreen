@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -261,6 +261,10 @@
       <Project>{061d51c9-b850-4187-9b49-fb87770ba753}</Project>
       <Name>AllGreen.WebServer.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AllGreen.WebServer.Owin\AllGreen.WebServer.Owin.csproj">
+      <Project>{20eeb4c0-61ad-44de-a582-a2355688c99a}</Project>
+      <Name>AllGreen.WebServer.Owin</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AllGreen.WebServer.Resources\AllGreen.WebServer.Resources.csproj">
       <Project>{49b3c384-e5a6-4063-9271-bae47e9d502c}</Project>
       <Name>AllGreen.WebServer.Resources</Name>
@@ -285,7 +289,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties T4Templates_ImplementPropertyChangedCaliburn__UseParentNamespace="False" ViewModels_SpecTraceStepViewModel_cs_UseParentNamespace="False" ViewModels__UseParentNamespace="False" SpecStatusViewModel_cs_UseParentNamespace="False" SpecStepViewModel_cs_UseParentNamespace="False" StepViewModel_cs_UseParentNamespace="False" ValueConverters__UseParentNamespace="False" NewFolder1__UseParentNamespace="False" Properties__UseParentNamespace="False" MainWindow_xaml_UseParentNamespace="False" MainView_xaml_UseParentNamespace="False" />
+      <UserProperties MainView_xaml_UseParentNamespace="False" MainWindow_xaml_UseParentNamespace="False" Properties__UseParentNamespace="False" NewFolder1__UseParentNamespace="False" ValueConverters__UseParentNamespace="False" StepViewModel_cs_UseParentNamespace="False" SpecStepViewModel_cs_UseParentNamespace="False" SpecStatusViewModel_cs_UseParentNamespace="False" ViewModels__UseParentNamespace="False" ViewModels_SpecTraceStepViewModel_cs_UseParentNamespace="False" T4Templates_ImplementPropertyChangedCaliburn__UseParentNamespace="False" T4Templates_ImplementPropertyChangedCaliburn_ImplementPropertyChangedCaliburn_tt_UseParentNamespace="False" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

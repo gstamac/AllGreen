@@ -7,6 +7,7 @@ using Caliburn.Micro;
 
 namespace AllGreen.Runner.WPF
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage()]
     public class BindableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, INotifyCollectionChanged, INotifyPropertyChanged
     {
         private const string CountString = "Count";

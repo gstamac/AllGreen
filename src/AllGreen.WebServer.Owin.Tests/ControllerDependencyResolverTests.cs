@@ -1,15 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Reflection;
-using System.Web.Http.Routing;
-using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using TemplateAttributes;
+using FluentAssertions;
 
-namespace AllGreen.WebServer.Core.Tests
+namespace AllGreen.WebServer.Owin.Tests
 {
     [TestClass]
     public class ControllerDependencyResolverTests

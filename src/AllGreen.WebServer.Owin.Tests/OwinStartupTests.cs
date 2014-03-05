@@ -8,8 +8,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using TinyIoC;
 using FluentAssertions;
+using AllGreen.WebServer.Owin;
+using AllGreen.WebServer.Core;
 
-namespace AllGreen.WebServer.Core.Tests
+namespace AllGreen.WebServer.Owin.Tests
 {
     [TestClass]
     public class OwinStartupTests

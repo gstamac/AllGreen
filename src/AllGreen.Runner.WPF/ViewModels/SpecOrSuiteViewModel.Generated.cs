@@ -44,8 +44,8 @@ namespace AllGreen.Runner.WPF.ViewModels
 		#endregion
 
 		#region INotifyPropertyChanged implementation
-		//ncrunch: no coverage start
 
+		[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage()]
 		protected virtual void ChangeProperty<T>(string propertyName, ref T propertyValue, T newValue, Action<T, T> changedCallback = null)
 		{
 			if ((propertyValue == null && newValue == null) || (propertyValue != null && propertyValue.Equals(newValue))) return;
@@ -55,12 +55,12 @@ namespace AllGreen.Runner.WPF.ViewModels
 			if (changedCallback != null) changedCallback(oldValue, newValue);
 		}
 
+		[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage()]
 		public string GetPropertyName<TProperty>(Expression<Func<AllGreen.Runner.WPF.ViewModels.SpecOrSuiteViewModel, TProperty>> propertySelector)
 		{
 			return propertySelector.GetMemberInfo().Name;
 		}
 
-		//ncrunch: no coverage end
 		#endregion
 	}
 }

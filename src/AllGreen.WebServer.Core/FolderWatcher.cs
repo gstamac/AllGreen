@@ -4,6 +4,7 @@ using System.IO;
 
 namespace AllGreen.WebServer.Core
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage()]
     public class FolderWatcher : IFolderWatcher, IDisposable
     {
         FileSystemWatcher _FileSystemWatcher;

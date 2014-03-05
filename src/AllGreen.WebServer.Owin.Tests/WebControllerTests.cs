@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Web.Http.Routing;
+using AllGreen.WebServer.Core;
 using FluentAssertions;
 using Microsoft.Owin.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -12,7 +13,7 @@ using Moq;
 using TemplateAttributes;
 using TinyIoC;
 
-namespace AllGreen.WebServer.Core.Tests
+namespace AllGreen.WebServer.Owin.Tests
 {
     [TestClass]
     public partial class WebControllerTests

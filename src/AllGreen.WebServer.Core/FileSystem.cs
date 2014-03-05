@@ -3,6 +3,7 @@ using System.IO;
 
 namespace AllGreen.WebServer.Core
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage()]
     public class FileSystem : IFileSystem
     {
         public string ReadAllText(string path)

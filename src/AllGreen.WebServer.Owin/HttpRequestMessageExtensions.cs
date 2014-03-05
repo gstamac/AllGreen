@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 
-namespace AllGreen.WebServer.Core
+namespace AllGreen.WebServer.Owin
 {
     public static class HttpRequestMessageExtensions
     {
@@ -21,7 +21,7 @@ namespace AllGreen.WebServer.Core
             }
         }
 
-        //ncrunch: no coverage start
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage()]
         public static void DumpToConsole(this HttpRequestMessage request)
         {
             Console.WriteLine("------------- REQUEST --------------");
@@ -36,6 +36,5 @@ namespace AllGreen.WebServer.Core
                 Console.WriteLine(String.Format("CONTENT: {0}", request.Content.ReadAsStringAsync().Result));
             Console.WriteLine("------------------------------------");
         }
-        //ncrunch: no coverage end
     }
 }

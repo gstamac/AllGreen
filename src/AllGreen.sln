@@ -26,6 +26,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.Runner.Console", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.Runner.WPF.Tests", "AllGreen.Runner.WPF.Tests\AllGreen.Runner.WPF.Tests.csproj", "{09F3E68D-1441-45C1-8217-417B6EDB88A8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.WebServer.Owin", "AllGreen.WebServer.Owin\AllGreen.WebServer.Owin.csproj", "{20EEB4C0-61AD-44DE-A582-A2355688C99A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.WebServer.Owin.Tests", "AllGreen.WebServer.Owin.Tests\AllGreen.WebServer.Owin.Tests.csproj", "{7435C5BD-2469-4DC1-899F-224029FC7034}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +60,14 @@ Global
 		{09F3E68D-1441-45C1-8217-417B6EDB88A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09F3E68D-1441-45C1-8217-417B6EDB88A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09F3E68D-1441-45C1-8217-417B6EDB88A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20EEB4C0-61AD-44DE-A582-A2355688C99A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20EEB4C0-61AD-44DE-A582-A2355688C99A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20EEB4C0-61AD-44DE-A582-A2355688C99A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20EEB4C0-61AD-44DE-A582-A2355688C99A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7435C5BD-2469-4DC1-899F-224029FC7034}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7435C5BD-2469-4DC1-899F-224029FC7034}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7435C5BD-2469-4DC1-899F-224029FC7034}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7435C5BD-2469-4DC1-899F-224029FC7034}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,5 +75,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{216FCF6A-7B92-4608-A544-70A6532A89B7} = {26A04B86-C877-4E45-8EBD-335573BA051B}
 		{09F3E68D-1441-45C1-8217-417B6EDB88A8} = {26A04B86-C877-4E45-8EBD-335573BA051B}
+		{7435C5BD-2469-4DC1-899F-224029FC7034} = {26A04B86-C877-4E45-8EBD-335573BA051B}
 	EndGlobalSection
 EndGlobal

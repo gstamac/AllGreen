@@ -1,8 +1,10 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace AllGreen.WebServer.Core.Tests
+namespace AllGreen.WebServer.Owin.Tests
 {
+	[System.CodeDom.Compiler.GeneratedCodeAttribute("AddDataMsTests.tt", "")]
+	[System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
 	partial class WebControllerTests
 	{
 		// DataTestMethod(@"script.js", @"text/js")

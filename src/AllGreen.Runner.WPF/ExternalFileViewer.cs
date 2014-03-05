@@ -14,7 +14,7 @@ using System.Windows;
 
 namespace AllGreen.Runner.WPF
 {
-    //ncrunch: no coverage start
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage()]
     public class ExternalFileViewer : IFileViewer
     {
         public void Open(string fullPath, int lineNumber, int columnNumber)
@@ -28,5 +28,4 @@ namespace AllGreen.Runner.WPF
             }
         }
     }
-    //ncrunch: no coverage start
 }

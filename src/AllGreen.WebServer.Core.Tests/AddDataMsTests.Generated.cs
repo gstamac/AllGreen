@@ -1,8 +1,8 @@
 ﻿using System;
 
-//ncrunch: no coverage start
 namespace TemplateAttributes
 {
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage()]
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
 	internal class DataTestMethodAttribute : Attribute
 	{
@@ -25,6 +25,7 @@ namespace TemplateAttributes
 		public int WorkItem { get; set; }
 	}
 
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage()]
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
 	internal class DataRowAttribute : Attribute
 	{
@@ -36,4 +37,3 @@ namespace TemplateAttributes
 		public string DisplayName { get; set; }
 	}
 }
-//ncrunch: no coverage end

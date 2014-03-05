@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Web.Http;
+using AllGreen.WebServer.Core;
 using Microsoft.AspNet.SignalR;
 using Owin;
 using TinyIoC;
 
-namespace AllGreen.WebServer.Core
+namespace AllGreen.WebServer.Owin
 {
     public class OwinStartup
     {

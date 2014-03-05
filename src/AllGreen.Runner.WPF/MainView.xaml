@@ -134,6 +134,7 @@
         <Menu Grid.Row="0" Grid.ColumnSpan="2">
             <MenuItem Header="Run All Tests" Command="{Binding RunAllTestsCommand}"/>
             <MenuItem Header="Configuration" Command="{Binding ConfigurationCommand}"/>
+            <MenuItem Header="Copy server URL" Command="{Binding CopyServerUrlCommand}"/>
         </Menu>
         <ListView ItemsSource="{Binding Runners}" Grid.Row="1" Grid.ColumnSpan="2">
             <ListView.Resources>

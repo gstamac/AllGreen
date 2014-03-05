@@ -8,7 +8,7 @@ using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace AllGreen.WebServer.Core.Tests
+namespace AllGreen.WebServer.Owin.Tests
 {
     [TestClass]
     public class RunnerClientsTest

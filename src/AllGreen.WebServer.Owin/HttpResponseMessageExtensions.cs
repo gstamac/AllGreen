@@ -1,7 +1,7 @@
 using System;
 using System.Net.Http;
 
-namespace AllGreen.WebServer.Core
+namespace AllGreen.WebServer.Owin
 {
     public static class HttpResponseMessageExtensions
     {

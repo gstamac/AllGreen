@@ -2,8 +2,9 @@ using System;
 using System.IO;
 using System.Net.Http;
 using System.Web.Http;
+using AllGreen.WebServer.Core;
 
-namespace AllGreen.WebServer.Core
+namespace AllGreen.WebServer.Owin
 {
     public class WebController : ApiController
     {

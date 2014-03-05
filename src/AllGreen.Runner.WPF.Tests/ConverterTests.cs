@@ -100,6 +100,8 @@ namespace AllGreen.Runner.WPF.Tests
             specStatusToImageConverter.Convert(SpecStatus.Failed, typeof(ImageSource), null, null).Should().BeAssignableTo<BitmapImage>();
             specStatusToImageConverter.Convert(SpecStatus.Skipped, typeof(ImageSource), null, null).Should().BeAssignableTo<BitmapImage>();
 
+            specStatusToImageConverter.Convert(null, typeof(ImageSource), null, null).Should().BeNull();
+
             specStatusToImageConverter.ConvertBack(null, null, null, null).Should().BeNull();
         }
     }

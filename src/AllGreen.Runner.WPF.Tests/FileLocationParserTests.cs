@@ -45,6 +45,7 @@ namespace AllGreen.Runner.WPF.Tests
             fileLocation.FullPath.Should().Be(fullPath);
         }
 
+        [TestMethod]
         public void NullTest()
         {
             new FileLocationParser("", Mock.Of<IWebResources>()).Parse(null).Should().BeNull();

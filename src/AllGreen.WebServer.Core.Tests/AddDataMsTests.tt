@@ -20,11 +20,11 @@
 	} else {
 		WriteLine("using System;");
 		WriteLine("");
-		WriteLine("//ncrunch: no coverage start");
 		WriteLine("namespace " + DataTestMethodAttributeNamespace);
 		WriteLine("{");
 		PushIndent("\t");
 		
+		WriteLine("[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage()]");
 		WriteLine("[AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]");
 		WriteLine("internal class " + DataTestMethodAttributeName + " : Attribute");
 		WriteLine("{");
@@ -57,6 +57,7 @@
         WriteLine("}");
         
 		WriteLine("");
+		WriteLine("[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage()]");
 		WriteLine("[AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]");
 		WriteLine("internal class " + DataRowAttributeName + " : Attribute");
 		WriteLine("{");
@@ -75,7 +76,6 @@
 
 		PopIndent();
         WriteLine("}");
-		WriteLine("//ncrunch: no coverage end");
 	}
 #>
 <#+

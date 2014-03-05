@@ -25,21 +25,25 @@ namespace AllGreen.Runner.WPF.ValueConverters
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            switch ((SpecStatus)value)
+            if (value is SpecStatus)
             {
-                case SpecStatus.Undefined:
-                    return new System.Windows.Media.Imaging.BitmapImage(new Uri("icons/help.png", UriKind.Relative));
-                case SpecStatus.Running:
-                    return new System.Windows.Media.Imaging.BitmapImage(new Uri("icons/refresh.png", UriKind.Relative));
-                case SpecStatus.Failed:
-                    return new System.Windows.Media.Imaging.BitmapImage(new Uri("icons/delete.png", UriKind.Relative));
-                case SpecStatus.Passed:
-                    return new System.Windows.Media.Imaging.BitmapImage(new Uri("icons/check.png", UriKind.Relative));
-                case SpecStatus.Skipped:
-                    return new System.Windows.Media.Imaging.BitmapImage(new Uri("icons/pause.png", UriKind.Relative));
+                switch ((SpecStatus)value)
+                {
+                    case SpecStatus.Running:
+                        return new System.Windows.Media.Imaging.BitmapImage(new Uri("icons/refresh.png", UriKind.Relative));
+                    case SpecStatus.Failed:
+                        return new System.Windows.Media.Imaging.BitmapImage(new Uri("icons/delete.png", UriKind.Relative));
+                    case SpecStatus.Passed:
+                        return new System.Windows.Media.Imaging.BitmapImage(new Uri("icons/check.png", UriKind.Relative));
+                    case SpecStatus.Skipped:
+                        return new System.Windows.Media.Imaging.BitmapImage(new Uri("icons/pause.png", UriKind.Relative));
+                    case SpecStatus.Undefined:
+                    default:
+                        return new System.Windows.Media.Imaging.BitmapImage(new Uri("icons/help.png", UriKind.Relative));
+                }
             }
-            
-            return new System.Windows.Media.Imaging.BitmapImage(new Uri("icons/help.png", UriKind.Relative));       //ncrunch: no coverage
+
+            return null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

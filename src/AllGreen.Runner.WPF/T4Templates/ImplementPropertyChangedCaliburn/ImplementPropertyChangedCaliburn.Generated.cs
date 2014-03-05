@@ -1,9 +1,9 @@
 ﻿
 using System;
 
-//ncrunch: no coverage start
 namespace TemplateAttributes
 {
+	[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage()]
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
 	internal class ImplementPropertyChangedCaliburnAttribute : Attribute
 	{
@@ -14,4 +14,3 @@ namespace TemplateAttributes
 		public Type Interface { get; private set; }
 	}
 }
-//ncrunch: no coverage end

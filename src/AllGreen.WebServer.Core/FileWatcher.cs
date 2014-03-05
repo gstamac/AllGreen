@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Microsoft.AspNet.SignalR;
+using TinyIoC;
 
 namespace AllGreen.WebServer.Core
 {
     public class FileWatcher : IDisposable
     {
-        IRunnerClients _RunnerClients;
-        IEnumerable<IFolderWatcher> _FolderWatchers;
-
-        public FileWatcher(IRunnerClients runnerClients, IEnumerable<IFolderWatcher> folderWatchers)
+        private readonly TinyIoCContainer _ResourceResolver;
+        private readonly IEnumerable<IFolderWatcher> _FolderWatchers;
+        
+        public FileWatcher(TinyIoCContainer resourceResolver, IEnumerable<IFolderWatcher> folderWatchers)
         {
-            _RunnerClients = runnerClients;
+            _ResourceResolver = resourceResolver;
             _FolderWatchers = folderWatchers;
 
             RegisterWatchers();
@@ -29,7 +29,8 @@ namespace AllGreen.WebServer.Core
 
         void folderWatcher_Changed(object sender, FileSystemEventArgs e)
         {
-            _RunnerClients.ReloadAll();
+            IRunnerClients runnerClients = _ResourceResolver.Resolve<IRunnerClients>();
+            runnerClients.ReloadAll();
         }
 
         public void Dispose()

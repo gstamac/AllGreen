@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
+using System.Linq;
 using System.Windows;
 using AllGreen.WebServer.Core;
 using Microsoft.AspNet.SignalR;
 using TinyIoC;
 using Microsoft.AspNet.SignalR.Hubs;
 using AllGreen.Runner.WPF.ViewModels;
+using AllGreen.WebServer.Owin;
 
 namespace AllGreen.Runner.WPF
 {
@@ -16,6 +17,8 @@ namespace AllGreen.Runner.WPF
     /// </summary>
     public partial class App : Application
     {
+        private FileWatcher _FileWatcher;
+
         protected void Application_Startup(object sender, StartupEventArgs e)
         {
             //XmlConfiguration configuration = XmlConfiguration.LoadFrom(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\AllGreen\\AllGreen\\AllGreen.config");
@@ -30,9 +33,12 @@ namespace AllGreen.Runner.WPF
             resourceResolver.Register<IWebResources>(webResources);
             resourceResolver.Register<IRunnerHub, RunnerHub>();
             resourceResolver.Register<IRunnerClients>((ioc, npo) => new RunnerClients(GlobalHost.ConnectionManager.GetHubContext<RunnerHub>().Clients));
+            resourceResolver.Register<IServerStarter>(new OwinServerStarter(resourceResolver));
             resourceResolver.Register<IFileViewer, ExternalFileViewer>();
             resourceResolver.Register<IFileLocationParser>(new FileLocationParser(configuration.ServerUrl, webResources));
             resourceResolver.Register<IFileLocationMapper>(new JsMapFileMapper(new FileSystem()));
+
+            _FileWatcher = new FileWatcher(resourceResolver, configuration.WatchedFolderFilters.Select(ff => new FolderWatcher(Path.GetFullPath(ff.Folder), ff.FilePattern, ff.IncludeSubfolders)));
 
             MainWindow mainWindow = new MainWindow() { DataContext = new MainViewModel(resourceResolver) };
             mainWindow.Show();

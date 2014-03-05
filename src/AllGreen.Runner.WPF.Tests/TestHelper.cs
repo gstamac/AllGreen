@@ -8,6 +8,7 @@ using Moq;
 
 namespace AllGreen.Runner.WPF.Tests
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage()]
     public class TestHelper
     {
         static public void AttachPropertyChangedEvent(object obj, PropertyChangedEventHandler propertyChangedEventHandler)

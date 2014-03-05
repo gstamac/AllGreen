@@ -44,5 +44,21 @@ namespace AllGreen.Runner.WPF.Tests
 
             jsMapFileMapper.Map(new FileLocation(inputFilename, inputFullPath, inputLineNumber)).Should().BeNull();
         }
+
+        [TestMethod]
+        public void MappingNotFound()
+        {
+            JsMapFileMapper jsMapFileMapper = new JsMapFileMapper(_FileSystem);
+
+            jsMapFileMapper.Map(new FileLocation(null, @"C:\Resources\file.js", 0)).Should().BeNull();
+        }
+
+        [TestMethod]
+        public void ExceptionTest()
+        {
+            JsMapFileMapper jsMapFileMapper = new JsMapFileMapper(_FileSystem);
+
+            jsMapFileMapper.Map(new FileLocation(null, @"C:\Resources\file.js", 3)).Should().BeNull();
+        }
     }
 }

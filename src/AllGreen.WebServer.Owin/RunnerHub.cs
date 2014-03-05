@@ -1,9 +1,10 @@
 using System;
 using System.Threading.Tasks;
+using AllGreen.WebServer.Core;
 using Microsoft.AspNet.SignalR;
 using UAParser;
 
-namespace AllGreen.WebServer.Core
+namespace AllGreen.WebServer.Owin
 {
     public class RunnerHub : Hub, IRunnerHub
     {
