@@ -51,7 +51,7 @@
     <Compile Include="IFileViewer.cs" />
     <Compile Include="IFileSystem.cs" />
     <Compile Include="IFolderWatcher.cs" />
-    <Compile Include="IOwinServerStarter.cs" />
+    <Compile Include="IServerStarter.cs" />
     <Compile Include="IRunnerClients.cs" />
     <Compile Include="IScriptList.cs" />
     <Compile Include="IReporter.cs" />
