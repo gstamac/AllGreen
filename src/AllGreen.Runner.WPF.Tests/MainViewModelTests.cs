@@ -93,7 +93,7 @@ namespace AllGreen.Runner.WPF.Tests
         [TestMethod]
         public void CopyServerUrlCommandTest()
         {
-            _Configuration.Mock().Setup(c => c.ServerUrl).Returns("localhost:8080");
+            _Configuration.Mock().Setup(c => c.ServerUrl).Returns("http://localhost:8080");
 
             _MainViewModel.CopyServerUrlCommand.Execute(null);
 

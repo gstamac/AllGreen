@@ -53,7 +53,7 @@ namespace AllGreen.Runner.WPF.ViewModels
 
             StartServerCommand = new RelayCommand(StartServer);
             RunAllTestsCommand = new RelayCommand(RunAllTests);
-            CopyServerUrlCommand = new RelayCommand(() => Clipboard.SetText(String.Format("http://{0}", Configuration.ServerUrl)));
+            CopyServerUrlCommand = new RelayCommand(() => Clipboard.SetText(Configuration.ServerUrl));
             ConfigurationCommand = new RelayCommand(() => ConfigurationVisible = true);
             OpenFileCommand = new RelayCommand<FileLocation>(fl => _FileViewer.Open(fl.FullPath, fl.LineNumber, fl.ColumnNumber));
         }
@@ -61,9 +61,7 @@ namespace AllGreen.Runner.WPF.ViewModels
         [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage()]
         private void StartServer()
         {
-            _ResourceResolver.Resolve<IServerStarter>()
-//                .Start(Configuration.ServerUrl, appBuilder => new OwinStartup(_ResourceResolver).Configuration(appBuilder));
-                .Start();
+            _ResourceResolver.Resolve<IServerStarter>().Start();
             ServerStatus = "Server running at " + Configuration.ServerUrl;
         }
 
