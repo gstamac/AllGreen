@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Web.Http;
-using AllGreen.WebServer.Core;
+using AllGreen.Core;
 using Microsoft.AspNet.SignalR;
 using Owin;
 using TinyIoC;

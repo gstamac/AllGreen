@@ -110,95 +110,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BindableDictionary.cs" />
-    <Compile Include="CompositeFileLocationMapper.cs" />
-    <Compile Include="FileLocationParser.cs" />
-    <Compile Include="IFileLocationParser.cs" />
-    <Compile Include="Imports\RelayCommand.cs" />
-    <Compile Include="JsMapFile.cs" />
-    <Compile Include="JsMapFileMapper.cs" />
-    <Compile Include="IFileLocationMapper.cs" />
-    <Compile Include="MainView.xaml.cs">
-      <DependentUpon>MainView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ObservableReporter.cs" />
-    <Compile Include="T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.Generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ImplementPropertyChangedCaliburn.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ValueConverters\ObjectToVisibilityConverter.cs" />
-    <Compile Include="ExternalFileViewer.cs" />
-    <Compile Include="ViewModels\SpecStatusViewModel.Generated.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>SpecStatusViewModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\SpecStepViewModel.cs">
-      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
-      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
-      <LastGenOutput>SpecStepViewModel.Generated.cs</LastGenOutput>
-      <LastOutputs>.\SpecStepViewModel.Generated.cs</LastOutputs>
-    </Compile>
-    <Compile Include="ViewModels\SpecStepViewModel.Generated.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>SpecStepViewModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ValueConverters\NotConverter.cs" />
-    <Compile Include="ValueConverters\RunnersToStatusesConverter.cs" />
-    <Compile Include="ViewModels\RunnerViewModel.cs">
-      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
-      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
-      <LastGenOutput>RunnerViewModel.Generated.cs</LastGenOutput>
-      <LastOutputs>.\RunnerViewModel.Generated.cs</LastOutputs>
-    </Compile>
-    <Compile Include="ViewModels\RunnerViewModel.Generated.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>RunnerViewModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\SpecOrSuiteViewModel.cs">
-      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
-      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
-      <LastGenOutput>SpecOrSuiteViewModel.Generated.cs</LastGenOutput>
-      <LastOutputs>.\SpecOrSuiteViewModel.Generated.cs</LastOutputs>
-    </Compile>
-    <Compile Include="ViewModels\SpecOrSuiteViewModel.Generated.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>SpecOrSuiteViewModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ValueConverters\SpecStatusToImageConverter.cs" />
-    <Compile Include="ViewModels\SpecStatusViewModel.cs">
-      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
-      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
-      <LastGenOutput>SpecStatusViewModel.Generated.cs</LastGenOutput>
-      <LastOutputs>.\SpecStatusViewModel.Generated.cs</LastOutputs>
-    </Compile>
-    <Compile Include="ViewModels\SpecTraceStepViewModel.cs">
-      <LastOutputs>.\SpecTraceStepViewModel.Generated.cs</LastOutputs>
-    </Compile>
-    <Compile Include="ViewModels\SpecViewModel.cs">
-      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
-      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
-      <LastGenOutput>SpecViewModel.Generated.cs</LastGenOutput>
-      <LastOutputs>.\SpecViewModel.Generated.cs</LastOutputs>
-    </Compile>
-    <Compile Include="ViewModels\SpecViewModel.Generated.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>SpecViewModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\SuiteViewModel.cs">
-      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
-      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
-      <LastGenOutput>SuiteViewModel.Generated.cs</LastGenOutput>
-      <LastOutputs>.\SuiteViewModel.Generated.cs</LastOutputs>
-    </Compile>
-    <Compile Include="ViewModels\SuiteViewModel.Generated.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>SuiteViewModel.cs</DependentUpon>
-    </Compile>
-    <Page Include="MainView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -206,16 +117,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ViewModels\MainViewModel.cs">
-      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
-      <LastGenOutput>MainViewModel.Generated.cs</LastGenOutput>
-      <LastOutputs>.\MainViewModel.Generated.cs</LastOutputs>
-      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
-    </Compile>
-    <Compile Include="ViewModels\MainViewModel.Generated.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>MainViewModel.cs</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -246,20 +147,18 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="T4Templates\ImplementPropertyChangedCaliburn\CodeModelUtils.ttinclude" />
-    <None Include="T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ImplementPropertyChangedCaliburn.Generated.cs</LastGenOutput>
-      <LastOutputs>.\ImplementPropertyChangedCaliburn.Generated.cs</LastOutputs>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AllGreen.WebServer.Core\AllGreen.WebServer.Core.csproj">
-      <Project>{061d51c9-b850-4187-9b49-fb87770ba753}</Project>
-      <Name>AllGreen.WebServer.Core</Name>
+    <ProjectReference Include="..\AllGreen.Core\AllGreen.Core.csproj">
+      <Project>{FFD622DA-FBC0-4666-8F61-34920D3699D3}</Project>
+      <Name>AllGreen.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AllGreen.Runner.WPF.Core\AllGreen.Runner.WPF.Core.csproj">
+      <Project>{7241afa8-44a9-4c9d-af6f-fda42f08e8b3}</Project>
+      <Name>AllGreen.Runner.WPF.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\AllGreen.WebServer.Owin\AllGreen.WebServer.Owin.csproj">
       <Project>{20eeb4c0-61ad-44de-a582-a2355688c99a}</Project>
@@ -273,23 +172,10 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icons\help.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icons\check.png" />
-    <Resource Include="icons\delete.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icons\refresh.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icons\pause.png" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties MainView_xaml_UseParentNamespace="False" MainWindow_xaml_UseParentNamespace="False" Properties__UseParentNamespace="False" NewFolder1__UseParentNamespace="False" ValueConverters__UseParentNamespace="False" StepViewModel_cs_UseParentNamespace="False" SpecStepViewModel_cs_UseParentNamespace="False" SpecStatusViewModel_cs_UseParentNamespace="False" ViewModels__UseParentNamespace="False" ViewModels_SpecTraceStepViewModel_cs_UseParentNamespace="False" T4Templates_ImplementPropertyChangedCaliburn__UseParentNamespace="False" T4Templates_ImplementPropertyChangedCaliburn_ImplementPropertyChangedCaliburn_tt_UseParentNamespace="False" />
+      <UserProperties MainView_xaml_UseParentNamespace="False" MainWindow_xaml_UseParentNamespace="False" Properties__UseParentNamespace="False" NewFolder1__UseParentNamespace="False" ValueConverters__UseParentNamespace="False" StepViewModel_cs_UseParentNamespace="False" SpecStepViewModel_cs_UseParentNamespace="False" SpecStatusViewModel_cs_UseParentNamespace="False" ViewModels__UseParentNamespace="False" ViewModels_SpecTraceStepViewModel_cs_UseParentNamespace="False" T4Templates_ImplementPropertyChangedCaliburn__UseParentNamespace="False" T4Templates_ImplementPropertyChangedCaliburn_ImplementPropertyChangedCaliburn_tt_UseParentNamespace="False" icons__UseParentNamespace="False" T4Templates__UseParentNamespace="False" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

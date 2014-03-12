@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using AllGreen.WebServer.Core;
+using AllGreen.Core;
 using FluentAssertions;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hosting;

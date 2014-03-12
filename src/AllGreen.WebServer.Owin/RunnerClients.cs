@@ -1,6 +1,6 @@
 using System;
 using Microsoft.AspNet.SignalR.Hubs;
-using AllGreen.WebServer.Core;
+using AllGreen.Core;
 
 namespace AllGreen.WebServer.Owin
 {

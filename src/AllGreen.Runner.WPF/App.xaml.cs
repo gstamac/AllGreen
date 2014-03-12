@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using AllGreen.WebServer.Core;
+using AllGreen.Core;
 using Microsoft.AspNet.SignalR;
 using TinyIoC;
-using Microsoft.AspNet.SignalR.Hubs;
-using AllGreen.Runner.WPF.ViewModels;
 using AllGreen.WebServer.Owin;
+using AllGreen.Runner.WPF.Core.ViewModels;
+using AllGreen.Runner.WPF.Core;
 
 namespace AllGreen.Runner.WPF
 {

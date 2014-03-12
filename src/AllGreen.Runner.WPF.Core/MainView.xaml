@@ -1,0 +1,169 @@
+﻿<UserControl x:Class="AllGreen.Runner.WPF.Core.MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:agrc="clr-namespace:AllGreen.Runner.WPF.Core"
+             xmlns:agvm="clr-namespace:AllGreen.Runner.WPF.Core.ViewModels"
+             xmlns:agvc="clr-namespace:AllGreen.Runner.WPF.Core.ValueConverters"
+             xmlns:agc="clr-namespace:AllGreen.Core;assembly=AllGreen.Core"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" Name="mainGrid">
+    <UserControl.Resources>
+        <DataTemplate x:Key="specOrSuiteTemplate">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition x:Uid="GridColumnDefinitionIconImage" Width="Auto" />
+                    <ColumnDefinition x:Uid="GridColumnDefinitionSpacer0" Width="4" />
+                    <ColumnDefinition x:Uid="GridColumnDefinitionDisplayName" Width="*" />
+                    <ColumnDefinition x:Uid="GridColumnDefinitionSpacer1" Width="10" />
+                    <ColumnDefinition x:Uid="GridColumnDefinitionStatuses" Width="Auto" />
+                    <ColumnDefinition x:Uid="GridColumnDefinitionSpacer2" Width="4" />
+                    <ColumnDefinition x:Uid="GridColumnDefinitionDuration" Width="50" />
+                    <ColumnDefinition x:Uid="GridColumnDefinitionSpacer2" Width="4" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding Name}" Grid.Column="2" HorizontalAlignment="Left" TextTrimming="CharacterEllipsis"/>
+                <ItemsControl Grid.Column="4" Height="16">
+                    <ItemsControl.ItemsSource>
+                        <MultiBinding Converter="{agvc:RunnersToStatusesConverter}">
+                            <Binding Path="DataContext.Runners" ElementName="mainGrid"/>
+                            <Binding Path="Statuses"/>
+                            <Binding Path="DataContext.Runners.Count" ElementName="mainGrid"/>
+                            <Binding Path="Statuses.Count"/>
+                        </MultiBinding>
+                    </ItemsControl.ItemsSource>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <DockPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <ItemContainerTemplate>
+                            <DockPanel Background="{Binding Runner.Background, Mode=OneWay}" Margin="1 0">
+                                <Image Source="{Binding Status, Converter={agvc:SpecStatusToImageConverter}}" Margin="5 1" Width="16" ToolTip="{Binding Description}"/>
+                            </DockPanel>
+                        </ItemContainerTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <TextBlock Text="{Binding Duration}" Width="Auto" Grid.Column="6" HorizontalAlignment="Right"/>
+            </Grid>
+        </DataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type agvm:SuiteViewModel}" ItemsSource="{Binding Children}">
+            <ContentControl Content="{Binding}" ContentTemplate="{StaticResource specOrSuiteTemplate}" />
+        </HierarchicalDataTemplate>
+
+        <HierarchicalDataTemplate DataType="{x:Type agvm:SpecViewModel}">
+            <ContentControl Content="{Binding}" ContentTemplate="{StaticResource specOrSuiteTemplate}" />
+        </HierarchicalDataTemplate>
+
+        <DataTemplate DataType="{x:Type agvm:SpecStatusViewModel}">
+            <Border Background="{Binding Runner.Background, Mode=OneWay}" Padding="5" Margin="2 2 2 0">
+                <StackPanel>
+                    <DockPanel>
+                        <Image Source="{Binding Status, Converter={agvc:SpecStatusToImageConverter}}" Width="14" Height="14"/>
+                        <TextBlock Text="{Binding Runner.Name}" FontWeight="Bold" Padding="4 0 0 0"/>
+                        <TextBlock Text="{Binding DurationText}" FontWeight="Bold" Padding="4 0 0 0" TextAlignment="Right"/>
+                    </DockPanel>
+                    <ItemsControl ItemsSource="{Binding Steps}" Padding="20 0 0 0"/>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type agvm:SpecStepViewModel}">
+            <StackPanel>
+                <DockPanel>
+                    <Image Source="{Binding Status, Converter={agvc:SpecStatusToImageConverter}}" Width="10" Height="10"/>
+                    <TextBlock Text="{Binding Message}" Padding="4 0 0 0"/>
+                    <DockPanel Visibility="{Binding ErrorLocation, Converter={agvc:ObjectToVisibilityConverter}}">
+                        <TextBlock Text=" in " FontStyle="Italic"/>
+                        <ContentControl Content="{Binding ErrorLocation}"/>
+                        <DockPanel Visibility="{Binding MappedLocation, Converter={agvc:ObjectToVisibilityConverter}}">
+                            <TextBlock Text=" (" FontStyle="Italic"/>
+                            <ContentControl Content="{Binding MappedLocation}"/>
+                            <TextBlock Text=")" FontStyle="Italic"/>
+                        </DockPanel>
+                    </DockPanel>
+                </DockPanel>
+                <ItemsControl ItemsSource="{Binding Trace}" Padding="20 0 0 0"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type agvm:SpecTraceStepViewModel}">
+            <DockPanel>
+                <TextBlock Text="{Binding Message}" FontStyle="Italic" Visibility="{Binding ScriptLocation, Converter={agvc:ObjectToVisibilityConverter}, ConverterParameter='Reverse'}"/>
+                <DockPanel Visibility="{Binding ScriptLocation, Converter={agvc:ObjectToVisibilityConverter}}">
+                    <TextBlock Text="at " FontStyle="Italic"/>
+                    <TextBlock Text="{Binding MethodName}" FontStyle="Italic"/>
+                    <TextBlock Text=" in " FontStyle="Italic"/>
+                    <ContentControl Content="{Binding ScriptLocation}"/>
+                    <DockPanel Visibility="{Binding MappedLocation, Converter={agvc:ObjectToVisibilityConverter}}">
+                        <TextBlock Text=" (" FontStyle="Italic"/>
+                        <ContentControl Content="{Binding MappedLocation}"/>
+                        <TextBlock Text=")" FontStyle="Italic"/>
+                    </DockPanel>
+                </DockPanel>
+            </DockPanel>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type agc:FileLocation}">
+            <DockPanel>
+                <TextBlock>
+            		<Hyperlink Command="{Binding Path=DataContext.OpenFileCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding}">
+            			<TextBlock Text="{Binding}" FontStyle="Italic"/>
+            		</Hyperlink>
+            	</TextBlock>
+            </DockPanel>
+        </DataTemplate>
+
+    </UserControl.Resources>
+
+    <Grid IsEnabled="{Binding ConfigurationVisible, Converter={agvc:NotConverter}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="550" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Menu Grid.Row="0" Grid.ColumnSpan="2">
+            <MenuItem Header="Run All Tests" Command="{Binding RunAllTestsCommand}"/>
+            <MenuItem Header="Configuration" Command="{Binding ConfigurationCommand}"/>
+            <MenuItem Header="Copy server URL" Command="{Binding CopyServerUrlCommand}"/>
+        </Menu>
+        <ListView ItemsSource="{Binding Runners}" Grid.Row="1" Grid.ColumnSpan="2">
+            <ListView.Resources>
+                <Style TargetType="GridViewColumnHeader">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </Style>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="Background" Value="{Binding Background, Mode=OneWay}">
+                    </Setter>
+                </Style>
+            </ListView.Resources>
+            <ListView.View>
+                <GridView AllowsColumnReorder="false">
+                    <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Runner" Width="Auto"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Status}" Header="Status" Width="Auto"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <agrc:StretchingTreeView x:Name="resultsTree"  ItemsSource="{Binding Suites}" VerticalAlignment="Stretch" Grid.Row="2" Grid.Column="0">
+            <agrc:StretchingTreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="IsExpanded" Value="True"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </agrc:StretchingTreeView.ItemContainerStyle>
+        </agrc:StretchingTreeView>
+        <GridSplitter ResizeDirection="Columns" Width="4" Grid.Row="2"/>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" Grid.Row="2" Grid.Column="1">
+            <ItemsControl ItemsSource="{Binding SelectedItem.Statuses.Values, ElementName=resultsTree}"/>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

@@ -227,12 +227,12 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Target Name="CopyLinkedContentFiles" BeforeTargets="Build">
+  <Target Name="CopyLinkedContentFiles" BeforeTargets="Build" Condition="'$(SkipCopyLinkedFiles)' != 'TRUE'">
     <Copy SourceFiles="%(Content.Identity)" DestinationFiles="%(Content.Link)" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Condition="'%(Content.Link)' != ''" />
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties css__UseParentNamespace="False" Scripts_typings_jasmine__UseParentNamespace="False" Scripts_typings__UseParentNamespace="False" Client_ReporterAdapters__UseParentNamespace="False" Client__UseParentNamespace="False" spec__UseParentNamespace="False" Scripts__UseParentNamespace="False" Properties__UseParentNamespace="False" NewFolder1__UseParentNamespace="False" />
+      <UserProperties css__UseParentNamespace="False" Scripts_typings_jasmine__UseParentNamespace="False" Scripts_typings__UseParentNamespace="False" Client_ReporterAdapters__UseParentNamespace="False" Client__UseParentNamespace="False" spec__UseParentNamespace="False" Scripts__UseParentNamespace="False" Properties__UseParentNamespace="False" NewFolder1__UseParentNamespace="False" Scripts_typings_jasmine-jquery__UseParentNamespace="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

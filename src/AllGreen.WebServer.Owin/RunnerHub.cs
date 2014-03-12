@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using AllGreen.WebServer.Core;
+using AllGreen.Core;
 using Microsoft.AspNet.SignalR;
 using UAParser;
 

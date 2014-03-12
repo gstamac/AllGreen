@@ -1,3 +1,0 @@
-// TODO: Config
-// TODO: Visual Studio Add-In
-// TODO: WebMatrix Add-In

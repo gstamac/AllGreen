@@ -9,7 +9,7 @@ using Moq;
 using TinyIoC;
 using FluentAssertions;
 using AllGreen.WebServer.Owin;
-using AllGreen.WebServer.Core;
+using AllGreen.Core;
 
 namespace AllGreen.WebServer.Owin.Tests
 {

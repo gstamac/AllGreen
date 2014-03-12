@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.WebServer.Core", "AllGreen.WebServer.Core\AllGreen.WebServer.Core.csproj", "{061D51C9-B850-4187-9B49-FB87770BA753}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.WebServer.Core.Tests", "AllGreen.WebServer.Core.Tests\AllGreen.WebServer.Core.Tests.csproj", "{216FCF6A-7B92-4608-A544-70A6532A89B7}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{26A04B86-C877-4E45-8EBD-335573BA051B}"
+	ProjectSection(SolutionItems) = preProject
+		IntegrationTests.testsettings = IntegrationTests.testsettings
+		UnitTests.testsettings = UnitTests.testsettings
+	EndProjectSection
 	ProjectSection(FolderGlobals) = preProject
 		AllGreen_WebServer_Core_Tests_csproj_UseParentNamespace = False
 		AllGreen_Runner_WPF_Tests_csproj_UseParentNamespace = False
@@ -24,11 +24,21 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.Runner.WPF", "AllG
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.Runner.Console", "AllGreen.Runner.Console\AllGreen.Runner.Console.csproj", "{84DFDB76-3A56-467C-B915-128BC87DFC70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.Runner.WPF.Tests", "AllGreen.Runner.WPF.Tests\AllGreen.Runner.WPF.Tests.csproj", "{09F3E68D-1441-45C1-8217-417B6EDB88A8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.WebServer.Owin", "AllGreen.WebServer.Owin\AllGreen.WebServer.Owin.csproj", "{20EEB4C0-61AD-44DE-A582-A2355688C99A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.WebServer.Owin.Tests", "AllGreen.WebServer.Owin.Tests\AllGreen.WebServer.Owin.Tests.csproj", "{7435C5BD-2469-4DC1-899F-224029FC7034}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.VS2013Integration", "AllGreen.VS2013Integration\AllGreen.VS2013Integration.csproj", "{8FDFCBBE-5919-48DF-B8C7-0A29D88716EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.VS2013Integration.Tests", "AllGreen.VS2013Integration.Tests\AllGreen.VS2013Integration.Tests.csproj", "{E003C37C-08D0-4247-A493-71C769BD3D64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.Runner.WPF.Core", "AllGreen.Runner.WPF.Core\AllGreen.Runner.WPF.Core.csproj", "{7241AFA8-44A9-4C9D-AF6F-FDA42F08E8B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.Core", "AllGreen.Core\AllGreen.Core.csproj", "{FFD622DA-FBC0-4666-8F61-34920D3699D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.Core.Tests", "AllGreen.Core.Tests\AllGreen.Core.Tests.csproj", "{4761C8C6-96CD-4FC4-84DB-41FC1BB20B01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AllGreen.Runner.WPF.Core.Tests", "AllGreen.Runner.WPF.Core.Tests\AllGreen.Runner.WPF.Core.Tests.csproj", "{1D753730-F836-48BD-8018-E8C0F6E286FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,14 +46,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{061D51C9-B850-4187-9B49-FB87770BA753}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{061D51C9-B850-4187-9B49-FB87770BA753}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{061D51C9-B850-4187-9B49-FB87770BA753}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{061D51C9-B850-4187-9B49-FB87770BA753}.Release|Any CPU.Build.0 = Release|Any CPU
-		{216FCF6A-7B92-4608-A544-70A6532A89B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{216FCF6A-7B92-4608-A544-70A6532A89B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{216FCF6A-7B92-4608-A544-70A6532A89B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{216FCF6A-7B92-4608-A544-70A6532A89B7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{49B3C384-E5A6-4063-9271-BAE47E9D502C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{49B3C384-E5A6-4063-9271-BAE47E9D502C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49B3C384-E5A6-4063-9271-BAE47E9D502C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -56,10 +58,6 @@ Global
 		{84DFDB76-3A56-467C-B915-128BC87DFC70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84DFDB76-3A56-467C-B915-128BC87DFC70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84DFDB76-3A56-467C-B915-128BC87DFC70}.Release|Any CPU.Build.0 = Release|Any CPU
-		{09F3E68D-1441-45C1-8217-417B6EDB88A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{09F3E68D-1441-45C1-8217-417B6EDB88A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{09F3E68D-1441-45C1-8217-417B6EDB88A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{09F3E68D-1441-45C1-8217-417B6EDB88A8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{20EEB4C0-61AD-44DE-A582-A2355688C99A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{20EEB4C0-61AD-44DE-A582-A2355688C99A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20EEB4C0-61AD-44DE-A582-A2355688C99A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -68,13 +66,38 @@ Global
 		{7435C5BD-2469-4DC1-899F-224029FC7034}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7435C5BD-2469-4DC1-899F-224029FC7034}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7435C5BD-2469-4DC1-899F-224029FC7034}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FDFCBBE-5919-48DF-B8C7-0A29D88716EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FDFCBBE-5919-48DF-B8C7-0A29D88716EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FDFCBBE-5919-48DF-B8C7-0A29D88716EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FDFCBBE-5919-48DF-B8C7-0A29D88716EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E003C37C-08D0-4247-A493-71C769BD3D64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E003C37C-08D0-4247-A493-71C769BD3D64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E003C37C-08D0-4247-A493-71C769BD3D64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E003C37C-08D0-4247-A493-71C769BD3D64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7241AFA8-44A9-4C9D-AF6F-FDA42F08E8B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7241AFA8-44A9-4C9D-AF6F-FDA42F08E8B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7241AFA8-44A9-4C9D-AF6F-FDA42F08E8B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7241AFA8-44A9-4C9D-AF6F-FDA42F08E8B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFD622DA-FBC0-4666-8F61-34920D3699D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFD622DA-FBC0-4666-8F61-34920D3699D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFD622DA-FBC0-4666-8F61-34920D3699D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFD622DA-FBC0-4666-8F61-34920D3699D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4761C8C6-96CD-4FC4-84DB-41FC1BB20B01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4761C8C6-96CD-4FC4-84DB-41FC1BB20B01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4761C8C6-96CD-4FC4-84DB-41FC1BB20B01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4761C8C6-96CD-4FC4-84DB-41FC1BB20B01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D753730-F836-48BD-8018-E8C0F6E286FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D753730-F836-48BD-8018-E8C0F6E286FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D753730-F836-48BD-8018-E8C0F6E286FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D753730-F836-48BD-8018-E8C0F6E286FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{216FCF6A-7B92-4608-A544-70A6532A89B7} = {26A04B86-C877-4E45-8EBD-335573BA051B}
-		{09F3E68D-1441-45C1-8217-417B6EDB88A8} = {26A04B86-C877-4E45-8EBD-335573BA051B}
 		{7435C5BD-2469-4DC1-899F-224029FC7034} = {26A04B86-C877-4E45-8EBD-335573BA051B}
+		{E003C37C-08D0-4247-A493-71C769BD3D64} = {26A04B86-C877-4E45-8EBD-335573BA051B}
+		{4761C8C6-96CD-4FC4-84DB-41FC1BB20B01} = {26A04B86-C877-4E45-8EBD-335573BA051B}
+		{1D753730-F836-48BD-8018-E8C0F6E286FC} = {26A04B86-C877-4E45-8EBD-335573BA051B}
 	EndGlobalSection
 EndGlobal

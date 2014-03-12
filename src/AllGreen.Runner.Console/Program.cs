@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using AllGreen.WebServer.Core;
+using AllGreen.Core;
 using AllGreen.WebServer.Owin;
 using Microsoft.AspNet.SignalR;
 using Microsoft.Owin.Hosting;

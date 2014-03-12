@@ -1,0 +1,130 @@
+﻿<#@ IntelliSenseLanguage processor="tangibleT4Editor" language="C#" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ assembly name="EnvDTE" #>
+<#@ import namespace="EnvDTE" #>
+<#@ assembly name="EnvDTE80" #>
+<#+ 
+	private FileCodeModel GetCodeModel(string filename)
+	{
+		var dte = (DTE)TransformationContext.Current.GetService(typeof(DTE));
+		ProjectItem projectItem = dte.Solution.FindProjectItem(filename);
+		return projectItem.FileCodeModel;
+	}
+
+	private bool IsPartialClass(CodeClass codeClass)
+	{
+		EnvDTE80.CodeClass2 codeClass2 = codeClass as EnvDTE80.CodeClass2;
+		return (codeClass2 != null) && (codeClass2.ClassKind == EnvDTE80.vsCMClassKind.vsCMClassKindPartialClass);
+	}
+
+	private void ProcessElements(FileCodeModel codeModel, CodeElements elements)
+	{
+		bool firstElement = true;
+		foreach (CodeElement element in elements)
+		{
+			CodeNamespace codeNamespace = element as CodeNamespace;
+			CodeClass codeClass = element as CodeClass;
+			if (codeNamespace != null) 
+			{
+				ProcessNamespace(codeModel, codeNamespace, !firstElement);
+				firstElement = false;
+			} else if (codeClass != null)
+			{
+				ProcessClass(codeModel, codeClass, !firstElement);
+				firstElement = false;
+			}
+		}
+	}
+
+	private void ProcessNamespace(FileCodeModel codeModel, CodeNamespace codeNamespace, bool emptyLineBefore)
+	{
+		if (emptyLineBefore) WriteLine("");
+		WriteLine("namespace " + codeNamespace.Name);
+		WriteLine("{");
+		PushIndent("\t");
+		ProcessElements(codeModel, codeNamespace.Children);
+		PopIndent();
+		WriteLine("}");
+	}
+
+	private IEnumerable<CodeInterface> GetClassInterfaces(CodeClass codeClass)
+	{
+		return codeClass.ImplementedInterfaces.OfType<CodeInterface>();
+	}
+
+	private IEnumerable<CodeAttribute> GetClassAttributes(CodeClass codeClass)
+	{
+		return codeClass.Attributes.OfType<CodeAttribute>();
+    }
+
+	private IEnumerable<CodeFunction> GetClassFunctions(CodeClass codeClass)
+    {
+		return codeClass.Members.OfType<CodeFunction>();
+	}
+
+	private IEnumerable<CodeVariable> GetClassVariables(CodeClass codeClass)
+    {
+		return codeClass.Members.OfType<CodeVariable>();
+	}
+
+	private IEnumerable<CodeClass> GetClassBases(CodeClass codeClass)
+    {
+		return codeClass.Bases.OfType<CodeClass>();
+	}
+
+	private IEnumerable<T> RecurseElementsOfType<T>(CodeElements elements) where T : class
+    {
+		foreach (CodeElement element in elements)
+		{
+			T rightElement = element as T;
+			if (rightElement != null) yield return rightElement;
+			foreach(T childElement in RecurseElementsOfType<T>(element.Children)) 
+				yield return childElement;
+		}
+		//return elements.OfType<CodeNamespace>().SelectMany(n => n.Children.OfType<CodeInterface>());
+    }
+
+	private List<CodeInterface> GetInterfacesToImplement(FileCodeModel codeModel, CodeClass codeClass, string attributeFullName)
+	{
+		var attributes = GetClassAttributes(codeClass).Where(a => a.FullName == attributeFullName 
+			&& a.Value.StartsWith("typeof(") && a.Value.EndsWith(")")).Select(a => a.Value.Substring(7, a.Value.Length - 8));
+
+		return GetClassInterfaces(codeClass).Where(i => attributes.Contains(i.Name))
+			.Union(RecurseElementsOfType<CodeInterface>(codeModel.CodeElements).Where(i => attributes.Contains(i.Name)))
+			.ToList();
+	}
+
+	private void OutputClassHeader(CodeClass codeClass, string classDeclarationSuffix = null)
+	{
+		WriteLine("[System.CodeDom.Compiler.GeneratedCodeAttribute(\"" + System.IO.Path.GetFileName(Host.TemplateFile) + "\", \"\")]");
+		WriteLine("[System.Runtime.CompilerServices.CompilerGeneratedAttribute()]");
+		if (!String.IsNullOrEmpty(classDeclarationSuffix))
+			WriteLine("partial class " + codeClass.Name + classDeclarationSuffix);
+		else
+			WriteLine("partial class " + codeClass.Name);
+		WriteLine("{");
+		PushIndent("\t");
+	}
+
+	private void OutputClassFooter(CodeClass codeClass)
+	{
+		PopIndent();
+		WriteLine("}");
+	}
+
+	private void DumpElements(CodeElements elements, string indent = "\t")
+	{
+		foreach (CodeElement element in elements)
+		{
+			string elDump = indent + element.Kind.ToString();
+			//if (element.Kind == vsCMElement.vsCMElementNamespace || element.Kind == vsCMElement.vsCMElementClass)
+			if (element.Kind != vsCMElement.vsCMElementImportStmt)
+				elDump += ": " + element.Name;
+			elDump += " -> " + element.Children.Count.ToString();
+			WriteLine(elDump);
+			DumpElements(element.Children, indent + "\t");
+		}
+	}
+#>

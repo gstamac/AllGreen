@@ -1,5 +1,5 @@
 using System;
-using AllGreen.WebServer.Core;
+using AllGreen.Core;
 
 namespace AllGreen.Runner.Console
 {

@@ -94,9 +94,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AllGreen.WebServer.Core\AllGreen.WebServer.Core.csproj">
-      <Project>{061d51c9-b850-4187-9b49-fb87770ba753}</Project>
-      <Name>AllGreen.WebServer.Core</Name>
+    <ProjectReference Include="..\AllGreen.Core\AllGreen.Core.csproj">
+      <Project>{FFD622DA-FBC0-4666-8F61-34920D3699D3}</Project>
+      <Name>AllGreen.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

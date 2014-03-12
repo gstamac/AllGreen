@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7241AFA8-44A9-4C9D-AF6F-FDA42F08E8B3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AllGreen.Runner.WPF.Core</RootNamespace>
+    <AssemblyName>AllGreen.Runner.WPF.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Caliburn.Micro">
+      <HintPath>..\packages\Caliburn.Micro.1.5.2\lib\net45\Caliburn.Micro.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.0.2\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\packages\Microsoft.Owin.2.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Diagnostics">
+      <HintPath>..\packages\Microsoft.Owin.Diagnostics.2.1.0\lib\net40\Microsoft.Owin.Diagnostics.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.HttpListener">
+      <HintPath>..\packages\Microsoft.Owin.Host.HttpListener.2.1.0\lib\net45\Microsoft.Owin.Host.HttpListener.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Hosting">
+      <HintPath>..\packages\Microsoft.Owin.Hosting.2.1.0\lib\net45\Microsoft.Owin.Hosting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\packages\Microsoft.Owin.Security.2.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.1.1\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.1.1\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.Owin">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Owin.5.1.1\lib\net45\System.Web.Http.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.1.5.2\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BindableDictionary.cs" />
+    <Compile Include="ExternalFileViewer.cs" />
+    <Compile Include="Imports\RelayCommand.cs" />
+    <Compile Include="MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ObservableReporter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StretchingTreeView.cs" />
+    <Compile Include="StretchingTreeViewItem.cs" />
+    <Compile Include="T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ImplementPropertyChangedCaliburn.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ValueConverters\NotConverter.cs" />
+    <Compile Include="ValueConverters\ObjectToVisibilityConverter.cs" />
+    <Compile Include="ValueConverters\RunnersToStatusesConverter.cs" />
+    <Compile Include="ValueConverters\SpecStatusToImageConverter.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs">
+      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
+      <LastGenOutput>MainViewModel.Generated.cs</LastGenOutput>
+      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
+      <LastOutputs>.\MainViewModel.Generated.cs</LastOutputs>
+    </Compile>
+    <Compile Include="ViewModels\MainViewModel.Generated.cs">
+      <DependentUpon>MainViewModel.cs</DependentUpon>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="ViewModels\RunnerViewModel.cs">
+      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
+      <LastGenOutput>RunnerViewModel.Generated.cs</LastGenOutput>
+      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
+      <LastOutputs>.\RunnerViewModel.Generated.cs</LastOutputs>
+    </Compile>
+    <Compile Include="ViewModels\RunnerViewModel.Generated.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RunnerViewModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\SpecOrSuiteViewModel.cs">
+      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
+      <LastGenOutput>SpecOrSuiteViewModel.Generated.cs</LastGenOutput>
+      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
+      <LastOutputs>.\SpecOrSuiteViewModel.Generated.cs</LastOutputs>
+    </Compile>
+    <Compile Include="ViewModels\SpecOrSuiteViewModel.Generated.cs">
+      <DependentUpon>SpecOrSuiteViewModel.cs</DependentUpon>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="ViewModels\SpecStatusViewModel.cs">
+      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
+      <LastGenOutput>SpecStatusViewModel.Generated.cs</LastGenOutput>
+      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
+      <LastOutputs>.\SpecStatusViewModel.Generated.cs</LastOutputs>
+    </Compile>
+    <Compile Include="ViewModels\SpecStatusViewModel.Generated.cs">
+      <DependentUpon>SpecStatusViewModel.cs</DependentUpon>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="ViewModels\SpecStepViewModel.cs">
+      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
+      <LastGenOutput>SpecStepViewModel.Generated.cs</LastGenOutput>
+      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
+      <LastOutputs>.\SpecStepViewModel.Generated.cs</LastOutputs>
+    </Compile>
+    <Compile Include="ViewModels\SpecStepViewModel.Generated.cs">
+      <DependentUpon>SpecStepViewModel.cs</DependentUpon>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="ViewModels\SpecTraceStepViewModel.cs" />
+    <Compile Include="ViewModels\SpecViewModel.cs">
+      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
+      <LastGenOutput>SpecViewModel.Generated.cs</LastGenOutput>
+      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
+    </Compile>
+    <Compile Include="ViewModels\SpecViewModel.Generated.cs">
+      <DependentUpon>SpecViewModel.cs</DependentUpon>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="ViewModels\SuiteViewModel.cs">
+      <Generator>T4Toolbox.TemplatedFileGenerator</Generator>
+      <LastGenOutput>SuiteViewModel.Generated.cs</LastGenOutput>
+      <Template>..\T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt</Template>
+      <LastOutputs>.\SuiteViewModel.Generated.cs</LastOutputs>
+    </Compile>
+    <Compile Include="ViewModels\SuiteViewModel.Generated.cs">
+      <DependentUpon>SuiteViewModel.cs</DependentUpon>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="WidthConverter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="T4Templates\ImplementPropertyChangedCaliburn\CodeModelUtils.ttinclude" />
+    <None Include="T4Templates\ImplementPropertyChangedCaliburn\ImplementPropertyChangedCaliburn.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ImplementPropertyChangedCaliburn.Generated.cs</LastGenOutput>
+      <LastOutputs>.\ImplementPropertyChangedCaliburn.Generated.cs</LastOutputs>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AllGreen.Core\AllGreen.Core.csproj">
+      <Project>{ffd622da-fbc0-4666-8f61-34920d3699d3}</Project>
+      <Name>AllGreen.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="MainView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\check.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\help.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\refresh.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties T4Templates_ImplementPropertyChangedCaliburn__UseParentNamespace="False" T4Templates__UseParentNamespace="False" ValueConverters__UseParentNamespace="False" ViewModels__UseParentNamespace="False" ViewModels_RunnerViewModel_cs_UseParentNamespace="False" Properties__UseParentNamespace="False" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Net.Http;
 using System.Web.Http;
-using AllGreen.WebServer.Core;
+using AllGreen.Core;
 
 namespace AllGreen.WebServer.Owin
 {
