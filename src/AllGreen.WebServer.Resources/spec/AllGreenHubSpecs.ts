@@ -4,7 +4,7 @@
 
 describe("AllGreen SignalR Hub", () => {
     beforeEach(() => {
-        this.app = jasmine.createSpyObj('app', ['reload', 'setServerStatus', 'specUpdated', 'log']);
+        this.app = jasmine.createSpyObj('app', ['runTests', 'setServerStatus', 'specUpdated', 'log']);
         //this.app['log'].andCallFake(console.log);
 
         this.hubProxy = jasmine.createSpyObj('hubProxy', ['on', 'invoke']);
@@ -33,7 +33,7 @@ describe("AllGreen SignalR Hub", () => {
 
         expect(this.connection.createHubProxy).toHaveBeenCalledWith('runnerHub');
         expect(this.connection.start).toHaveBeenCalled();
-        expect(this.hubProxy.on).toHaveBeenCalledWith('reload', jasmine.any(Function));
+        expect(this.hubProxy.on).toHaveBeenCalledWith('runTests', jasmine.any(Function));
         expect(this.proxyCallback).toEqual(jasmine.any(Function));
         expect(this.connectionCallbacks['done']).toEqual(jasmine.any(Function));
         this.connectionCallbacks['done']();
@@ -54,10 +54,10 @@ describe("AllGreen SignalR Hub", () => {
         expect(this.hubProxy.invoke).toHaveBeenCalledWith('register');
     });
 
-    it("Calls Env.reload on reload message", () => {
+    it("Calls App.runTests on runTests message", () => {
         this.hub.connect();
         this.proxyCallback();
-        expect(this.app.reload).toHaveBeenCalled();
+        expect(this.app.runTests).toHaveBeenCalled();
     });
 
     it("Displays status on error", () => {

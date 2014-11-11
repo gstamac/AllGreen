@@ -57,7 +57,7 @@ namespace AllGreen.WebServer.Owin
         public void Register()
         {
             _Reporter.Register(Context.ConnectionId, CleanupUserAgent(Context.Headers["User-Agent"]));
-            Clients.Caller.reload();
+            Clients.Caller.runTests();
         }
 
         private string CleanupUserAgent(string userAgent)

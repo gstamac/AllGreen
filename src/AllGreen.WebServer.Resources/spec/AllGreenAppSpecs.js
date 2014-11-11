@@ -2,6 +2,49 @@
 /// <reference path="../Scripts/typings/jasmine-jquery/jasmine-jquery.d.ts" />
 /// <reference path="../Client/allgreen.ts" />
 var _this = this;
+describe("CompositeRunnerReporter", function () {
+    beforeEach(function () {
+        _this.composite = new AllGreen.CompositeRunnerReporter();
+    });
+
+    afterEach(function () {
+        _this.composite = null;
+    });
+
+    it("Checks isReady for all reporters", function () {
+        var runnerReporter1 = { isReady: function () {
+                return true;
+            } };
+        _this.composite.registerRunnerReporter(runnerReporter1);
+        var runnerReporter2 = { isReady: function () {
+                return false;
+            } };
+        _this.composite.registerRunnerReporter(runnerReporter2);
+
+        expect(_this.composite.isReady()).toBeFalsy();
+
+        runnerReporter2.isReady = function () {
+            return true;
+        };
+
+        expect(_this.composite.isReady()).toBeTruthy();
+    });
+
+    ['reset', 'started', 'finished', 'specUpdated'].forEach(function (method) {
+        it("Forwards '" + method + "' to multiple reporters", function () {
+            var runnerReporter1 = jasmine.createSpyObj('runnerReporter1', [method]);
+            _this.composite.registerRunnerReporter(runnerReporter1);
+            var runnerReporter2 = jasmine.createSpyObj('runnerReporter2', [method]);
+            _this.composite.registerRunnerReporter(runnerReporter2);
+
+            _this.composite[method]();
+
+            expect(runnerReporter1[method]).toHaveBeenCalled();
+            expect(runnerReporter2[method]).toHaveBeenCalled();
+        });
+    });
+});
+
 describe("App", function () {
     beforeEach(function () {
         jasmine.getFixtures().fixturesPath = '';
@@ -28,42 +71,9 @@ describe("App", function () {
         expect(serverReporter.setServerStatus).toHaveBeenCalledWith('server status');
     });
 
-    it("Checks isReady for all reporters", function () {
-        var runnerReporter1 = { isReady: function () {
-                return true;
-            } };
-        _this.app.registerRunnerReporter(runnerReporter1);
-        var runnerReporter2 = { isReady: function () {
-                return false;
-            } };
-        _this.app.registerRunnerReporter(runnerReporter2);
-
-        expect(_this.app.isReady()).toBeFalsy();
-
-        runnerReporter2.isReady = function () {
-            return true;
-        };
-
-        expect(_this.app.isReady()).toBeTruthy();
-    });
-
-    ['reset', 'started', 'finished', 'specUpdated'].forEach(function (method) {
-        it("Forwards '" + method + "' to multiple reporters", function () {
-            var runnerReporter1 = jasmine.createSpyObj('runnerReporter1', [method]);
-            _this.app.registerRunnerReporter(runnerReporter1);
-            var runnerReporter2 = jasmine.createSpyObj('runnerReporter2', [method]);
-            _this.app.registerRunnerReporter(runnerReporter2);
-
-            _this.app[method]();
-
-            expect(runnerReporter1[method]).toHaveBeenCalled();
-            expect(runnerReporter2[method]).toHaveBeenCalled();
-        });
-    });
-
     var registerAdapterFactory = function (name) {
         var adapterFactory = jasmine.createSpyObj('adapterFactory', ['create', 'getName']);
-        adapterFactory['create'].andReturn({ start: function () {
+        adapterFactory['create'].andReturn({ runTests: function () {
             } });
         adapterFactory['getName'].andReturn(name);
         this.app.registerAdapterFactory(adapterFactory);
@@ -71,7 +81,7 @@ describe("App", function () {
     };
 
     var registerAdapter = function (name) {
-        var adapter = jasmine.createSpyObj('adapter', ['start']);
+        var adapter = jasmine.createSpyObj('adapter', ['runTests']);
         var adapterFactory = jasmine.createSpyObj('adapterFactory', ['create', 'getName']);
         adapterFactory['create'].andReturn(adapter);
         adapterFactory['getName'].andReturn(name);
@@ -79,13 +89,13 @@ describe("App", function () {
         return adapter;
     };
 
-    it("Creates adapters on run tests", function () {
+    it("Creates adapters after runner is loaded", function () {
         var adapterFactory1 = registerAdapterFactory('adapter1');
         var adapterFactory2 = registerAdapterFactory('adapter2');
 
-        _this.app.runTests();
-        expect(adapterFactory1.create).toHaveBeenCalledWith(_this.app);
-        expect(adapterFactory2.create).toHaveBeenCalledWith(_this.app);
+        _this.app.runnerLoaded();
+        expect(adapterFactory1.create).toHaveBeenCalledWith(jasmine.any(Object));
+        expect(adapterFactory2.create).toHaveBeenCalledWith(jasmine.any(Object));
     });
 
     it("Should run tests after all reporters are ready", function () {
@@ -96,7 +106,7 @@ describe("App", function () {
         runs(function () {
             _this.app.registerRunnerReporter(runnerReporter);
 
-            _this.app.runTests();
+            _this.app.runnerLoaded();
             expect(adapterFactory.create.callCount).toBe(0);
             runnerReporter.isReady = function () {
                 return true;
@@ -104,20 +114,20 @@ describe("App", function () {
         });
         waits(20);
         runs(function () {
-            expect(adapterFactory.create).toHaveBeenCalledWith(_this.app);
+            expect(adapterFactory.create).toHaveBeenCalledWith(jasmine.any(Object));
         });
     });
 
-    it("Adapters start is called", function () {
+    it("Adapters run tests is called after runner is loaded", function () {
         var adapter1 = registerAdapter('adapter1');
         var adapter2 = registerAdapter('adapter2');
 
-        _this.app.runTests();
-        expect(adapter1.start).toHaveBeenCalled();
-        expect(adapter2.start).toHaveBeenCalled();
+        _this.app.runnerLoaded();
+        expect(adapter1.runTests).toHaveBeenCalled();
+        expect(adapter2.runTests).toHaveBeenCalled();
     });
 
-    it("Can be reloaded", function () {
+    it("Can be started", function () {
         var runnerReporter = jasmine.createSpyObj('runnerReporter', ['reset', 'isReady']);
         runnerReporter['isReady'].andCallFake(function () {
             return true;
@@ -126,10 +136,10 @@ describe("App", function () {
 
         var adapterFactory1 = registerAdapterFactory('adapter1');
 
-        _this.app.reload();
+        _this.app.runTests();
         expect(runnerReporter.reset).toHaveBeenCalled();
         expect($('#runner-iframe')).toHaveAttr('src', '/~internal~/Client/runner.html');
-        _this.app.runTests();
+        _this.app.runnerLoaded();
         expect(adapterFactory1.create).not.toHaveBeenCalled();
     });
 
@@ -141,9 +151,9 @@ describe("App", function () {
         _this.app.registerAdapterFactory(adapterFactory1);
         _this.app.registerAdapterFactory(adapterFactory2);
         _this.app.registerAdapterFactory(adapterFactory3);
-        _this.app.runTests();
-        expect(adapterFactory1.create).toHaveBeenCalledWith(_this.app);
-        expect(adapterFactory2.create).toHaveBeenCalledWith(_this.app);
+        _this.app.runnerLoaded();
+        expect(adapterFactory1.create).toHaveBeenCalledWith(jasmine.any(Object));
+        expect(adapterFactory2.create).toHaveBeenCalledWith(jasmine.any(Object));
         expect(adapterFactory3.create).not.toHaveBeenCalled();
     });
 

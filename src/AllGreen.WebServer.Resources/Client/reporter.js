@@ -95,7 +95,7 @@ var AllGreen;
                     var stepElement = $('<div/>').html(step.message).addClass('spec-step');
                     if (step.status)
                         stepElement.addClass(this.statusClass(step.status));
-else
+                    else
                         stepElement.addClass('log');
                     if (step.trace) {
                         $('<div/>').html(step.trace.replace(/\n/g, '<br/>')).addClass('spec-step-trace').appendTo(stepElement);
@@ -127,14 +127,14 @@ else
 
         RunnerReporter.prototype.investigateSuiteStatus = function (suiteContentElement) {
             if (suiteContentElement.children('.running').length)
-                return AllGreen.SpecStatus.Running;
+                return 1 /* Running */;
             if (suiteContentElement.children('.failed').length)
-                return AllGreen.SpecStatus.Failed;
+                return 3 /* Failed */;
             if (suiteContentElement.children('.undefined').length)
-                return AllGreen.SpecStatus.Undefined;
+                return 0 /* Undefined */;
             if (suiteContentElement.children('.passed').length)
-                return AllGreen.SpecStatus.Passed;
-            return AllGreen.SpecStatus.Skipped;
+                return 2 /* Passed */;
+            return 4 /* Skipped */;
         };
 
         RunnerReporter.prototype.setSuiteElementClass = function (element, status) {

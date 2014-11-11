@@ -1,4 +1,4 @@
-﻿/// <reference path="../allgreen.ts" />
+/// <reference path="../allgreen.ts" />
 /// <reference path="../../Scripts/typings/jasmine/jasmine.d.ts" />
 var AllGreen;
 (function (AllGreen) {
@@ -49,7 +49,7 @@ var AllGreen;
             return true;
         };
 
-        JasmineAdapter.prototype.start = function () {
+        JasmineAdapter.prototype.runTests = function () {
             var jasmineEnv = jasmine.getEnv();
             jasmineEnv.addReporter(this);
             jasmineEnv.execute();

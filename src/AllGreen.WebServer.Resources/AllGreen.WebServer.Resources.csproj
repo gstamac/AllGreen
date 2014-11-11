@@ -232,7 +232,7 @@
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties css__UseParentNamespace="False" Scripts_typings_jasmine__UseParentNamespace="False" Scripts_typings__UseParentNamespace="False" Client_ReporterAdapters__UseParentNamespace="False" Client__UseParentNamespace="False" spec__UseParentNamespace="False" Scripts__UseParentNamespace="False" Properties__UseParentNamespace="False" NewFolder1__UseParentNamespace="False" Scripts_typings_jasmine-jquery__UseParentNamespace="False" />
+      <UserProperties Test__UseParentNamespace="False" Scripts_typings_jasmine-jquery__UseParentNamespace="False" NewFolder1__UseParentNamespace="False" Properties__UseParentNamespace="False" Scripts__UseParentNamespace="False" spec__UseParentNamespace="False" Client__UseParentNamespace="False" Client_ReporterAdapters__UseParentNamespace="False" Scripts_typings__UseParentNamespace="False" Scripts_typings_jasmine__UseParentNamespace="False" css__UseParentNamespace="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

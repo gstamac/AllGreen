@@ -91,8 +91,8 @@ namespace AllGreen.WebServer.Owin.Tests
             public void ReportsRegisterTest()
             {
                 dynamic caller = new ExpandoObject();
-                bool reloadCalled = false;
-                caller.reload = new Action(() => reloadCalled = true);
+                bool runTestsCalled = false;
+                caller.runTests = new Action(() => runTestsCalled = true);
 
                 var clientsMock = new Mock<IHubCallerConnectionContext>();
                 clientsMock.Setup(c => c.Caller).Returns((ExpandoObject)caller);
@@ -100,7 +100,7 @@ namespace AllGreen.WebServer.Owin.Tests
                 _RunnerHub.Register();
 
                 _ReporterMock.Verify(r => r.Register(_ConnectionId, "Windows 7 Firefox 23.0"));
-                reloadCalled.Should().BeTrue();
+                runTestsCalled.Should().BeTrue();
             }
 
             private static HubCallerContext CreateContext(string connectionId)

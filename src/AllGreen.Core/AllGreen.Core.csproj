@@ -53,6 +53,7 @@
     <Compile Include="FolderFilter.cs" />
     <Compile Include="FolderWatcher.cs" />
     <Compile Include="FileWatcher.cs" />
+    <Compile Include="IClipboard.cs" />
     <Compile Include="IConfiguration.cs" />
     <Compile Include="IFileLocationMapper.cs" />
     <Compile Include="IFileLocationParser.cs" />
@@ -60,7 +61,7 @@
     <Compile Include="IFileSystem.cs" />
     <Compile Include="IFolderWatcher.cs" />
     <Compile Include="IServerStarter.cs" />
-    <Compile Include="IRunnerClients.cs" />
+    <Compile Include="IRunnerBroadcaster.cs" />
     <Compile Include="IScriptList.cs" />
     <Compile Include="IReporter.cs" />
     <Compile Include="IRunnerHub.cs" />

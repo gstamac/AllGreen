@@ -175,7 +175,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties MainView_xaml_UseParentNamespace="False" MainWindow_xaml_UseParentNamespace="False" Properties__UseParentNamespace="False" NewFolder1__UseParentNamespace="False" ValueConverters__UseParentNamespace="False" StepViewModel_cs_UseParentNamespace="False" SpecStepViewModel_cs_UseParentNamespace="False" SpecStatusViewModel_cs_UseParentNamespace="False" ViewModels__UseParentNamespace="False" ViewModels_SpecTraceStepViewModel_cs_UseParentNamespace="False" T4Templates_ImplementPropertyChangedCaliburn__UseParentNamespace="False" T4Templates_ImplementPropertyChangedCaliburn_ImplementPropertyChangedCaliburn_tt_UseParentNamespace="False" icons__UseParentNamespace="False" T4Templates__UseParentNamespace="False" />
+      <UserProperties T4Templates__UseParentNamespace="False" icons__UseParentNamespace="False" T4Templates_ImplementPropertyChangedCaliburn_ImplementPropertyChangedCaliburn_tt_UseParentNamespace="False" T4Templates_ImplementPropertyChangedCaliburn__UseParentNamespace="False" ViewModels_SpecTraceStepViewModel_cs_UseParentNamespace="False" ViewModels__UseParentNamespace="False" SpecStatusViewModel_cs_UseParentNamespace="False" SpecStepViewModel_cs_UseParentNamespace="False" StepViewModel_cs_UseParentNamespace="False" ValueConverters__UseParentNamespace="False" NewFolder1__UseParentNamespace="False" Properties__UseParentNamespace="False" MainWindow_xaml_UseParentNamespace="False" MainView_xaml_UseParentNamespace="False" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

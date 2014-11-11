@@ -47,7 +47,7 @@ module AllGreen {
             return true;
         }
 
-        start() {
+        runTests() {
             var jasmineEnv = jasmine.getEnv();
             jasmineEnv.addReporter(this);
             jasmineEnv.execute();

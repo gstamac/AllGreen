@@ -69,35 +69,38 @@ namespace AllGreen.Runner.WPF.Core.Tests
         [TestMethod]
         public void StartServerCommandTest()
         {
-            IServerStarter owinServerStarter = Mock.Of<IServerStarter>();
-            _ResourceResolver.Register<IServerStarter>(owinServerStarter);
+            IServerStarter serverStarter = Mock.Of<IServerStarter>();
+            _ResourceResolver.Register<IServerStarter>(serverStarter);
 
-            IRunnerClients mockOfRunnerClients = Mock.Of<IRunnerClients>();
-            _ResourceResolver.Register<IRunnerClients>(mockOfRunnerClients);
+            IRunnerBroadcaster mockOfRunnerClients = Mock.Of<IRunnerBroadcaster>();
+            _ResourceResolver.Register<IRunnerBroadcaster>(mockOfRunnerClients);
 
             _MainViewModel.StartServerCommand.Execute(null);
 
-            owinServerStarter.Mock().Verify(oss => oss.Start());
+            serverStarter.Mock().Verify(oss => oss.Start());
         }
 
         [TestMethod]
         public void RunAllTestsCommandShouldFireReloadOnAllClients()
         {
-            Mock<IRunnerClients> mockOfRunnerClients = new Mock<IRunnerClients>();
-            _ResourceResolver.Register<IRunnerClients>(mockOfRunnerClients.Object);
+            Mock<IRunnerBroadcaster> mockOfRunnerClients = new Mock<IRunnerBroadcaster>();
+            _ResourceResolver.Register<IRunnerBroadcaster>(mockOfRunnerClients.Object);
             _MainViewModel.RunAllTestsCommand.Execute(null);
 
-            mockOfRunnerClients.Verify(rh => rh.ReloadAll());
+            mockOfRunnerClients.Verify(rh => rh.StartAll());
         }
 
         [TestMethod]
         public void CopyServerUrlCommandTest()
         {
+            IClipboard clipboard = Mock.Of<IClipboard>();
+            _ResourceResolver.Register<IClipboard>(clipboard);
+
             _Configuration.Mock().Setup(c => c.ServerUrl).Returns("http://localhost:8080");
 
             _MainViewModel.CopyServerUrlCommand.Execute(null);
 
-            System.Windows.Clipboard.GetText().Should().Be("http://localhost:8080");
+            clipboard.Mock().Verify(c => c.SetText("http://localhost:8080"));
         }
 
         [TestMethod]

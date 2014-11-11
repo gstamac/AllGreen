@@ -20,9 +20,9 @@ var AllGreen;
 
         Hub.prototype.attachToHub = function (connection, app) {
             var hubProxy = connection.createHubProxy('runnerHub');
-            hubProxy.on('reload', function () {
-                app.log('reloading...');
-                app.reload();
+            hubProxy.on('runTests', function () {
+                app.log('starting...');
+                app.runTests();
             });
             return hubProxy;
         };
@@ -127,3 +127,4 @@ var AllGreen;
     }
     AllGreen.initializeHub = initializeHub;
 })(AllGreen || (AllGreen = {}));
+//# sourceMappingURL=hub.js.map

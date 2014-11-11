@@ -29,8 +29,8 @@ namespace AllGreen.Core
 
         void folderWatcher_Changed(object sender, FileSystemEventArgs e)
         {
-            IRunnerClients runnerClients = _ResourceResolver.Resolve<IRunnerClients>();
-            runnerClients.ReloadAll();
+            IRunnerBroadcaster runnerBroadcaster = _ResourceResolver.Resolve<IRunnerBroadcaster>();
+            runnerBroadcaster.StartAll();
         }
 
         public void Dispose()

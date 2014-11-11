@@ -48,7 +48,7 @@ namespace AllGreen.Runner.WPF.Core.ViewModels
 
             StartServerCommand = new RelayCommand(StartServer);
             RunAllTestsCommand = new RelayCommand(RunAllTests);
-            CopyServerUrlCommand = new RelayCommand(() => Clipboard.SetText(Configuration.ServerUrl));
+            CopyServerUrlCommand = new RelayCommand(CopyServerUrlToClipboard);
             ConfigurationCommand = new RelayCommand(() => ConfigurationVisible = true);
             OpenFileCommand = new RelayCommand<FileLocation>(fl => _FileViewer.Open(fl.FullPath, fl.LineNumber, fl.ColumnNumber));
         }
@@ -62,8 +62,16 @@ namespace AllGreen.Runner.WPF.Core.ViewModels
 
         private void RunAllTests()
         {
-            IRunnerClients runnerClients = _ResourceResolver.Resolve<IRunnerClients>();
-            runnerClients.ReloadAll();
+            IRunnerBroadcaster runnerBroadcaster = _ResourceResolver.Resolve<IRunnerBroadcaster>();
+            runnerBroadcaster.StartAll();
+        }
+
+
+        private void CopyServerUrlToClipboard()
+        {
+            IClipboard clipboard;
+            if (_ResourceResolver.TryResolve<IClipboard>(out clipboard))
+                clipboard.SetText(Configuration.ServerUrl);
         }
 
         public void Dispose()

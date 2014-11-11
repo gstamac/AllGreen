@@ -84,7 +84,7 @@
     <Compile Include="OwinServerStarter.cs" />
     <Compile Include="OwinStartup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RunnerClients.cs" />
+    <Compile Include="RunnerBroadcaster.cs" />
     <Compile Include="RunnerHub.cs" />
     <Compile Include="SignalRDependencyResolver.cs" />
     <Compile Include="WebController.cs" />

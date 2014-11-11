@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BindableDictionary.cs" />
+    <Compile Include="ClipboardProxy.cs" />
     <Compile Include="ExternalFileViewer.cs" />
     <Compile Include="Imports\RelayCommand.cs" />
     <Compile Include="MainView.xaml.cs">
@@ -223,7 +224,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties T4Templates_ImplementPropertyChangedCaliburn__UseParentNamespace="False" T4Templates__UseParentNamespace="False" ValueConverters__UseParentNamespace="False" ViewModels__UseParentNamespace="False" ViewModels_RunnerViewModel_cs_UseParentNamespace="False" Properties__UseParentNamespace="False" />
+      <UserProperties Properties__UseParentNamespace="False" ViewModels_RunnerViewModel_cs_UseParentNamespace="False" ViewModels__UseParentNamespace="False" ValueConverters__UseParentNamespace="False" T4Templates__UseParentNamespace="False" T4Templates_ImplementPropertyChangedCaliburn__UseParentNamespace="False" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

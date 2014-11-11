@@ -4,17 +4,17 @@ using AllGreen.Core;
 
 namespace AllGreen.WebServer.Owin
 {
-    public class RunnerClients : IRunnerClients
+    public class RunnerBroadcaster : IRunnerBroadcaster
     {
         private readonly IHubConnectionContext _HubConnectionContext;
 
-        public RunnerClients(IHubConnectionContext hubConnectionContext)
+        public RunnerBroadcaster(IHubConnectionContext hubConnectionContext)
         {
             this._HubConnectionContext = hubConnectionContext;
         }
-        public void ReloadAll()
+        public void StartAll()
         {
-            _HubConnectionContext.All.reload();
+            _HubConnectionContext.All.runTests();
         }
     }
 }

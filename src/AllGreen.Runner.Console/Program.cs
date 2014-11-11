@@ -26,18 +26,17 @@ namespace AllGreen.Runner.Console
             webResources.Add(new FileSystemResources(configuration.RootFolder, scriptList, new FileSystem()));
             resourceResolver.Register<IWebResources>(webResources);
             resourceResolver.Register<IRunnerHub, RunnerHub>();
-            resourceResolver.Register<IRunnerClients>((ioc, npo) => new RunnerClients(GlobalHost.ConnectionManager.GetHubContext<RunnerHub>().Clients));
+            resourceResolver.Register<IRunnerBroadcaster>((ioc, npo) => new RunnerBroadcaster(GlobalHost.ConnectionManager.GetHubContext<RunnerHub>().Clients));
             resourceResolver.Register<IReporter, ConsoleReporter>();
 
             using (WebApp.Start(url, appBuilder => new OwinStartup(resourceResolver).Configuration(appBuilder)))
             {
                 System.Console.WriteLine("Server running at " + url);
-                IRunnerHub runnerHub = resourceResolver.Resolve<IRunnerHub>();
                 string command = "";
                 while (command != "x")
                 {
                     command = System.Console.ReadLine();
-                    GlobalHost.ConnectionManager.GetHubContext<RunnerHub>().Clients.All.reload();
+                    resourceResolver.Resolve<IRunnerBroadcaster>().StartAll();
                 }
             }
         }

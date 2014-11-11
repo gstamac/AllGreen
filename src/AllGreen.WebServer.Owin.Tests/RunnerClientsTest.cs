@@ -17,17 +17,17 @@ namespace AllGreen.WebServer.Owin.Tests
         public void SendTest()
         {
             dynamic all = new ExpandoObject();
-            bool reloadCalled = false;
-            all.reload = new Action(() => reloadCalled = true);
+            bool runTestsCalled = false;
+            all.runTests = new Action(() => runTestsCalled = true);
 
             var clientsMock = new Mock<IHubCallerConnectionContext>();
             clientsMock.Setup(c => c.All).Returns((ExpandoObject)all);
 
-            RunnerClients runnerClients = new RunnerClients(clientsMock.Object);
+            RunnerBroadcaster runnerBroadcaster = new RunnerBroadcaster(clientsMock.Object);
 
-            runnerClients.ReloadAll();
+            runnerBroadcaster.StartAll();
 
-            reloadCalled.Should().BeTrue();
+            runTestsCalled.Should().BeTrue();
         }
 
     }

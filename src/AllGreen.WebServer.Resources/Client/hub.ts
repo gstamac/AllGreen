@@ -26,9 +26,9 @@ module AllGreen {
 
         private attachToHub(connection: HubConnection, app: App): HubProxy {
             var hubProxy = connection.createHubProxy('runnerHub');
-            hubProxy.on('reload', () => {
-                app.log('reloading...');
-                app.reload();
+            hubProxy.on('runTests', () => {
+                app.log('starting...');
+                app.runTests();
             });
             return hubProxy;
         }

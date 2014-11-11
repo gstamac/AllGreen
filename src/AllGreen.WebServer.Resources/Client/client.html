@@ -17,13 +17,16 @@
     <script src="/~internal~/Client/allgreen.js"></script>
     <script src="/~internal~/Client/reporter.js"></script>
     <script src="/~internal~/Client/hub.js"></script>
-    <script type="text/javascript">
-        AllGreenApp = new AllGreen.App();
-        AllGreen.initializeDefaultReporters(AllGreenApp);
-        AllGreen.initializeHub(AllGreenApp);
-    </script>
     
     <script type="text/javascript">$('#runner-iframe').prop('src', 'about:blank');</script>
     <iframe id="runner-iframe" src="about:blank"></iframe>
+
+    <script type="text/javascript">
+        $(window).load(function () {
+            AllGreenApp = new AllGreen.App();
+            AllGreen.initializeDefaultReporters(AllGreenApp);
+            AllGreen.initializeHub(AllGreenApp);
+        });
+    </script>
 </body>
 </html>

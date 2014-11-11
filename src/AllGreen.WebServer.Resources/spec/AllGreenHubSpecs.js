@@ -4,7 +4,7 @@
 var _this = this;
 describe("AllGreen SignalR Hub", function () {
     beforeEach(function () {
-        _this.app = jasmine.createSpyObj('app', ['reload', 'setServerStatus', 'specUpdated', 'log']);
+        _this.app = jasmine.createSpyObj('app', ['runTests', 'setServerStatus', 'specUpdated', 'log']);
 
         //this.app['log'].andCallFake(console.log);
         _this.hubProxy = jasmine.createSpyObj('hubProxy', ['on', 'invoke']);
@@ -39,7 +39,7 @@ describe("AllGreen SignalR Hub", function () {
 
         expect(_this.connection.createHubProxy).toHaveBeenCalledWith('runnerHub');
         expect(_this.connection.start).toHaveBeenCalled();
-        expect(_this.hubProxy.on).toHaveBeenCalledWith('reload', jasmine.any(Function));
+        expect(_this.hubProxy.on).toHaveBeenCalledWith('runTests', jasmine.any(Function));
         expect(_this.proxyCallback).toEqual(jasmine.any(Function));
         expect(_this.connectionCallbacks['done']).toEqual(jasmine.any(Function));
         _this.connectionCallbacks['done']();
@@ -60,10 +60,10 @@ describe("AllGreen SignalR Hub", function () {
         expect(_this.hubProxy.invoke).toHaveBeenCalledWith('register');
     });
 
-    it("Calls Env.reload on reload message", function () {
+    it("Calls App.runTests on runTests message", function () {
         _this.hub.connect();
         _this.proxyCallback();
-        expect(_this.app.reload).toHaveBeenCalled();
+        expect(_this.app.runTests).toHaveBeenCalled();
     });
 
     it("Displays status on error", function () {
@@ -77,8 +77,7 @@ describe("AllGreen SignalR Hub", function () {
     [
         { method: 'reconnecting', status: 'Reconnecting...' },
         { method: 'reconnected', status: 'Reconnected' },
-        { method: 'disconnected', status: 'Disconnected' }
-    ].forEach(function (data) {
+        { method: 'disconnected', status: 'Disconnected' }].forEach(function (data) {
         it("Displays status on " + data.method, function () {
             _this.hub.connect();
 
@@ -141,9 +140,10 @@ describe("AllGreen SignalR HubReporter", function () {
     });
 
     it("Should report specUpdated", function () {
-        var spec = { id: 123, name: 'test 1', suite: null, status: AllGreen.SpecStatus.Passed, steps: [] };
+        var spec = { id: 123, name: 'test 1', suite: null, status: 2 /* Passed */, steps: [] };
         _this.hubReporter.hubProxyConnected(_this.hubProxy);
         _this.hubReporter.specUpdated(spec);
         expect(_this.hubProxy.invoke).toHaveBeenCalledWith('specUpdated', spec);
     });
 });
+//# sourceMappingURL=AllGreenHubSpecs.js.map

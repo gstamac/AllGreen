@@ -8,7 +8,7 @@ describe("AllGreen JasmineAdapterFactory", () => {
         var adapter = factory.create(this.reporter);
 
         expect(adapter).toBeDefined();
-        expect(adapter.start).toBeDefined();
+        expect(adapter.runTests).toBeDefined();
     });
 
     it("Should have the correct name", () => {

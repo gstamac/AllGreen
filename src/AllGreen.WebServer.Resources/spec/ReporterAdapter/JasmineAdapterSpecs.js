@@ -1,4 +1,4 @@
-/// <reference path="../../Scripts/typings/jasmine/jasmine.d.ts" />
+﻿/// <reference path="../../Scripts/typings/jasmine/jasmine.d.ts" />
 /// <reference path="../../Client/reporterAdapters/jasmineAdapter.ts" />
 var _this = this;
 describe("AllGreen JasmineAdapterFactory", function () {
@@ -8,7 +8,7 @@ describe("AllGreen JasmineAdapterFactory", function () {
         var adapter = factory.create(_this.reporter);
 
         expect(adapter).toBeDefined();
-        expect(adapter.start).toBeDefined();
+        expect(adapter.runTests).toBeDefined();
     });
 
     it("Should have the correct name", function () {
@@ -125,13 +125,13 @@ describe("AllGreen JasmineAdapter", function () {
 
     it("Shows started specs as running", function () {
         _this.adapter.reportSpecStarting(_this.spec);
-        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Running, null);
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', 1 /* Running */, null);
     });
 
     it("Shows passed specs as passed", function () {
         _this.spec.results = createSpecResults(true, false);
         _this.adapter.reportSpecResults(_this.spec);
-        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Passed, null);
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', 2 /* Passed */, null);
     });
 
     it("Shows failed specs as failed", function () {
@@ -141,9 +141,9 @@ describe("AllGreen JasmineAdapter", function () {
             createSpecResultExpectStep(false, 'expected something and failed', 'trace 1\ntrace 2')
         ]);
         _this.adapter.reportSpecResults(_this.spec);
-        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, [
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', 3 /* Failed */, [
             { message: 'log message' },
-            { message: 'expected something and failed', status: AllGreen.SpecStatus.Failed, trace: 'trace 1\ntrace 2' }
+            { message: 'expected something and failed', status: 3 /* Failed */, trace: 'trace 1\ntrace 2' }
         ]);
     });
 
@@ -159,7 +159,7 @@ describe("AllGreen JasmineAdapter", function () {
             }
         ]);
         _this.adapter.reportSpecResults(_this.spec);
-        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, [
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', 3 /* Failed */, [
             { message: 'expected something and failed' }
         ]);
     });
@@ -182,7 +182,7 @@ describe("AllGreen JasmineAdapter", function () {
             }
         ]);
         _this.adapter.reportSpecResults(_this.spec);
-        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, [
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', 3 /* Failed */, [
             {
                 message: 'Error: expected something and failed',
                 errorLocation: 'file.js:10:12'
@@ -207,7 +207,7 @@ describe("AllGreen JasmineAdapter", function () {
             }
         ]);
         _this.adapter.reportSpecResults(_this.spec);
-        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, [
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', 3 /* Failed */, [
             {
                 message: 'Error: expected something and failed',
                 errorLocation: 'file.js:10'
@@ -230,7 +230,7 @@ describe("AllGreen JasmineAdapter", function () {
             }
         ]);
         _this.adapter.reportSpecResults(_this.spec);
-        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, [
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', 3 /* Failed */, [
             {
                 message: 'Error: expected something and failed'
             }
@@ -243,8 +243,8 @@ describe("AllGreen JasmineAdapter", function () {
             createSpecResultExpectStep(false, 'error message', trace)
         ]);
         _this.adapter.reportSpecResults(_this.spec);
-        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, [
-            { message: 'error message', status: AllGreen.SpecStatus.Failed, trace: 'trace 1\ntrace 2' }
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', 3 /* Failed */, [
+            { message: 'error message', status: 3 /* Failed */, trace: 'trace 1\ntrace 2' }
         ]);
     });
 
@@ -254,22 +254,22 @@ describe("AllGreen JasmineAdapter", function () {
             createSpecResultExpectStep(false, 'msg', trace)
         ]);
         _this.adapter.reportSpecResults(_this.spec);
-        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, [
-            { message: 'msg', status: AllGreen.SpecStatus.Failed, trace: 'trace 1\ntrace 2' }
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', 3 /* Failed */, [
+            { message: 'msg', status: 3 /* Failed */, trace: 'trace 1\ntrace 2' }
         ]);
     });
 
     it("Shows skipped specs as skipped", function () {
         _this.spec.results = createSpecResults(false, true);
         _this.adapter.reportSpecResults(_this.spec);
-        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Skipped, null);
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', 4 /* Skipped */, null);
     });
 
     it("Shows specs from same suite as results from same suite", function () {
         _this.adapter.reportSpecResults(_this.spec);
         _this.adapter.reportSpecResults(_this.spec2);
-        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, null);
-        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.spec2Guid, 'test 2', _this.suite1Guid, 'Suite 1', AllGreen.SpecStatus.Failed, null);
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.specGuid, 'test 1', _this.suite1Guid, 'Suite 1', 3 /* Failed */, null);
+        expect(_this.reporter.specUpdated).toHaveBeenCalledForSpec(_this.spec2Guid, 'test 2', _this.suite1Guid, 'Suite 1', 3 /* Failed */, null);
     });
 
     it("Shows nested suites", function () {
@@ -296,7 +296,7 @@ describe("AllGreen JasmineAdapter", function () {
                     name: 'Suite 1'
                 })
             }),
-            status: AllGreen.SpecStatus.Failed
+            status: 3 /* Failed */
         }));
         expect(_this.reporter.specUpdated).toHaveBeenCalledWith(jasmine.objectContaining({
             id: _this.spec2Guid,
@@ -309,7 +309,7 @@ describe("AllGreen JasmineAdapter", function () {
                     name: 'Suite 1'
                 })
             }),
-            status: AllGreen.SpecStatus.Failed
+            status: 3 /* Failed */
         }));
     });
 

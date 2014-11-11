@@ -48,7 +48,7 @@ module AllGreen {
     }
 
     export interface IAdapter {
-        start();
+        runTests();
     }
 
     export interface IAdapterFactory {
@@ -56,58 +56,17 @@ module AllGreen {
         getName(): string;
     }
 
-    export class App implements IServerReporter, IRunnerReporter {
-        constructor() { }
-
-        private serverReporter: IServerReporter = null;
+    export class CompositeRunnerReporter implements IRunnerReporter
+    {
         private runnerReporters: IRunnerReporter[] = [];
-        private adapterFactories: IAdapterFactory[] = [];
-
-        public setServerReporter(serverReporter: IServerReporter) {
-            if (serverReporter != null)
-                this.serverReporter = serverReporter;
-        }
 
         public registerRunnerReporter(runnerReporter: IRunnerReporter) {
             if (runnerReporter != null)
                 this.runnerReporters.push(runnerReporter);
         }
 
-        public registerAdapterFactory(adapterFactory: IAdapterFactory) {
-            var newName = adapterFactory.getName();
-            var found: boolean = false;
-            this.adapterFactories.forEach((adapterFactory: IAdapterFactory) =>
-            { found = found || adapterFactory.getName() == newName; });
-            if (!found)
-                this.adapterFactories.push(adapterFactory);
-        }
-
-        public runTests = function () {
-            this.delayStartIfNeeded(this, this.adapterFactories);
-        }
-
-        private delayStartIfNeeded(app: App, adapterFactories: IAdapterFactory[]) {
-            if (!app.isReady()) {
-                console.log('delaying test run');
-                setTimeout(() => this.delayStartIfNeeded(app, adapterFactories), 10);
-            }
-            else {
-                adapterFactories.forEach((adapterFactory: IAdapterFactory) =>
-                { adapterFactory.create(app).start(); });
-            }
-        }
-
-        public setServerStatus(status: string) {
-            this.serverReporter.setServerStatus(status);
-        }
-
         public isReady(): boolean {
-            for (var i = 0; i < this.runnerReporters.length; i++) {
-                if (!this.runnerReporters[i].isReady()) {
-                    return false;
-                }
-            }
-            return true;
+            return this.runnerReporters.every((runnerReporter) => runnerReporter.isReady());
         }
 
         public reset() {
@@ -133,11 +92,59 @@ module AllGreen {
                 runnerReporter.finished();
             });
         }
+    }
 
-        public reload() {
+    export class App {
+        private serverReporter: IServerReporter = null;
+        private compositeRunnerReporter: CompositeRunnerReporter;
+        private adapterFactories: IAdapterFactory[] = [];
+
+        constructor() {
+            this.compositeRunnerReporter = new CompositeRunnerReporter();
+        }
+
+        public setServerReporter(serverReporter: IServerReporter) {
+            if (serverReporter != null)
+                this.serverReporter = serverReporter;
+        }
+
+        public registerRunnerReporter(runnerReporter: IRunnerReporter) {
+            this.compositeRunnerReporter.registerRunnerReporter(runnerReporter);
+        }
+
+        public registerAdapterFactory(adapterFactory: IAdapterFactory) {
+            var newName = adapterFactory.getName();
+            if (this.adapterFactories.every((adapterFactory) => adapterFactory.getName() != newName))
+                this.adapterFactories.push(adapterFactory);
+        }
+
+        public setServerStatus(status: string) {
+            this.serverReporter.setServerStatus(status);
+        }
+
+        public runTests() {
             this.adapterFactories = [];
-            this.reset();
+            this.compositeRunnerReporter.reset();
+            this.reloadRunner();
+        }
+
+        private reloadRunner() {
             $('#runner-iframe').prop('src', '/~internal~/Client/runner.html');
+        }
+
+        public runnerLoaded = function () {
+            this.delayRunTestsIfNeeded(this.compositeRunnerReporter);
+        }
+
+        private delayRunTestsIfNeeded() {
+            if (!this.compositeRunnerReporter.isReady()) {
+                console.log('delaying test run');
+                setTimeout(() => this.delayRunTestsIfNeeded(), 10);
+            }
+            else {
+                this.adapterFactories.forEach((adapterFactory) =>
+                { adapterFactory.create(this.compositeRunnerReporter).runTests(); });
+            }
         }
 
         public log(message?: any, ...optionalParams: any[]): void {
