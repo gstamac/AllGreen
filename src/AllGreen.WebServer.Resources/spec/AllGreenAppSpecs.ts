@@ -3,6 +3,7 @@
 /// <reference path="../Client/allgreen.ts" />
 
 describe("CompositeRunnerReporter", () => {
+   
     beforeEach(() => {
         this.composite = new AllGreen.CompositeRunnerReporter();
     });
@@ -41,14 +42,6 @@ describe("CompositeRunnerReporter", () => {
 
 describe("App", () => {
     beforeEach(() => {
-        jasmine.getFixtures().fixturesPath = '';
-        var clientHtml = readFixtures('Client/client.html');
-        expect(clientHtml).not.toBe('');
-        clientHtml = clientHtml.replace(/~internal~\//g, '');
-        clientHtml = clientHtml.replace(/<script[^>]*><\/script>/g, '');
-        clientHtml = clientHtml.replace(/<script[^>]*>[^<]*new AllGreen\.App()[^<]*<\/script>/g, '');
-        setFixtures(clientHtml);
-
         this.app = new AllGreen.App();
     });
 
@@ -99,9 +92,10 @@ describe("App", () => {
 
             this.app.runnerLoaded();
             expect(adapterFactory.create.callCount).toBe(0);
+           
             runnerReporter.isReady = () => true;
         });
-        waits(20);
+        waits(20);       
         runs(() => {
             expect(adapterFactory.create).toHaveBeenCalledWith(jasmine.any(Object));
         });
@@ -125,7 +119,6 @@ describe("App", () => {
 
         this.app.runTests();
         expect(runnerReporter.reset).toHaveBeenCalled();
-        expect($('#runner-iframe')).toHaveAttr('src', '/~internal~/Client/runner.html');
         this.app.runnerLoaded();
         expect(adapterFactory1.create).not.toHaveBeenCalled();
     });
@@ -155,5 +148,28 @@ describe("App", () => {
         expect(this.app.reconnectEnabled).toBeFalsy();
         this.app.enableReconnect(true);
         expect(this.app.reconnectEnabled).toBeTruthy();
+    });
+})
+
+describe("App UI", () => {
+    beforeEach(() => {
+        jasmine.getFixtures().fixturesPath = '';
+        var clientHtml = readFixtures('Client/client.html');
+        expect(clientHtml).not.toBe('');
+        clientHtml = clientHtml.replace(/~internal~\//g, '');
+        clientHtml = clientHtml.replace(/<script[^>]*><\/script>/g, '');
+        clientHtml = clientHtml.replace(/<script[^>]*>[^<]*new AllGreen\.App()[^<]*<\/script>/g, '');
+        setFixtures(clientHtml);
+
+        this.app = new AllGreen.App();
+    });
+
+    afterEach(() => {
+        this.app = null;
+    });
+
+    it("Should load runner on test run", () => {
+        this.app.runTests();
+        expect($('#runner-iframe')).toHaveAttr('src', '/~internal~/Client/runner.html');
     });
 })

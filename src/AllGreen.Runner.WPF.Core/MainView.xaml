@@ -148,8 +148,8 @@
             </ListView.Resources>
             <ListView.View>
                 <GridView AllowsColumnReorder="false">
-                    <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Runner" Width="Auto"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Status}" Header="Status" Width="Auto"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Runner" Width="200"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Status}" Header="Status" Width="500"/>
                 </GridView>
             </ListView.View>
         </ListView>

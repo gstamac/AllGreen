@@ -1,4 +1,4 @@
-﻿/// <reference path="../../Scripts/typings/jasmine/jasmine.d.ts" />
+/// <reference path="../../Scripts/typings/jasmine/jasmine.d.ts" />
 /// <reference path="../../Client/reporterAdapters/jasmineAdapter.ts" />
 var _this = this;
 describe("AllGreen JasmineAdapterFactory", function () {

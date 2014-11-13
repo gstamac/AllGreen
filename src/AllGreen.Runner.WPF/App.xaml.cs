@@ -80,13 +80,10 @@ namespace AllGreen.Runner.WPF
                 ServedFolderFilters = new List<FolderFilter>(
                     new FolderFilter[] { 
                         new FolderFilter() { Folder = "Scripts", FilePattern = "jasmine.js", IncludeSubfolders = false },
+                        //new FolderFilter() { Folder = "Scripts", FilePattern = "jquery-2.1.0.js", IncludeSubfolders = false },
+                        //new FolderFilter() { Folder = "Scripts", FilePattern = "jasmine-jquery.js", IncludeSubfolders = false },
+                        //new FolderFilter() { Folder = "Client", FilePattern = "*.html", IncludeSubfolders = false },
                         new FolderFilter() { Folder = "Client/ReporterAdapters", FilePattern = "jasmineAdapter.js", IncludeSubfolders = false },
-                        //new FolderFilter() { Folder = "Test", FilePattern = "testScript.js", IncludeSubfolders = false },
-
-                        //new FolderFilter() { Folder = "Scripts", FilePattern = "jasmine.js", IncludeSubfolders = false },
-                        //new FolderFilter() { Folder = "Scripts", FilePattern = "*.js", IncludeSubfolders = true },
-                        //new FolderFilter() { Folder = "Client", FilePattern = "*.js", IncludeSubfolders = false },
-                        //new FolderFilter() { Folder = "Client", FilePattern = "*.js", IncludeSubfolders = true },
                         new FolderFilter() { Folder = "spec", FilePattern = "*.js", IncludeSubfolders = true },
                     }),
                 ExcludeServedFolderFilters = new List<FolderFilter>(
@@ -94,11 +91,6 @@ namespace AllGreen.Runner.WPF
                         new FolderFilter() { Folder = "Scripts", FilePattern = "*.min.js", IncludeSubfolders = true },
                         new FolderFilter() { Folder = "Scripts", FilePattern = "*.intellisense.js", IncludeSubfolders = true },
                         new FolderFilter() { Folder = "Client", FilePattern = "*.min.js", IncludeSubfolders = true },
-                        //new FolderFilter() { Folder = "spec", FilePattern = "*.min.js", IncludeSubfolders = true },
-                        //new FolderFilter() { Folder = "Client", FilePattern = "allgreen.js", IncludeSubfolders = false },
-                        //new FolderFilter() { Folder = "Client", FilePattern = "hub.js", IncludeSubfolders = false },
-                        //new FolderFilter() { Folder = "Client", FilePattern = "reporter.js", IncludeSubfolders = false },
-                        //new FolderFilter() { Folder = "Client", FilePattern = "testScript.js", IncludeSubfolders = false },
                     }),
                 WatchedFolderFilters = new List<FolderFilter>() { 
                     new FolderFilter() { Folder = "Test", FilePattern = "*.js", IncludeSubfolders = false }

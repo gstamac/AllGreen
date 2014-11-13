@@ -47,14 +47,6 @@ describe("CompositeRunnerReporter", function () {
 
 describe("App", function () {
     beforeEach(function () {
-        jasmine.getFixtures().fixturesPath = '';
-        var clientHtml = readFixtures('Client/client.html');
-        expect(clientHtml).not.toBe('');
-        clientHtml = clientHtml.replace(/~internal~\//g, '');
-        clientHtml = clientHtml.replace(/<script[^>]*><\/script>/g, '');
-        clientHtml = clientHtml.replace(/<script[^>]*>[^<]*new AllGreen\.App()[^<]*<\/script>/g, '');
-        setFixtures(clientHtml);
-
         _this.app = new AllGreen.App();
     });
 
@@ -108,6 +100,7 @@ describe("App", function () {
 
             _this.app.runnerLoaded();
             expect(adapterFactory.create.callCount).toBe(0);
+
             runnerReporter.isReady = function () {
                 return true;
             };
@@ -138,7 +131,6 @@ describe("App", function () {
 
         _this.app.runTests();
         expect(runnerReporter.reset).toHaveBeenCalled();
-        expect($('#runner-iframe')).toHaveAttr('src', '/~internal~/Client/runner.html');
         _this.app.runnerLoaded();
         expect(adapterFactory1.create).not.toHaveBeenCalled();
     });
@@ -168,6 +160,29 @@ describe("App", function () {
         expect(_this.app.reconnectEnabled).toBeFalsy();
         _this.app.enableReconnect(true);
         expect(_this.app.reconnectEnabled).toBeTruthy();
+    });
+});
+
+describe("App UI", function () {
+    beforeEach(function () {
+        jasmine.getFixtures().fixturesPath = '';
+        var clientHtml = readFixtures('Client/client.html');
+        expect(clientHtml).not.toBe('');
+        clientHtml = clientHtml.replace(/~internal~\//g, '');
+        clientHtml = clientHtml.replace(/<script[^>]*><\/script>/g, '');
+        clientHtml = clientHtml.replace(/<script[^>]*>[^<]*new AllGreen\.App()[^<]*<\/script>/g, '');
+        setFixtures(clientHtml);
+
+        _this.app = new AllGreen.App();
+    });
+
+    afterEach(function () {
+        _this.app = null;
+    });
+
+    it("Should load runner on test run", function () {
+        _this.app.runTests();
+        expect($('#runner-iframe')).toHaveAttr('src', '/~internal~/Client/runner.html');
     });
 });
 //# sourceMappingURL=AllGreenAppSpecs.js.map
