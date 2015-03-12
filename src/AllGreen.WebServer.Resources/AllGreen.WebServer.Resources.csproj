@@ -223,6 +223,6 @@
       <UserProperties Test__UseParentNamespace="False" Scripts_typings_jasmine-jquery__UseParentNamespace="False" NewFolder1__UseParentNamespace="False" Properties__UseParentNamespace="False" Scripts__UseParentNamespace="False" spec__UseParentNamespace="False" Client__UseParentNamespace="False" Client_ReporterAdapters__UseParentNamespace="False" Scripts_typings__UseParentNamespace="False" Scripts_typings_jasmine__UseParentNamespace="False" css__UseParentNamespace="False" />
     </VisualStudio>
   </ProjectExtensions>
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v11.0\WebApplications\Microsoft.WebApplication.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\WebApplications\Microsoft.WebApplication.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
 </Project>
