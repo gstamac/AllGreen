@@ -33,6 +33,9 @@
     <Reference Include="Caliburn.Micro">
       <HintPath>..\packages\Caliburn.Micro.1.5.2\lib\net45\Caliburn.Micro.dll</HintPath>
     </Reference>
+    <Reference Include="envdte, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core">
       <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.0.2\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
@@ -224,7 +227,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Properties__UseParentNamespace="False" ViewModels_RunnerViewModel_cs_UseParentNamespace="False" ViewModels__UseParentNamespace="False" ValueConverters__UseParentNamespace="False" T4Templates__UseParentNamespace="False" T4Templates_ImplementPropertyChangedCaliburn__UseParentNamespace="False" />
+      <UserProperties T4Templates_ImplementPropertyChangedCaliburn__UseParentNamespace="False" T4Templates__UseParentNamespace="False" ValueConverters__UseParentNamespace="False" ViewModels__UseParentNamespace="False" ViewModels_RunnerViewModel_cs_UseParentNamespace="False" Properties__UseParentNamespace="False" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

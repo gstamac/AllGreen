@@ -22,7 +22,7 @@ namespace AllGreen.Runner.WPF
         protected void Application_Startup(object sender, StartupEventArgs e)
         {
             //XmlConfiguration configuration = XmlConfiguration.LoadFrom(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\AllGreen\\AllGreen\\AllGreen.config");
-            XmlConfiguration configuration = GetAllGreenProjectConfig();
+            XmlConfiguration configuration = GetDummyConfig();
 
             TinyIoCContainer resourceResolver = new TinyIoCContainer();
             resourceResolver.Register<IConfiguration>(configuration);

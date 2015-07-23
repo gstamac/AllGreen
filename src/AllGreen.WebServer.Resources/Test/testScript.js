@@ -25,7 +25,7 @@ describe("Suite 2", function () {
     }
 
     function level2() {
-        throw new Error('Something went terible wrong');
+        throw new Error('Something Went Terribly Wrong');
     }
 
     describe("Suite 3", function () {
