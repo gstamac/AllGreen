@@ -7,7 +7,7 @@ describe("Suite 1", () => {
 
     it("Test 2", () => {
         expect(true).not.toBe(false);
-        expect(true).toBe(false);
+        expect(true).toBe(true);
     });
 
     it("Test 3", () => {

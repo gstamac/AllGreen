@@ -6,7 +6,7 @@ describe("Suite 1", function () {
 
     it("Test 2", function () {
         expect(true).not.toBe(false);
-        expect(true).toBe(false);
+        expect(true).toBe(true);
     });
 
     it("Test 3", function () {
